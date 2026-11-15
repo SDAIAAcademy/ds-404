@@ -1,158 +1,315 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Day 4 asks whether the evidence of Days 1 to 3 still holds when the data changes under the model, and what else must be true before Bustan adopts a pretrained model. The case moves to the northern region Bustan opened in August 2025. End the day with every participant's capstone task chosen.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
-<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
-
-<section class="slide" id="s1-idea" data-lo="LO5">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" id="review-day3" data-lo="LO4">
+  <div class="kicker">Review of Day 3</div>
+  <h2>What do you put in front of Ahlam?</h2>
+  <div class="quiz" data-type="single" data-lo="LO4">
+    <p class="lead">Over twelve weeks LightGBM's orders cost SAR 2,972 a week less than the zero-shot forecaster's, with a 95% interval from -7,820 to +506. Its scaled quantile loss is clearly lower. What do you report?</p>
+    <div class="opts">
+      <div class="opt" data-why="Lets error decide a question that was asked in riyals: the lower error does not settle the cost">LightGBM is better: its error is lower</div>
+      <div class="opt" data-ok>LightGBM probably costs less, but twelve weeks cannot separate the two; keep both on test</div>
+      <div class="opt" data-why="Reads an interval that crosses zero as proof of no difference">The two forecasters cost the same</div>
+      <div class="opt" data-why="Uses one origin's flip as the verdict: over twelve weeks the ranking returns">Smoothing, because it won at one origin</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The mean favours LightGBM; the interval says the weeks do not prove it. Both facts go in the report.</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Answer: B. Two minutes. Today adds a third fact: whether any of these numbers hold in a region the models have not seen.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO5">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
+<!-- ======================= SESSION 1 ======================= -->
+<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
+
+<section class="slide" data-label="Three shifts" id="three-shifts" data-lo="LO5">
+  <div class="kicker">What can change between training and deployment</div>
+  <h2>Inputs, outcomes or the link between them can move, and each needs its own test</h2>
+  <table class="t small">
+    <tr><th>Shift</th><th>What changes</th><th>At Bustan's north</th><th>Test</th></tr>
+    <tr><td><b>Covariate</b></td><td>the features, p(x)</td><td>longer distances, new drivers</td><td>adversarial validation</td></tr>
+    <tr><td><b>Label</b></td><td>the outcome rate, p(y)</td><td>more late deliveries</td><td>compare rates</td></tr>
+    <tr><td><b>Concept</b></td><td>the link, p(y | x)</td><td>distance costs more on new routes</td><td>old model on new outcomes</td></tr>
+  </table>
+  <aside class="notes"><p>The holiday season that moves eleven days a year (Day 2) is a fourth, slower shift of the same kind: a pattern the training window holds in different places. Ask the room which of the three a model can be protected from without any northern outcomes. Only covariate shift; the other two need labels.</p></aside>
+</section>
+
+<section class="slide" data-label="Adversarial" id="adversarial-validation" data-lo="LO5">
+  <div class="kicker">A test that needs no labels</div>
+  <h2>Train a classifier to tell the old depots from the north: if it can, the inputs have shifted</h2>
   <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+    <div class="step c-navy"><b>Stack</b>old orders and northern orders</div>
+    <div class="arrow frag" data-frag="b">→</div><div class="step c-teal frag" data-frag="b"><b>Label</b>north = 1, old = 0</div>
+    <div class="arrow frag" data-frag="c">→</div><div class="step c-cyan frag" data-frag="c"><b>Classify</b>grouped by customer, out of fold</div>
+    <div class="arrow frag" data-frag="d">→</div><div class="step c-coral frag" data-frag="d"><b>Read</b>AUC and the features it used</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout warn small mt frag" data-frag="d"><b>Same period on both sides.</b> Old orders from before the north opened would let the classifier separate by date.</div>
+  <aside class="notes"><p>Press once per step. Grouping by customer matters here as on Day 1: a customer belongs to one region, so a random split would let the classifier recognise customers instead of conditions.</p></aside>
+</section>
+
+<section class="slide" data-label="What moved" id="what-moved" data-lo="LO5" data-minutes="3">
+  <div class="kicker">Lab 4.1, the course run, orders since 24 August 2025</div>
+  <h2>The classifier separates the north almost perfectly, on driver tenure and distance</h2>
+  <table class="t small">
+    <tr><th>Feature</th><th>Share of the classifier's gain</th><th>Old depots, median</th><th>North, median</th></tr>
+    <tr><td>Driver tenure</td><td>57%</td><td>28 months</td><td>8 months</td></tr>
+    <tr><td>Distance</td><td>32%</td><td>17.2 km</td><td>44.1 km</td></tr>
+    <tr><td>Truck utilisation</td><td>5%</td><td>0.68</td><td>0.56</td></tr>
+  </table>
+  <p class="small mt-s">Adversarial AUC 0.954, folds grouped by customer. Grocery is 66% of northern orders, 47% of old.</p>
+  <aside class="notes"><p>From data/reference/d4_1.json. The north is a year old, so its drivers are new; its customers are spread out. Neither fact surprises Shadi; the point is that the test found them without anyone asking, and would find the ones nobody thought of.</p></aside>
+</section>
+
+<section class="slide" data-label="Label and concept" id="label-concept" data-lo="LO5">
+  <div class="kicker">Lab 4.1, separating the shifts</div>
+  <h2>The new inputs explain less than half of the extra lateness</h2>
+  <div class="bars mt">
+    <div class="row"><span>Old depots, observed</span><div class="bar" style="--w:43%;--c:var(--cyan)"></div><span class="val">18.6%</span></div>
+    <div class="row"><span>North, predicted by the old model</span><div class="bar" style="--w:67%"></div><span class="val">29.2%</span></div>
+    <div class="row"><span>North, observed</span><div class="bar" style="--w:100%;--c:var(--coral)"></div><span class="val">43.6%</span></div>
+  </div>
+  <p class="small mt">Covariate shift accounts for +10.6 points; the other +14.4 points are a changed link between the features and lateness.</p>
+  <aside class="notes"><p>The old model's prediction is an extrapolation (it saw few eight-month drivers), so read the split as an estimate, not an accounting identity. The lab's distance-band table backs it up: with drivers of a year or more, the north is still later at every distance band.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-1" data-lo="LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>What does an adversarial AUC of 0.95 tell Shadi?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5">
+    <p class="lead">The adversarial classifier separates northern orders from old ones with AUC 0.95, mostly on driver tenure and distance. What can you conclude before any northern outcome is known?</p>
+    <div class="opts">
+      <div class="opt" data-why="Jumps from different inputs to a failing model: shifted inputs make failure possible, not certain">The late model will fail in the north</div>
+      <div class="opt" data-why="Treats the strongest shifted features as the problem to delete: dropping them hides the shift and removes real signal">Drop tenure and distance from the late model</div>
+      <div class="opt" data-ok>Many northern orders have few look-alikes in the training data, so its predictions there are untested</div>
+      <div class="opt" data-why="Confuses input shift with outcome shift: the classifier never saw a late flag">The north has a higher late rate</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Adversarial validation measures the inputs only. Whether the model fails is measured on outcomes (Session 2).</div>
+  </div>
+  <aside class="notes"><p>Answer: C. The lab's stretch tests option B. In the build's trial, dropping driver tenure lowered the adversarial AUC from 0.95 to 0.82, and distance took over 78% of the gain: the shift is still there, only less visible.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-1" data-auto="lab" data-lab="4.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>The lab runs in about a minute on a laptop. LightGBM is set to one thread in the Day 4 labs: on some Windows laptops four threads were thirty times slower. Watch for folds that are not grouped by customer (AUC near 1.0) and for importance read from split counts instead of gain.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO5">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
-  </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+<section class="slide" data-label="Four schemes" id="four-schemes" data-lo="LO5">
+  <div class="kicker">Validating on the old depots, before the north has outcomes</div>
+  <h2>Each validation scheme answers a different question about the future</h2>
+  <table class="t small">
+    <tr><th>Scheme</th><th>Test rows</th><th>Answers</th></tr>
+    <tr><td>Random</td><td>shuffled orders</td><td>new orders from the same customers</td></tr>
+    <tr><td>Grouped</td><td>unseen customers</td><td>new customers in the same regions</td></tr>
+    <tr><td>Temporal</td><td>the last 20% of days</td><td>the next months, same customers</td></tr>
+    <tr><td>Region-held-out</td><td>one unseen old region</td><td>a region the model has not seen</td></tr>
+  </table>
+  <aside class="notes"><p>Ask the room to pick the scheme that matches the deployment before the lab runs. Most pick region-held-out; some pick temporal, because the north is also later in time. The lab shows why temporal still flatters: the same customers sit on both sides of the date.</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO5">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Honest scheme" id="honest-scheme" data-lo="LO5" data-minutes="3">
+  <div class="kicker">Lab 4.2, the course run, one LightGBM, 72,000 old orders</div>
+  <h2>Region-held-out came within 0.01 AUC of the north; no scheme saw the calibration fail</h2>
+  <table class="t small">
+    <tr><th>Scheme</th><th>AUC</th><th>Log loss</th><th>Predicted late rate</th><th>Observed</th></tr>
+    <tr><td>Random</td><td>0.871</td><td>0.316</td><td>18.0%</td><td>18.1%</td></tr>
+    <tr><td>Temporal</td><td>0.881</td><td>0.316</td><td>19.5%</td><td>19.2%</td></tr>
+    <tr><td>Grouped</td><td>0.773</td><td>0.384</td><td>18.1%</td><td>18.0%</td></tr>
+    <tr><td>Region-held-out</td><td>0.770</td><td>0.389</td><td>17.9%</td><td>18.3%</td></tr>
+    <tr><td><b>Deployed in the north</b></td><td><b>0.763</b></td><td><b>0.618</b></td><td><b>31.0%</b></td><td><b>43.6%</b></td></tr>
+  </table>
+  <aside class="notes"><p>From data/reference/d4_2.json. Random and temporal promised an AUC 0.11 too high: customer leakage. Grouped and region-held-out were honest about ranking. Every scheme promised a log loss near 0.39 or lower; the north had 0.62, because the late rate and the distance effect changed. No split of old data can show a shift that exists only in the new region.</p></aside>
+</section>
+
+<section class="slide" data-label="Subgroups" id="subgroup-error" data-lo="LO5 LO6">
+  <div class="kicker">Lab 4.2, deployed in the north, by segment</div>
+  <h2>The average hides a segment the model barely ranks</h2>
+  <table class="t small">
+    <tr><th>Segment</th><th>Orders</th><th>AUC</th><th>Predicted</th><th>Observed</th></tr>
+    <tr><td>Grocery</td><td>5,242</td><td>0.764</td><td>29.7%</td><td>42.0%</td></tr>
+    <tr><td>HoReCa</td><td>1,194</td><td>0.817</td><td>39.2%</td><td>56.5%</td></tr>
+    <tr><td>Hypermarket</td><td>608</td><td>0.837</td><td>34.3%</td><td>29.3%</td></tr>
+    <tr><td>Institutional</td><td>956</td><td>0.651</td><td>25.3%</td><td>45.6%</td></tr>
+  </table>
+  <aside class="notes"><p>On the old depots the grouped scheme gave nearly equal AUCs by region (0.765 to 0.777). In the north, institutional customers (hospitals, schools) are ranked poorly and their lateness is underpredicted by 20 points. Subgroup error is part of the adoption memo on Day 4 Session 4, not an appendix.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-2" data-lo="LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which promise can you make Shadi?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5">
+    <p class="lead">Before the north opened, the analyst reported "AUC 0.87, well calibrated" from random 5-fold validation on the old depots. Knowing what you know now, what should the report have said?</p>
+    <div class="opts">
+      <div class="opt" data-ok>A region-held-out AUC near 0.77, and no promise on calibrated probabilities until northern outcomes arrive</div>
+      <div class="opt" data-why="Keeps the leaky estimate: random folds put the same customers on both sides">AUC 0.87, since random folds use the most data</div>
+      <div class="opt" data-why="Picks a scheme that leaks across time through repeat customers">A temporal AUC of 0.88, since the north is later in time</div>
+      <div class="opt" data-why="Overcorrects: ranking held up under region-held-out validation, only calibration failed">No estimate at all: nothing measured on old data applies to the north</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The scheme that held out a whole region matched the deployed ranking. Calibration depends on the late rate, which only northern outcomes reveal.</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>Answer: A. Then ask what date to put on recalibration: as soon as a few hundred northern outcomes per segment are in.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-2" data-auto="lab" data-lab="4.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Fourteen LightGBM fits on 72,000 orders: about a minute and a half with one thread; quick mode uses a third of the old orders. Watch for a temporal split by order index instead of date, and for region-held-out folds that leave the north in training. The stretch (Hail to Tabuk) shows whether a few months of the new region fix the calibration.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO5">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
-  </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+<section class="slide" data-label="Recap conformal" id="recap-conformal" data-lo="LO5">
+  <div class="kicker">Recap from DS-305, then what breaks</div>
+  <h2>Split conformal holds 90% of the time only if new orders are exchangeable with the calibration orders</h2>
+  <pre class="code s" data-file="labs/_src/D4_3_apply_weighted_conformal.py"><code class="language-python">scores = np.abs(y_cal - model.predict(X_cal))   # log hours
+k = int(np.ceil((n + 1) * 0.9))
+q = np.sort(scores)[k - 1]                      # interval: prediction ± q</code></pre>
+  <div class="callout warn small mt">Lab 4.1's adversarial AUC of 0.95 says the northern orders are not exchangeable with the old ones.</div>
+  <aside class="notes"><p>DS-305 is a prerequisite and not built yet; if participants have not met split conformal, take three minutes on this slide: sort the calibration errors, take the 90th percentile with the small-sample correction, add and subtract it. The intervals are on log hours, so in hours they are multiplicative: from 0.37 to 2.71 times the prediction in the course run.</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO5">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
+<section class="slide" data-label="Weights" id="density-ratio-weights" data-lo="LO5">
+  <div class="kicker">Correcting for covariate shift</div>
+  <h2>Weight each calibration order by how northern it looks</h2>
   <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+    <div class="step c-navy"><b>Classifier</b>p(north | x), out of fold</div>
+    <div class="arrow frag" data-frag="b">→</div><div class="step c-teal frag" data-frag="b"><b>Ratio</b>w(x) = p / (1 - p)</div>
+    <div class="arrow frag" data-frag="c">→</div><div class="step c-cyan frag" data-frag="c"><b>Weighted quantile</b>of calibration scores, plus the new order's own weight at infinity</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip mt frag" data-frag="c"><b>Takeaway.</b> If too few calibration orders look like a new one, its interval is infinite: an honest "we do not know".</div>
+  <aside class="notes"><p>Weighted conformal prediction under covariate shift is from Tibshirani, Barber, Candès and Ramdas (2019). It keeps the coverage guarantee when only p(x) changes and the weights are right. Keep the classifier simple and score it out of fold: in-sample probabilities near 0 and 1 make a few weights enormous. Sources: arXiv 1904.06019.</p></aside>
+</section>
+
+<section class="slide" data-label="Coverage" id="coverage-result" data-lo="LO5" data-minutes="3">
+  <div class="kicker">Lab 4.3, the course run, 90% intervals for delivery hours in the north</div>
+  <h2>Weighting restores 90% overall, and leaves institutional customers short</h2>
+  <table class="t small">
+    <tr><th>Northern orders</th><th>Split conformal</th><th>Weighted</th></tr>
+    <tr><td>All</td><td>87.7%</td><td>90.1%</td></tr>
+    <tr><td>Grocery</td><td>89.0%</td><td>91.4%</td></tr>
+    <tr><td>HoReCa</td><td>85.5%</td><td>88.2%</td></tr>
+    <tr><td>Hypermarket</td><td>95.2%</td><td>96.5%</td></tr>
+    <tr><td>Institutional</td><td>78.7%</td><td>81.0%</td></tr>
+  </table>
+  <p class="small mt-s">Median width 61 hours split, 67 weighted. Effective sample size 1,082 of 22,325 calibration orders.</p>
+  <aside class="notes"><p>From data/reference/d4_3.json. On four different calibration splits during the build, weighting raised coverage every time, by 2 to 5 points, but landed between 85% and 91%: one split is not the whole story. The institutional gap is concept shift, which weights cannot correct. The width is in hours on a multiplicative interval; the point model is weak, which is a separate problem from coverage.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-3" data-lo="LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>What did the weights correct?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5">
+    <p class="lead">After weighting, coverage in the north is 90.1% overall but 81.0% for institutional customers. Which statement is right?</p>
+    <div class="opts">
+      <div class="opt" data-why="Assumes weighting gives coverage in every subgroup: its guarantee is marginal, over the deployment distribution">The weights are wrong: weighted conformal guarantees 90% in every segment</div>
+      <div class="opt" data-why="Blames sample size: 956 orders are enough to see a 9-point gap">Institutional customers are too few to measure coverage</div>
+      <div class="opt" data-why="Thinks larger weights fix concept shift: no reweighting of old orders reproduces a link that changed">Raising the institutional weights would fix it</div>
+      <div class="opt" data-ok>Weights correct a change in the inputs; the institutional gap is a change in the link, which needs northern outcomes</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Reweighting old orders can only reproduce relationships the old orders had.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. Mention Mondrian (group-conditional) conformal as the tool for per-segment coverage once the segment has its own calibration data.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-3" data-auto="lab" data-lab="4.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>About a minute on a laptop; quick mode keeps all old orders because fewer make the weights noisy (with a third of them, weighting lowered coverage in a trial run). Watch for weights computed from in-sample probabilities and for a weighted quantile that leaves out the test order's own weight; both make coverage look better than it is.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO6">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Four checks" id="four-checks" data-lo="LO6">
+  <div class="kicker">What adoption requires</div>
+  <h2>A model is adopted when accuracy, licence, data and cost all allow it</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-teal flat"><h4>Accuracy</h4><p class="small mb0">Against a tuned baseline, with intervals, under the deployment's shift, by subgroup.</p></div>
+    <div class="card c-cyan flat"><h4>Licence</h4><p class="small mb0">Weights and outputs allowed for commercial production use.</p></div>
+    <div class="card c-coral flat"><h4>Data</h4><p class="small mb0">Classification, personal data, where it may be processed.</p></div>
+    <div class="card c-purple flat"><h4>Cost</h4><p class="small mb0">Running and monitoring every cycle, against the gain in riyals.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Any one of the four can block adoption on its own. The lab finds that the licence blocks one candidate outright, the data blocks every option outside the Kingdom for personal data, and cost blocks nothing.</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO6">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Licences" id="licences" data-lo="LO6">
+  <div class="kicker">Checked on the official model pages, November 2026</div>
+  <h2>Three candidates allow commercial use; TabPFN-2.6 restricts even its outputs</h2>
+  <table class="t small">
+    <tr><th>Model</th><th>Task</th><th>Weights licence</th><th>Production at Bustan</th></tr>
+    <tr><td>TabICLv2</td><td>tables</td><td>BSD-3-Clause</td><td>allowed</td></tr>
+    <tr><td>TabPFN-2.6</td><td>tables</td><td>TabPFN-2.6 Non-Commercial License</td><td>blocked: outputs for non-commercial use only</td></tr>
+    <tr><td>Chronos-2</td><td>series</td><td>Apache-2.0</td><td>allowed</td></tr>
+    <tr><td>TimesFM 2.5</td><td>series</td><td>Apache-2.0</td><td>allowed</td></tr>
+  </table>
+  <aside class="notes"><p>Licences change between versions, and the catalog's own note that TimesFM's weights are non-commercial did not match the TimesFM 2.5 model page when checked for this course. Re-check on the day of the decision and record the date. Sources: github.com/soda-inria/tabicl; huggingface.co/Prior-Labs/tabpfn_2_6; huggingface.co/amazon/chronos-2; huggingface.co/google/timesfm-2.5-200m-pytorch.</p></aside>
+</section>
+
+<section class="slide" data-label="Residency" id="residency" data-lo="LO6">
+  <div class="kicker">The data decides where the model may run</div>
+  <h2>Orders hold personal data: leaving the Kingdom needs a purpose, a risk assessment and safeguards</h2>
+  <table class="t small">
+    <tr><th>Dataset (Bustan's register)</th><th>Level</th><th>Personal data</th><th>Outside the Kingdom</th></tr>
+    <tr><td>Orders with customer ids</td><td>Restricted</td><td>yes: sole traders</td><td>PDPL Article 29 conditions, transfer risk assessment, safeguards</td></tr>
+    <tr><td>Daily demand by product and depot</td><td>Restricted</td><td>no</td><td>Bustan's policy: an approved exception</td></tr>
+  </table>
+  <p class="small mt-s">Self-hosting in Riyadh is allowed for every candidate. Google Colab counts as outside the Kingdom: fine for synthetic course data only.</p>
+  <aside class="notes"><p>The Personal Data Protection Law, Article 29, allows a transfer only for listed purposes, with an adequate level of protection and the minimum data needed. The Regulation on Personal Data Transfer outside the Kingdom requires a risk assessment before a transfer (Article 7) and, in its exempted cases, safeguards such as standard contractual clauses, binding common rules or a certificate (Article 4). The National Data Governance Policies define the classification levels for public entities; Bustan, a private company, applies the same levels in its own register by choice. Sources: the national references in the README.</p></aside>
+</section>
+
+<section class="slide" data-label="Adoption table" id="adoption-table" data-lo="LO6" data-minutes="3">
+  <div class="kicker">Lab 4.4, the course's adoption table</div>
+  <h2>One go with conditions, two not now, one no-go</h2>
+  <table class="t small">
+    <tr><th>Model</th><th>Decision</th><th>Reason and condition</th></tr>
+    <tr><td>TabICLv2</td><td>not now</td><td>the course run cannot tell it from tuned LightGBM; retest with the real model</td></tr>
+    <tr><td>TabPFN-2.6</td><td>no-go</td><td>non-commercial licence</td></tr>
+    <tr><td>Chronos-2</td><td>go with conditions</td><td>self-hosted in Riyadh, for holiday windows, if its stacking weight pays its cost</td></tr>
+    <tr><td>TimesFM 2.5</td><td>not now</td><td>not evaluated in this course</td></tr>
+  </table>
+  <p class="small mt-s">Running costs from the synthetic sheet: SAR 2 to 84 a month per option, small next to SAR 3,000 a week of regret between two forecasters.</p>
+  <aside class="notes"><p>From data/reference/d4_4.json. The course's evidence for TabICLv2 and Chronos-2 came from stand-ins: say it again. A cohort that ran the real models in Colab may reach different decisions, and should, if their numbers differ. The memo lines are the capstone's starting point.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-4" data-lo="LO6">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which option can Bustan use for late-delivery risk?</h2>
+  <div class="quiz" data-type="single" data-lo="LO6">
+    <p class="lead">A vendor offers TabPFN-2.6 as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?</p>
+    <div class="opts">
+      <div class="opt" data-why="Puts cost first: SAR 14 a month is trivial next to the other two checks">The price per prediction</div>
+      <div class="opt" data-ok>The licence: its outputs are for non-commercial use only</div>
+      <div class="opt" data-why="Treats the benchmark as evidence for Bustan: it is a hypothesis to test on Bustan's own data">The benchmark score is not high enough</div>
+      <div class="opt" data-why="Names a real obstacle but not the first: even self-hosted in Riyadh, the licence forbids commercial use">Only the transfer of personal data outside the Kingdom</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Self-hosting would solve the residency question; nothing Bustan can do solves the licence without a separate commercial agreement.</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>Answer: B. D is the strongest distractor; point out that the residency problem has a remedy (self-hosting) and the licence does not.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-4" data-auto="lab" data-lab="4.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>No model runs in this lab; it reads the adoption files and the references of Days 1 and 2. Keep the last three minutes for the capstone choice: each participant sets CAPSTONE_TASK and says it aloud. Asil's role is the data protection officer: if a participant proposes a cloud option, ask them to write the exception request in one line.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
-  <div class="kicker">Day 4 · wrap-up</div>
-  <h2>Three things to keep</h2>
-  <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+<!-- ======================= CLOSE ======================= -->
+<section class="slide" data-label="Wrap-up" id="wrap-up">
+  <div class="kicker">Day 4 · Three things to keep</div>
+  <h2>Validate as you will deploy, and adopt only under conditions you can name</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal"><h4>Detect</h4><p class="small mb0">Adversarial validation on the inputs; rates and an old model on the outcomes.</p></div>
+    <div class="card c-cyan"><h4>Validate and correct</h4><p class="small mb0">Hold out what deployment holds out; weight for covariate shift, recalibrate for the rest.</p></div>
+    <div class="card c-coral"><h4>Adopt with conditions</h4><p class="small mb0">Licence, data, cost and subgroup error, in one table.</p></div>
   </div>
+  <aside class="notes"><p>Collect every participant's capstone task. Remind them that the assessors will name a new shift scenario in the defence and ask which validation result changes before re-running it.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
-  <div class="kicker">Next</div>
-  <h2>Capstone: Capstone project presentations</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <div class="kicker">Tomorrow · Day 5</div>
+  <h2>Capstone</h2>
+  <p class="lead">An evaluation protocol and an adoption decision for one structured-data task, defended in 10 minutes with 10 minutes of questions.</p>
+  <ul class="bullets">
+    <li>Start from labs/capstone/: the starter and the template.</li>
+    <li>Bring the numbers with their intervals, and the run that produced each.</li>
+  </ul>
+  <aside class="notes"><p>The capstone brief and rubric are on the course page. Participants work in a public repository; nothing in it may contain real customer data.</p></aside>
 </section>

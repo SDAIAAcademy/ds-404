@@ -1,0 +1,100 @@
+{
+ "estimates": [
+  {
+   "scheme": "random",
+   "auc": 0.87084,
+   "logloss": 0.31566,
+   "predicted": 0.17996,
+   "observed": 0.18058,
+   "auc_gap": 0.10802,
+   "logloss_gap": -0.30237
+  },
+  {
+   "scheme": "grouped",
+   "auc": 0.7732,
+   "logloss": 0.384,
+   "predicted": 0.18132,
+   "observed": 0.18016,
+   "auc_gap": 0.01037,
+   "logloss_gap": -0.23403
+  },
+  {
+   "scheme": "temporal",
+   "auc": 0.88053,
+   "logloss": 0.31595,
+   "predicted": 0.19461,
+   "observed": 0.19202,
+   "auc_gap": 0.1177,
+   "logloss_gap": -0.30208
+  },
+  {
+   "scheme": "region-held-out",
+   "auc": 0.77018,
+   "logloss": 0.38857,
+   "predicted": 0.17895,
+   "observed": 0.18255,
+   "auc_gap": 0.00735,
+   "logloss_gap": -0.22946
+  }
+ ],
+ "deployed": {
+  "auc": 0.76283,
+  "logloss": 0.61803,
+  "predicted": 0.30955,
+  "observed": 0.43625
+ },
+ "closest": "region-held-out",
+ "by_segment": [
+  {
+   "segment": "grocery",
+   "orders": 5242.0,
+   "auc": 0.76352,
+   "predicted": 0.29723,
+   "observed": 0.41988
+  },
+  {
+   "segment": "horeca",
+   "orders": 1194.0,
+   "auc": 0.81728,
+   "predicted": 0.39243,
+   "observed": 0.56533
+  },
+  {
+   "segment": "hypermarket",
+   "orders": 608.0,
+   "auc": 0.83654,
+   "predicted": 0.34252,
+   "observed": 0.29276
+  },
+  {
+   "segment": "institutional",
+   "orders": 956.0,
+   "auc": 0.65144,
+   "predicted": 0.25263,
+   "observed": 0.45607
+  }
+ ],
+ "by_region_old": [
+  {
+   "region": "central",
+   "orders": 38165.0,
+   "auc": 0.76576,
+   "predicted": 0.18141,
+   "observed": 0.17563
+  },
+  {
+   "region": "eastern",
+   "orders": 17139.0,
+   "auc": 0.765,
+   "predicted": 0.17788,
+   "observed": 0.19779
+  },
+  {
+   "region": "western",
+   "orders": 16696.0,
+   "auc": 0.77713,
+   "predicted": 0.18499,
+   "observed": 0.17423
+  }
+ ]
+}

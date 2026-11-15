@@ -1,0 +1,113 @@
+{
+ "licences": [
+  {
+   "model": "TabICLv2",
+   "licence_ok": true,
+   "licence_note": "BSD-3-Clause"
+  },
+  {
+   "model": "TabPFN-2.6",
+   "licence_ok": false,
+   "licence_note": "TabPFN-2.6 Non-Commercial License: no: needs a separate commercial licence; yes: outputs for non-commercial purposes only"
+  },
+  {
+   "model": "Chronos-2",
+   "licence_ok": true,
+   "licence_note": "Apache-2.0"
+  },
+  {
+   "model": "TimesFM 2.5",
+   "licence_ok": true,
+   "licence_note": "Apache-2.0"
+  }
+ ],
+ "residency": [
+  {
+   "model": "TabICLv2",
+   "deployment": "self-hosted in Bustan's data centre in Riyadh",
+   "residency": "allowed"
+  },
+  {
+   "model": "TabICLv2",
+   "deployment": "Google Colab (Google-run machines, location not chosen by the user)",
+   "residency": "not allowed: personal data outside the Kingdom needs a PDPL Article 29 purpose, a transfer risk assessment and safeguards; Restricted data also needs Asil's exception"
+  },
+  {
+   "model": "TabPFN-2.6",
+   "deployment": "self-hosted in Bustan's data centre in Riyadh",
+   "residency": "allowed"
+  },
+  {
+   "model": "TabPFN-2.6",
+   "deployment": "the vendor's hosted service outside the Kingdom",
+   "residency": "not allowed: personal data outside the Kingdom needs a PDPL Article 29 purpose, a transfer risk assessment and safeguards; Restricted data also needs Asil's exception"
+  },
+  {
+   "model": "Chronos-2",
+   "deployment": "self-hosted in Bustan's data centre in Riyadh",
+   "residency": "allowed"
+  },
+  {
+   "model": "Chronos-2",
+   "deployment": "a cloud endpoint in a region outside the Kingdom",
+   "residency": "conditions: Restricted data outside Bustan's systems needs Asil's written exception"
+  },
+  {
+   "model": "TimesFM 2.5",
+   "deployment": "self-hosted in Bustan's data centre in Riyadh",
+   "residency": "allowed"
+  }
+ ],
+ "cost": [
+  {
+   "task": "late-delivery risk (tables)",
+   "option": "self-hosted CPU server (existing)",
+   "sar_per_month": 2.0
+  },
+  {
+   "task": "late-delivery risk (tables)",
+   "option": "hosted service, per 1,000 predictions",
+   "sar_per_month": 14.0
+  },
+  {
+   "task": "daily demand (series)",
+   "option": "self-hosted CPU server (existing)",
+   "sar_per_month": 52.0
+  },
+  {
+   "task": "daily demand (series)",
+   "option": "self-hosted GPU server (to buy or lease)",
+   "sar_per_month": 84.0
+  }
+ ],
+ "decisions": [
+  {
+   "task": "late-delivery risk (tables)",
+   "model": "TabICLv2",
+   "licence_ok": true,
+   "decision": "not now",
+   "memo": "Licence and self-hosting allow it, but the course run cannot tell the pretrained slot from tuned LightGBM at any size; retest on Bustan's data with the real model."
+  },
+  {
+   "task": "late-delivery risk (tables)",
+   "model": "TabPFN-2.6",
+   "licence_ok": false,
+   "decision": "no-go",
+   "memo": "Non-commercial licence: weights and outputs may not steer Bustan's deliveries without a separate commercial licence."
+  },
+  {
+   "task": "daily demand (series)",
+   "model": "Chronos-2",
+   "licence_ok": true,
+   "decision": "go with conditions",
+   "memo": "Apache-2.0, self-hosted in Riyadh; as a member for holiday windows only, if its stacking weight pays for its running cost."
+  },
+  {
+   "task": "daily demand (series)",
+   "model": "TimesFM 2.5",
+   "licence_ok": true,
+   "decision": "not now",
+   "memo": "Apache-2.0 on its model page; not evaluated in this course, so no evidence either way."
+  }
+ ]
+}
