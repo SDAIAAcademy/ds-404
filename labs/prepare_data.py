@@ -287,8 +287,8 @@ def main():
     o.to_csv(DATA / "orders.csv.gz", index=False, lineterminator="\n",
              compression={"method": "gzip", "mtime": 0, "compresslevel": 9})
     trucks = {"truck": {"m3": 60.0, "kg": 20000, "sar_per_trip": 2400},
-              "reefer": {"m3": 40.0, "kg": 14000, "sar_per_trip": 3200, "available_per_week": 3},
-              "depot_inbound_m3_per_week": 520.0, "suppliers": {"S1": "dry goods", "S2": "beverages",
+              "reefer": {"m3": 40.0, "kg": 14000, "sar_per_trip": 3200, "available_per_week": 2},
+              "depot_inbound_m3_per_week": 200.0, "suppliers": {"S1": "dry goods", "S2": "beverages",
                                                                  "S3": "chilled dairy (reefer only)", "S4": "dates and catering"},
               "note": "synthetic rates of Bustan Food Wholesale, not market prices"}
     (DATA / "trucks.json").write_text(json.dumps(trucks, indent=1) + "\n", encoding="utf-8", newline="\n")

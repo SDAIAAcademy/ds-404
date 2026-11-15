@@ -8,9 +8,9 @@
   "m3": 40.0,
   "kg": 14000,
   "sar_per_trip": 3200,
-  "available_per_week": 3
+  "available_per_week": 2
  },
- "depot_inbound_m3_per_week": 520.0,
+ "depot_inbound_m3_per_week": 200.0,
  "suppliers": {
   "S1": "dry goods",
   "S2": "beverages",

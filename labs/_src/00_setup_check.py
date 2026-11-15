@@ -49,7 +49,7 @@ U.check(len(o) == 80000 and Y.shape[1] == 400, "the case data is in place")
 import pulp
 
 prob = pulp.LpProblem("tiny", pulp.LpMinimize)
-x = pulp.LpVariable("trucks", lowBound=0, cat="Integer")
+x = prob.add_variable("trucks", lowBound=0, cat="Integer")      # PuLP 4: variables belong to a problem
 prob += 2400 * x
 prob += 60 * x >= 130
 prob.solve(pulp.HiGHS(msg=False))

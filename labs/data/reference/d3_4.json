@@ -1,0 +1,190 @@
+{
+ "scale": 1.28822,
+ "rho_prod": 0.09262,
+ "rho_day": 0.03644,
+ "risk": [
+  {
+   "product": "P001",
+   "category": "rice_flour_sugar",
+   "p_short": 0.1735,
+   "fill_rate": 0.98833,
+   "aimed": 0.11599,
+   "cut": 12.0
+  },
+  {
+   "product": "P002",
+   "category": "rice_flour_sugar",
+   "p_short": 0.2025,
+   "fill_rate": 0.98707,
+   "aimed": 0.18159,
+   "cut": 1.0
+  },
+  {
+   "product": "P003",
+   "category": "rice_flour_sugar",
+   "p_short": 1.0,
+   "fill_rate": 0.118,
+   "aimed": 0.08304,
+   "cut": 340.0
+  },
+  {
+   "product": "P004",
+   "category": "rice_flour_sugar",
+   "p_short": 0.1195,
+   "fill_rate": 0.99124,
+   "aimed": 0.12035,
+   "cut": 0.0
+  },
+  {
+   "product": "P005",
+   "category": "rice_flour_sugar",
+   "p_short": 0.0805,
+   "fill_rate": 0.99458,
+   "aimed": 0.08989,
+   "cut": 0.0
+  },
+  {
+   "product": "P023",
+   "category": "beverages",
+   "p_short": 0.1715,
+   "fill_rate": 0.98431,
+   "aimed": 0.17415,
+   "cut": 0.0
+  },
+  {
+   "product": "P024",
+   "category": "beverages",
+   "p_short": 0.0955,
+   "fill_rate": 0.99505,
+   "aimed": 0.11685,
+   "cut": 0.0
+  },
+  {
+   "product": "P025",
+   "category": "beverages",
+   "p_short": 0.0845,
+   "fill_rate": 0.99315,
+   "aimed": 0.08276,
+   "cut": 0.0
+  },
+  {
+   "product": "P026",
+   "category": "beverages",
+   "p_short": 0.146,
+   "fill_rate": 0.98733,
+   "aimed": 0.14306,
+   "cut": 0.0
+  },
+  {
+   "product": "P027",
+   "category": "beverages",
+   "p_short": 0.1565,
+   "fill_rate": 0.98775,
+   "aimed": 0.16393,
+   "cut": 0.0
+  },
+  {
+   "product": "P033",
+   "category": "dairy_chilled",
+   "p_short": 0.721,
+   "fill_rate": 0.91813,
+   "aimed": 0.72712,
+   "cut": 0.0
+  },
+  {
+   "product": "P034",
+   "category": "dairy_chilled",
+   "p_short": 0.777,
+   "fill_rate": 0.84644,
+   "aimed": 0.76342,
+   "cut": 0.0
+  },
+  {
+   "product": "P035",
+   "category": "dairy_chilled",
+   "p_short": 0.6455,
+   "fill_rate": 0.93994,
+   "aimed": 0.67051,
+   "cut": 0.0
+  },
+  {
+   "product": "P036",
+   "category": "dairy_chilled",
+   "p_short": 0.666,
+   "fill_rate": 0.91219,
+   "aimed": 0.66787,
+   "cut": 0.0
+  },
+  {
+   "product": "P037",
+   "category": "dairy_chilled",
+   "p_short": 0.8355,
+   "fill_rate": 0.87145,
+   "aimed": 0.83235,
+   "cut": 0.0
+  },
+  {
+   "product": "P041",
+   "category": "dates_ramadan",
+   "p_short": 0.079,
+   "fill_rate": 0.99197,
+   "aimed": 0.08725,
+   "cut": 0.0
+  },
+  {
+   "product": "P042",
+   "category": "dates_ramadan",
+   "p_short": 0.156,
+   "fill_rate": 0.98272,
+   "aimed": 0.167,
+   "cut": 0.0
+  },
+  {
+   "product": "P043",
+   "category": "dates_ramadan",
+   "p_short": 0.089,
+   "fill_rate": 0.99057,
+   "aimed": 0.09423,
+   "cut": 0.0
+  },
+  {
+   "product": "P044",
+   "category": "dates_ramadan",
+   "p_short": 0.109,
+   "fill_rate": 0.99151,
+   "aimed": 0.12846,
+   "cut": 0.0
+  },
+  {
+   "product": "P045",
+   "category": "dates_ramadan",
+   "p_short": 0.1065,
+   "fill_rate": 0.99023,
+   "aimed": 0.12201,
+   "cut": 0.0
+  }
+ ],
+ "comparison": [
+  {
+   "scenarios": "independent",
+   "mean_p_short": 0.32072,
+   "p_3_or_more_in_stock_short": 0.2675,
+   "fill_rate": 0.90799,
+   "short_cost_p95": 11544.345
+  },
+  {
+   "scenarios": "as measured",
+   "mean_p_short": 0.38355,
+   "p_3_or_more_in_stock_short": 0.4945,
+   "fill_rate": 0.88508,
+   "short_cost_p95": 23828.88
+  },
+  {
+   "scenarios": "stress",
+   "mean_p_short": 0.41347,
+   "p_3_or_more_in_stock_short": 0.463,
+   "fill_rate": 0.86077,
+   "short_cost_p95": 39342.57
+  }
+ ]
+}

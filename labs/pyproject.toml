@@ -2,7 +2,7 @@
 name = "ds-404-labs"
 version = "2027.1.0"
 description = "Lab notebooks for the SDAIA Academy course DS-404 Advanced Modelling for Structured Data"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "numpy>=2.0",
     "pandas>=2.2",
@@ -10,7 +10,7 @@ dependencies = [
     "scikit-learn>=1.5",
     "lightgbm>=4.5",
     "matplotlib>=3.9",
-    "pulp>=3.0",
+    "pulp>=4.2,<5",
     "highspy>=1.7",
     "jupyterlab>=4.4",
 ]

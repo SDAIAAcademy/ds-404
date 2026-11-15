@@ -517,9 +517,7 @@ def week_inputs(model: str = "zero_shot_cov", origin_index: int = PLAN_ORIGIN, w
 def day3_products() -> pd.DataFrame:
     """The 20 products Day 3 plans for, at the Riyadh depot, with their costs per case."""
     p = products()
-    pick20 = (p[p.group.isin(["smooth", "seasonal"])].groupby("supplier", group_keys=False)
-              .apply(lambda d: d.head(5)))
-    pick20 = pick20.reset_index(drop=True)
+    pick20 = p[p.group.isin(["smooth", "seasonal"])].groupby("supplier").head(5).reset_index(drop=True)
     pick20["series"] = pick20["product"] + "-RUH"
     margin = pick20.price - pick20.unit_cost
     weekly_hold = pick20.unit_cost * 0.004 * 7                                  # cost of capital and space per week
