@@ -5,7 +5,7 @@
 
 Data Science Track · SDAIA Academy · DS-404 · Level 400
 
-REPLACE: one line under the title: what participants can do after the course
+Decide when pretrained models, stacked ensembles and decision-aware pipelines earn their place, measured against tuned baselines and under shift
 
 Participants decide when pretrained models, ensembles and decision-aware pipelines earn their place in structured-data work. On a fictional food wholesaler's synthetic orders and demand, they test pretrained tabular models and zero-shot forecasters against tuned baselines, stack ensembles, turn forecasts into orders by optimisation, score models by decision cost and validate under the shift of a new depot region. They end with an adoption decision weighing accuracy, licence, cost and data residency.
 
@@ -48,22 +48,22 @@ Every lab is a notebook in `labs/`. Open it in Google Colab from the course page
 
 | | Session | Lab | File |
 |---|---|---|---|
-| 1.1 | Day 1 · Session 1 | Tune a boosted-tree baseline under a fixed budget with grouped cross-validation | [`D1_1_tune_boosted_tree.ipynb`](labs/D1_1_tune_boosted_tree.ipynb) |
-| 1.2 | Day 1 · Session 2 | Run a pretrained tabular model on the same splits; compare accuracy and run time | [`D1_2_run_pretrained_tabular.ipynb`](labs/D1_2_run_pretrained_tabular.ipynb) |
-| 1.3 | Day 1 · Session 3 | Plot both across six training sizes, using supplied scores for the largest | [`D1_3_plot_both_across.ipynb`](labs/D1_3_plot_both_across.ipynb) |
-| 1.4 | Day 1 · Session 4 | Check a claim for unequal tuning budgets and pretraining overlap | [`D1_4_check_claim_unequal.ipynb`](labs/D1_4_check_claim_unequal.ipynb) |
-| 2.1 | Day 2 · Session 1 | Score zero-shot forecasts for 400 series against supplied benchmark backtests | [`D2_1_score_zero_shot.ipynb`](labs/D2_1_score_zero_shot.ipynb) |
-| 2.2 | Day 2 · Session 2 | Find the series groups, such as intermittent items, where the benchmark wins | [`D2_2_find_series_groups.ipynb`](labs/D2_2_find_series_groups.ipynb) |
-| 2.3 | Day 2 · Session 3 | Add Ramadan and Eid covariates and measure holiday-week error | [`D2_3_add_ramadan_eid.ipynb`](labs/D2_3_add_ramadan_eid.ipynb) |
-| 2.4 | Day 2 · Session 4 | Stack forecasters on rolling-origin windows; test the improvement against its interval | [`D2_4_stack_forecasters_rolling.ipynb`](labs/D2_4_stack_forecasters_rolling.ipynb) |
-| 3.1 | Day 3 · Session 1 | Compute newsvendor quantities from quantile forecasts for 20 products | [`D3_1_compute_newsvendor_quantities.ipynb`](labs/D3_1_compute_newsvendor_quantities.ipynb) |
-| 3.2 | Day 3 · Session 2 | Solve an order and truck-allocation programme for one depot week | [`D3_2_solve_order_truck.ipynb`](labs/D3_2_solve_order_truck.ipynb) |
-| 3.3 | Day 3 · Session 3 | Rank three forecasters by regret and by error | [`D3_3_rank_three_forecasters.ipynb`](labs/D3_3_rank_three_forecasters.ipynb) |
-| 3.4 | Day 3 · Session 4 | Stress-test the plan with simulated demand; report shortage risk | [`D3_4_stress_test_plan.ipynb`](labs/D3_4_stress_test_plan.ipynb) |
-| 4.1 | Day 4 · Session 1 | Run adversarial validation between old depots and the new region | [`D4_1_run_adversarial_validation.ipynb`](labs/D4_1_run_adversarial_validation.ipynb) |
-| 4.2 | Day 4 · Session 2 | Compare random, grouped and temporal validation with deployed error | [`D4_2_compare_random_grouped.ipynb`](labs/D4_2_compare_random_grouped.ipynb) |
-| 4.3 | Day 4 · Session 3 | Apply weighted conformal intervals and check coverage in the new region | [`D4_3_apply_weighted_conformal.ipynb`](labs/D4_3_apply_weighted_conformal.ipynb) |
-| 4.4 | Day 4 · Session 4 | Complete a licence, cost and residency table; choose the capstone task | [`D4_4_complete_licence_cost.ipynb`](labs/D4_4_complete_licence_cost.ipynb) |
+| 1.1 | Day 1 · Session 1 | A tuned baseline under a budget | [`D1_1_tune_boosted_tree.ipynb`](labs/D1_1_tune_boosted_tree.ipynb) |
+| 1.2 | Day 1 · Session 2 | A pretrained model on the same folds | [`D1_2_run_pretrained_tabular.ipynb`](labs/D1_2_run_pretrained_tabular.ipynb) |
+| 1.3 | Day 1 · Session 3 | Learning curves with intervals | [`D1_3_plot_both_across.ipynb`](labs/D1_3_plot_both_across.ipynb) |
+| 1.4 | Day 1 · Session 4 | Check a leaderboard claim | [`D1_4_check_claim_unequal.ipynb`](labs/D1_4_check_claim_unequal.ipynb) |
+| 2.1 | Day 2 · Session 1 | Zero-shot against the supplied backtests | [`D2_1_score_zero_shot.ipynb`](labs/D2_1_score_zero_shot.ipynb) |
+| 2.2 | Day 2 · Session 2 | Where the benchmark wins | [`D2_2_find_series_groups.ipynb`](labs/D2_2_find_series_groups.ipynb) |
+| 2.3 | Day 2 · Session 3 | Ramadan and Eid as covariates | [`D2_3_add_ramadan_eid.ipynb`](labs/D2_3_add_ramadan_eid.ipynb) |
+| 2.4 | Day 2 · Session 4 | Stacking on rolling-origin windows | [`D2_4_stack_forecasters_rolling.ipynb`](labs/D2_4_stack_forecasters_rolling.ipynb) |
+| 3.1 | Day 3 · Session 1 | Newsvendor quantities | [`D3_1_compute_newsvendor_quantities.ipynb`](labs/D3_1_compute_newsvendor_quantities.ipynb) |
+| 3.2 | Day 3 · Session 2 | Orders and trucks for one depot week | [`D3_2_solve_order_truck.ipynb`](labs/D3_2_solve_order_truck.ipynb) |
+| 3.3 | Day 3 · Session 3 | Regret against error | [`D3_3_rank_three_forecasters.ipynb`](labs/D3_3_rank_three_forecasters.ipynb) |
+| 3.4 | Day 3 · Session 4 | Stress-test the plan | [`D3_4_stress_test_plan.ipynb`](labs/D3_4_stress_test_plan.ipynb) |
+| 4.1 | Day 4 · Session 1 | Adversarial validation | [`D4_1_run_adversarial_validation.ipynb`](labs/D4_1_run_adversarial_validation.ipynb) |
+| 4.2 | Day 4 · Session 2 | Four schemes against deployed error | [`D4_2_compare_random_grouped.ipynb`](labs/D4_2_compare_random_grouped.ipynb) |
+| 4.3 | Day 4 · Session 3 | Weighted conformal intervals | [`D4_3_apply_weighted_conformal.ipynb`](labs/D4_3_apply_weighted_conformal.ipynb) |
+| 4.4 | Day 4 · Session 4 | Licence, cost and residency | [`D4_4_complete_licence_cost.ipynb`](labs/D4_4_complete_licence_cost.ipynb) |
 <!-- /academy:labs -->
 
 ## Capstone
@@ -86,7 +86,7 @@ An evaluation protocol and adoption decision for one structured-data task (two p
 Each line is a capability; the examples are interchangeable.
 
 - **Pretrained tabular models:** TabICL, TabPFN family (non-commercial weights)
-- **Pretrained forecasters:** Chronos family, TimesFM (non-commercial weights)
+- **Pretrained forecasters:** Chronos family, TimesFM
 - **Baselines and ensembling:** LightGBM, StatsForecast, AutoGluon
 - **Optimisation modelling and solvers:** Pyomo or PuLP with HiGHS, OR-Tools
 - **Conformal prediction:** MAPIE, course-provided implementations

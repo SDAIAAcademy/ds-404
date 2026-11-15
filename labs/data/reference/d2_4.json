@@ -1,0 +1,78 @@
+{
+ "answered_by": "stand-in (weekday profile with in-context holiday multipliers; not a pretrained model)",
+ "weights": {
+  "2026-01-04": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.0,
+   "LightGBM (tuned)": 0.94332,
+   "zero-shot + covariates": 0.05668
+  },
+  "2026-02-15": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.0,
+   "LightGBM (tuned)": 0.95006,
+   "zero-shot + covariates": 0.04994
+  },
+  "2026-03-15": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.0,
+   "LightGBM (tuned)": 0.89175,
+   "zero-shot + covariates": 0.10825
+  },
+  "2026-05-10": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.0,
+   "LightGBM (tuned)": 0.81395,
+   "zero-shot + covariates": 0.18605
+  }
+ },
+ "means": {
+  "best single": 0.4911,
+  "least-squares stack": 0.5293,
+  "simple average": 0.57961,
+  "stack": 0.48879
+ },
+ "gain": {
+  "gain": 0.00201,
+  "lo": 0.00118,
+  "hi": 0.00283,
+  "relative": 0.00405
+ },
+ "average_gain": [
+  -0.08856,
+  -0.09407,
+  -0.08298
+ ],
+ "ls_gain": [
+  -0.03703,
+  -0.04054,
+  -0.03332
+ ],
+ "verdict": "the gain is real but under 2%: weigh it against running four models",
+ "weights_ls": {
+  "2026-01-04": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.38607,
+   "LightGBM (tuned)": 0.61393,
+   "zero-shot + covariates": 0.0
+  },
+  "2026-02-15": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.38825,
+   "LightGBM (tuned)": 0.6108,
+   "zero-shot + covariates": 0.00095
+  },
+  "2026-03-15": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.3506,
+   "LightGBM (tuned)": 0.58392,
+   "zero-shot + covariates": 0.06549
+  },
+  "2026-05-10": {
+   "seasonal naive": 0.0,
+   "smoothing": 0.17727,
+   "LightGBM (tuned)": 0.58172,
+   "zero-shot + covariates": 0.24101
+  }
+ }
+}

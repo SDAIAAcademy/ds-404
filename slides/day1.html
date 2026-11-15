@@ -1,158 +1,471 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Welcome the room. This is a 400-level course: participants already tune boosted trees, backtest forecasters and read intervals (DS-304 and DS-305 are the prerequisites). Calibrate with one question: who has run a pretrained tabular model or a pretrained forecaster on their own data, and who believed the result? Day 1 asks one question four ways: does a pretrained tabular model beat a fairly tuned baseline on Bustan's late deliveries, and at what size?</p></aside>
+</section>
+
+<section class="slide" data-label="The week" id="four-days-one-decision">
+  <div class="kicker">The course at a glance</div>
+  <h2>Four days of evidence, then one adoption decision you defend</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-teal"><h4>Day 1 · Tables</h4><p class="small mb0">A tuned baseline, a pretrained tabular model, learning curves, a leaderboard claim.</p></div>
+    <div class="card c-cyan"><h4>Day 2 · Series</h4><p class="small mb0">Zero-shot forecasts on 400 series, by group, with Ramadan and Eid, and stacking.</p></div>
+    <div class="card c-coral"><h4>Day 3 · Decisions</h4><p class="small mb0">Quantiles into orders and trucks; forecasters ranked by the regret they cause.</p></div>
+    <div class="card c-purple"><h4>Day 4 · Shift and adoption</h4><p class="small mb0">A new region: shift found, validated, corrected; licence, cost and residency.</p></div>
+  </div>
+  <div class="callout tip mt"><b>Day 5 · Capstone.</b> An evaluation protocol and an adoption decision for one task, in a public repository, defended before two assessors.</div>
+  <aside class="notes"><p>One sentence per day; do not teach yet. The capstone rubric: fair comparison 25, validation under shift 25, ensemble or decision analysis 20, adoption reasoning 15, reproducibility 15. Each day builds one part of it. The follow-up task, within three weeks, applies the same protocol to a workplace or public dataset.</p></aside>
+</section>
+
+<section class="slide" data-label="How we work" id="evidence-before-adoption">
+  <div class="kicker">How this course works</div>
+  <h2>Every new model meets a fair baseline, the same splits and an interval</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>Fair</h4><p class="small mb0">Same data, same folds, same metric, and the tuning budget written down.</p></div>
+    <div class="card c-teal"><h4>Sized</h4><p class="small mb0">A difference without an interval is an anecdote.</p></div>
+    <div class="card c-coral"><h4>Decided</h4><p class="small mb0">Accuracy is one column. Cost, licence and the data's classification are the others.</p></div>
+  </div>
+  <div class="callout warn small mt"><b>AI policy.</b> AI off for the supervised checks and for the Day 1 baseline (Lab 1.1). In the other labs an assistant may give hints, not finished pipelines. In the capstone, anything goes, with a verification note and a live defence.</div>
+  <aside class="notes"><p>Say the AI policy aloud and why: the baseline of Lab 1.1 is the yardstick for the whole day, and the supervised check asks participants to choose a validation scheme, compute a newsvendor quantity and read a learning curve without help. The policy comes from the catalog entry, not from the trainer.</p></aside>
+</section>
+
+<section class="slide" data-label="Case study" id="bustan-food-wholesale">
+  <div class="kicker">One case study all week</div>
+  <h2>Bustan Food Wholesale wants to know which new models earn their place</h2>
+  <p class="lead">A fictional food wholesaler with depots in Riyadh, Jeddah, Dammam and Buraidah, and a new northern region around Hail and Tabuk.</p>
+  <div class="cols cols-3 gap-s mt-s">
+    <div class="card c-teal flat"><h4>80,000 orders</h4><p class="small mb0">Over three Hijri years, with delivery hours and a late flag. 8,000 of them come from the new region.</p></div>
+    <div class="card c-cyan flat"><h4>400 demand series</h4><p class="small mb0">100 products at four depots, daily, with Ramadan and both Eids from the Umm al-Qura calendar.</p></div>
+    <div class="card c-coral flat"><h4>Costs and capacity</h4><p class="small mb0">Margins, holding and spoilage, trucks, reefers and depot space.</p></div>
+  </div>
+  <aside class="notes"><p>Name the people. Ahlam Al-Kuwaileet, head of supply planning, owns the decision. Shadi Al-Baiz runs the new northern region. Imad Al-Sharqi plans trucks and depot space. Asil Al-Rajeh is the data protection officer and owns the classification register. Rafif Al-Moaibed is the analyst who forwards the vendor's claim in Session 4. Participants play Sarab Al-Mashouq, a senior data scientist. All data is synthetic, generated with a fixed seed by labs/prepare_data.py; the planted problems are listed in labs/solutions/answer_key.md. Do not reveal them yet.</p></aside>
+</section>
+
+<section class="slide" data-label="Setup" id="where-models-run">
+  <div class="kicker">Lab environment</div>
+  <h2>Pretrained models run in Colab; on a laptop a labelled stand-in answers</h2>
+  <div class="cols cols-2">
+    <ol class="bullets">
+      <li>Run <code>00_setup_check.ipynb</code> before Session 1.</li>
+      <li>In <b>Colab</b>, the first cell installs the model's package and its weights download into the Colab runtime. Nothing downloads to your laptop.</li>
+      <li>Elsewhere a <b>stand-in</b> answers. Every result prints which one answered.</li>
+      <li>Every lab starts from supplied files. No lab needs another lab's output.</li>
+    </ol>
+    <pre class="code s" data-file="terminal (local option)"><code class="language-bash">git clone https://github.com/SDAIAAcademy/ds-404
+cd ds-404/labs
+uv sync
+uv run jupyter lab</code></pre>
+  </div>
+  <aside class="notes"><p>The stand-in is honest about itself: for tables it is a spline logistic regression averaged with a nearest-neighbour vote; for series it is a weekday profile with holiday multipliers estimated from the context. It is there so that every notebook runs on any laptop. The numbers on these slides come from the course's own run, which used the stand-in because no pretrained weights were downloaded for it: say so when you show them, and invite participants with Colab to compare. Common failures: Colab's free runtime disconnects after idling (rerun the first cell); a proxy blocks huggingface.co (use the stand-in).</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
+<!-- ======================= SESSION 1 ======================= -->
 <section class="slide section" id="s1" data-auto="section" data-session="1"></section>
 
-<section class="slide" id="s1-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
+<section class="slide" data-label="The question" id="new-model-old-baseline" data-lo="LO1">
+  <div class="kicker">What Ahlam asks</div>
+  <h2>"Is the new model better?" means better than what, tuned how much?</h2>
   <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+    <div class="chat">
+      <div class="msg user"><span class="who">Ahlam</span>A vendor says its pretrained model predicts late deliveries better than anything we have. Should we switch?</div>
+      <div class="msg ai"><span class="who">Sarab</span>Better than our boosted trees after we tune them with the same effort, on our own customers. Give me today.</div>
+    </div>
+    <div class="stack">
+      <div class="card c-teal flat"><h4>The target</h4><p class="small mb0">Late: delivered after the promised hours. 18% of orders in the established regions.</p></div>
+      <div class="card c-coral flat"><h4>The trap</h4><p class="small mb0">An untuned baseline makes any new model look good.</p></div>
+    </div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>The late rate is from the generated data: 18.1% in the established regions, 43.6% in the new north (Day 4). Ask the room: what is the cheapest way to make a new model win a comparison? Expected answers: tune it and not the baseline; test on data it saw; report the best of many runs. Today defends against all three.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Budget" id="budget-before-search" data-lo="LO1">
+  <div class="kicker">Before any search</div>
+  <h2>Write the tuning budget down before you search</h2>
+  <table class="t small">
+    <tr><th>Budget item</th><th>Lab 1.1</th><th>Why it is fixed first</th></tr>
+    <tr><td>Configurations</td><td>20, drawn at random</td><td>More draws always find a luckier one</td></tr>
+    <tr><td>Folds</td><td>5, grouped by customer</td><td>The estimate the search optimises</td></tr>
+    <tr><td>Fits</td><td>100, plus 3 refits</td><td>The unit a pretrained model is compared in</td></tr>
+    <tr><td>Seconds</td><td>measured, on a laptop CPU</td><td>The cost the adoption memo reports</td></tr>
+  </table>
+  <div class="callout tip small mt"><b>A budget is part of the result.</b> "AUC 0.78 after 103 fits" can be compared; "AUC 0.78" cannot.</div>
+  <aside class="notes"><p>In the course run the 100 search fits took about 25 seconds on a laptop CPU at 5,000 orders. Random search beats a grid at the same budget when only a few parameters matter, which is usual for boosted trees (Bergstra and Bengio). Sources: Bergstra and Bengio, Random Search for Hyper-Parameter Optimization, JMLR 13 (2012).</p></aside>
+</section>
+
+<section class="slide" data-label="Search space" id="search-space" data-lo="LO1">
+  <div class="kicker">What the search draws from</div>
+  <h2>Six parameters, each with a range that a practitioner would defend</h2>
+  <pre class="code s" data-file="bustan.sample_config"><code class="language-python">{"learning_rate":     log-uniform 0.02 to 0.2,
+ "num_leaves":        7, 15, 31 or 63,
+ "min_child_samples": 10, 20, 50 or 100,
+ "n_estimators":      100, 200 or 400,
+ "colsample_bytree":  0.6, 0.8 or 1.0,
+ "reg_lambda":        0, 1 or 5}</code></pre>
+  <p class="small mt-s">The best of 20 in the course run: 7 leaves, learning rate 0.021, 400 trees, 60% of features per tree. Small trees and many of them.</p>
+  <aside class="notes"><p>Ask why the best trees are so small: 5,000 orders and a target where much of the variation is the customer, which the model cannot see for a new customer. Deep trees memorise customers. The spread between the best and the worst of the 20 configurations was 0.037 AUC: that is what the budget buys.</p></aside>
+</section>
+
+<section class="slide" data-label="Customers repeat" id="customers-repeat" data-lo="LO1">
+  <div class="kicker">Why the folds must be grouped</div>
+  <h2>A customer seen in training is recognised, not predicted</h2>
+  <div class="cols cols-2">
+    <ul class="bullets">
+      <li>A customer's <b>distance and segment never change</b>: together they fingerprint the customer.</li>
+      <li>Some customers are late more often for reasons in no column: their street, their receiving hours.</li>
+      <li>Random folds put the same customer on both sides; the model learns the fingerprint.</li>
+      <li>Bustan predicts for <b>new and changing customers</b>, so the folds keep each customer on one side.</li>
+    </ul>
+    <div class="card c-coral"><h4>In the sample</h4><p class="small mb0">5,000 orders from fewer than 1,500 customers: most customers appear more than once.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>The planted problem: every customer has a hidden effect on delay, and distance is a fixed property of the customer. Ask the room which other datasets have the same structure: patients with many visits, students with many courses, stores with many days. DS-305 covered grouped validation as a technique; here it decides which baseline counts.</p></aside>
+</section>
+
+<section class="slide" data-label="Three estimates" id="random-folds-flatter" data-lo="LO1">
+  <div class="kicker">Lab 1.1, the course run</div>
+  <h2>Random K-fold flattered the same model by 0.02 AUC</h2>
+  <div class="bars mt">
+    <div class="row"><span>Random 5-fold</span><div class="bar" style="--w:80%;--c:var(--coral)"></div><span class="val">0.799</span></div>
+    <div class="row"><span>Grouped 5-fold</span><div class="bar" style="--w:78%"></div><span class="val">0.779</span></div>
+    <div class="row"><span>Held-out customers</span><div class="bar" style="--w:78%;--c:var(--cyan)"></div><span class="val">0.785</span></div>
+  </div>
+  <p class="small mt">Same configuration, same 5,000 orders. The held-out set is 14,289 orders of customers the model never saw.</p>
+  <aside class="notes"><p>Numbers from the course's solution run of Lab 1.1 (data/reference/d1_1.json). Random folds were 0.014 above the held-out customers; grouped folds were 0.005 below. Point out that a 0.02 flattery is larger than most of the differences between models we will see today: an unfair split can decide a comparison on its own.</p></aside>
+</section>
+
+<section class="slide" data-label="Ensemble" id="top-three-ensemble" data-lo="LO1">
+  <div class="kicker">The last step of the baseline</div>
+  <h2>Average the top three configurations to make the baseline stable, not lucky</h2>
+  <div class="cols cols-2">
+    <div class="stack">
+      <div class="card c-teal flat"><h4>Why</h4><p class="small mb0">The single best of 20 is partly the best by chance. Three good ones disagree in different places.</p></div>
+      <div class="card c-cyan flat"><h4>How</h4><p class="small mb0">Refit each on all training orders; average the <b>probabilities</b>.</p></div>
+    </div>
+    <div class="stat"><div class="big">0.784</div><div class="lbl">held-out AUC of the three-model average; the single best scored 0.785</div></div>
+  </div>
+  <div class="callout note small mt">Here the average did not raise the score. It is kept because the catalog asks for a tuned, ensembled baseline: a pretrained model must beat the strongest version.</div>
+  <aside class="notes"><p>Honest finding: in the course run the ensemble scored 0.7835 against 0.7845 for the single best, a difference well inside the noise. Ensembling buys stability across samples, which matters in Lab 1.3 where the baseline is retuned at every size. Averaging classes instead of probabilities would destroy the ranking that AUC measures.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-1" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which estimate goes in the memo?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">Sarab's baseline scores 0.80 AUC under random 5-fold and 0.78 under 5-fold grouped by customer. Bustan will use the model on next quarter's orders, many from new customers. Which number goes in the memo?</p>
+    <div class="opts">
+      <div class="opt" data-why="Takes the higher score as the better one: a higher estimate from a leaky split is only more optimistic">0.80, because it is the model's best result</div>
+      <div class="opt" data-ok>0.78, because the folds keep each customer on one side</div>
+      <div class="opt" data-why="Averages two estimates as if both were honest: the average keeps half of the leak">0.79, the average of the two schemes</div>
+      <div class="opt" data-why="Treats the choice of split as a matter of taste: the deployment, not preference, decides which split is honest">Either, as long as the memo names the scheme</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The model will meet customers it has not seen. Only grouped folds measure that; random folds let it recognise customers by their fixed fields.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. If many choose D, ask what decision Ahlam takes from the number: she cannot correct for a scheme she does not understand. If many choose C, point out that half a leak is still a leak.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-1" data-auto="lab" data-lab="1.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>AI-off lab: assistants closed. Walk the room. Usual problems: folds built on rows instead of customers (the check "no customer is on both sides" fails); a search that reuses one random generator per configuration and so draws the same configuration 20 times; forgetting to sort best first. Quick mode (BUSTAN_QUICK=1) runs 6 configurations on 3 folds for slow laptops. Early finishers take the stretch: a grid at the same budget.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="In-context" id="training-rows-as-context" data-lo="LO1">
+  <div class="kicker">What a tabular foundation model does</div>
+  <h2>It reads your training rows as context and predicts in one pass, with no training on them</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Pretraining</b>once, by the vendor, on synthetic tables</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Context</b>your labelled training rows</div>
+    <div class="arrow">→</div>
+    <div class="step c-cyan"><b>Query</b>your test rows</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Output</b>probabilities, one forward pass</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout tip small mt"><b>No parameter updates.</b> "Fit" stores the rows; the work happens at prediction.</div>
+  <aside class="notes"><p>The TabICL paper describes in-context learning on tables as setting the training data as context for the test data and predicting in a single forward pass without parameter updates. TabPFN and TabICL are both pretrained on synthetic datasets drawn from a prior, not on real company data. Sources: Qu et al., TabICL (arXiv 2502.05564); Qu et al., TabICLv2 (arXiv 2602.11139).</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Cost moves" id="cost-moves-to-predict" data-lo="LO1">
+  <div class="kicker">Where the seconds go</div>
+  <h2>The cost moves from fitting to predicting</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th></th><th>Boosted trees</th><th>In-context model</th></tr>
+      <tr><td>Fit</td><td>builds trees</td><td>stores rows</td></tr>
+      <tr><td>Tuning</td><td>many fits</td><td>usually none</td></tr>
+      <tr><td>Predict</td><td>walks trees: cheap</td><td>attends to training rows: grows with both sizes</td></tr>
+      <tr><td>Hardware</td><td>CPU</td><td>GPU for large tables</td></tr>
+    </table>
+    <div class="card c-coral"><h4>For Bustan</h4><p class="small mb0">Scoring 2,000 orders every night is cheap either way. Scoring 50,000 with 50,000 rows of context is not.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>The TabICL README recommends a GPU for larger datasets. In Lab 1.2's course run the stand-in's predict step took about 0.07 seconds per fold against 0.008 for the trees: the shape, not the size, is what to notice. With the real model in Colab the gap is larger. Sources: TabICL repository README (github.com/soda-inria/tabicl).</p></aside>
+</section>
+
+<section class="slide" data-label="Families" id="two-families" data-lo="LO1 LO6">
+  <div class="kicker">The models in the tool slot</div>
+  <h2>Two families of tabular foundation models, with different licences</h2>
+  <div class="cols cols-2 gap-s">
+    <div class="card c-teal"><h4>TabICL (TabICLv2)</h4><p class="small mb0">Classification and regression. Code and weights under BSD-3-Clause, a permissive licence.</p></div>
+    <div class="card c-purple"><h4>TabPFN family (TabPFN-2.5, 2.6)</h4><p class="small mb0">Weights under Prior Labs' non-commercial licences: testing and research, not production, without a commercial licence.</p></div>
+  </div>
+  <div class="callout warn small mt"><b>Names and licences change.</b> Checked on the official pages in November 2026. Check again before a cohort.</div>
+  <aside class="notes"><p>These are examples in a capability slot, not endorsements. The licence matters on Day 4: a non-commercial licence also restricts the outputs, so a model can be fine for this course and unusable for Bustan's nightly scoring. Sources: TabICL repository (BSD-3-Clause); Hugging Face model pages Prior-Labs/tabpfn_2_5 and tabpfn_2_6, licence files read on 15 November 2026.</p></aside>
+</section>
+
+<section class="slide" data-label="Same folds" id="same-folds-same-metric" data-lo="LO1">
+  <div class="kicker">The rule of Lab 1.2</div>
+  <h2>Score both models on the same folds and pair the differences</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 1.2"><code class="language-python">folds = U.grouped_folds(data.customer, 5)
+gbm = fold_scores(lambda: U.lgbm(**best_cfg),
+                  X, y, folds)
+pre = fold_scores(make_pretrained, X, y, folds)
+diff = pre.auc - gbm.auc        # fold by fold
+U.mean_ci(diff)</code></pre>
+    <div class="stack">
+      <div class="card c-teal flat"><h4>Paired</h4><p class="small mb0">A hard fold is hard for both models; the difference cancels it.</p></div>
+      <div class="card c-coral flat"><h4>Unpaired</h4><p class="small mb0">Each model on its own split adds split noise to the comparison.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><p>Walk through the code. The configuration comes from Lab 1.1's supplied file, so a participant who did not finish Lab 1.1 starts from the same point. Ask: if fold 3 contains Bustan's three most erratic customers, what happens to both AUCs on that fold, and to their difference?</p></aside>
+</section>
+
+<section class="slide" data-label="Lab 1.2 result" id="comparison-with-tuning" data-lo="LO1">
+  <div class="kicker">Lab 1.2, the course run (stand-in)</div>
+  <h2>At 2,000 orders the two cannot be told apart, and one of them needed 40 seconds of tuning</h2>
+  <table class="t small">
+    <tr><th>Answered by</th><th>AUC (5 folds)</th><th>Fit s</th><th>Predict s</th><th>Tuning s</th></tr>
+    <tr><td>Tuned LightGBM</td><td>0.779 ± 0.027</td><td>0.39</td><td>0.008</td><td>40</td></tr>
+    <tr><td>Stand-in</td><td>0.771 ± 0.035</td><td>0.23</td><td>0.073</td><td>0</td></tr>
+  </table>
+  <p class="small mt-s">Paired difference, stand-in minus baseline: -0.008, 95% interval -0.022 to +0.006.</p>
+  <aside class="notes"><p>From data/reference/d1_2.json. Tuning seconds are Lab 1.1's 103 fits times the mean fit time here. These are stand-in numbers: say it plainly, and ask a participant who ran the notebook in Colab to read TabICL's row aloud. Whatever the model, the reading is the same: no difference detectable at this size, and very different costs.</p></aside>
+</section>
+
+<section class="slide" data-label="Preprocessing" id="preprocessing-moves" data-lo="LO1">
+  <div class="kicker">What changed besides the model</div>
+  <h2>A pretrained model brings its own preprocessing: know what it does to your columns</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal flat"><h4>Scaling</h4><p class="small mb0">Rescaled inside the model. Trees never needed it.</p></div>
+    <div class="card c-cyan flat"><h4>Categories</h4><p class="small mb0">The segment is stored as a code 0 to 3. A careless pipeline feeds it as a number.</p></div>
+    <div class="card c-coral flat"><h4>Ensembling</h4><p class="small mb0">Several passes over transformed copies of the table (TabICL's <code>n_estimators</code>).</p></div>
+  </div>
+  <div class="callout warn small mt"><b>Fairness cuts both ways.</b> The pretrained model ensembles by default; that is why the baseline is ensembled too.</div>
+  <aside class="notes"><p>The TabICL README documents n_estimators as the number of ensemble members, 8 by default. This slide prepares Session 4: the vendor's claim compares an eight-member pretrained ensemble with untuned single trees. Sources: TabICL repository README.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-2" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>What makes the run-time comparison fair?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">The pretrained model took 0.3 seconds per fold and the baseline 0.4. Rafif concludes the pretrained model is cheaper. What is missing from his comparison?</p>
+    <div class="opts">
+      <div class="opt" data-why="Thinks hardware explains everything: both ran on the same CPU here">The type of processor each model ran on</div>
+      <div class="opt" data-why="Treats prediction as free: for an in-context model it is where most of the cost lives, so it must be counted, not dropped">Nothing: fit time is the cost that matters</div>
+      <div class="opt" data-ok>The 103 fits the baseline's tuning cost before that fit</div>
+      <div class="opt" data-why="Confuses accuracy with cost: AUC is a separate column of the same table">The AUC of each model on the same folds</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The baseline's single fit was bought with a search; the pretrained model ran with defaults. The table carries tuning time, fit time and predict time.</div>
+  </div>
+  <aside class="notes"><p>Answer: C. Then turn it around: if Bustan scores large batches nightly, the pretrained model's predict time is the bigger line, which option B hides.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-2" data-auto="lab" data-lab="1.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>In Colab, ask participants to switch to a GPU runtime if one is free; the CPU runtime works for 2,000 rows. If huggingface.co is blocked, the stand-in answers and the notebook says so. Check that everyone reads the "answered by" line before comparing numbers with a neighbour. Fallback: data/reference/d1_1.json supplies the baseline configuration.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
+<section class="slide" data-label="One point" id="one-score-one-point" data-lo="LO1">
+  <div class="kicker">Why one comparison is not enough</div>
+  <h2>A score at one training size is one point on a curve</h2>
   <div class="cols cols-2">
     <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
+      <li>Bustan has <b>500 orders</b> for a new segment and <b>50,000</b> for its oldest depots.</li>
+      <li>Pretrained models are often strongest on small tables; tuned trees catch up as rows grow.</li>
+      <li>Where the curves cross, if they cross, is the decision.</li>
     </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+    <div class="card c-teal"><h4>Six sizes</h4><p class="small mb0">500, 1,000, 2,000, 5,000, 10,000 orders in the lab; 50,000 supplied.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>The TabICL paper reports TabPFNv2 excelling on tables with up to 10,000 samples and TabICL scaling to larger ones: published claims are about sizes, so Bustan's evidence must be too. Sources: TabICL (arXiv 2502.05564).</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
+<section class="slide" data-label="Repeats" id="repeats-make-intervals" data-lo="LO1">
+  <div class="kicker">The design of Lab 1.3</div>
+  <h2>Repeat every point on a fresh subsample to see how far it moves</h2>
   <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+    <div class="step c-navy"><b>Draw</b><i>n</i> orders from the pool</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Tune</b>the baseline: 8 configurations, grouped folds</div>
+    <div class="arrow">→</div>
+    <div class="step c-cyan"><b>Score</b>both on the same held-out customers</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Repeat</b>with a new seed</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip small mt"><b>The interval is over samples.</b> It answers "what if Bustan had drawn other orders of this size?"</div>
+  <aside class="notes"><p>Three repeats per size in the lab, five at 50,000 in the supplied file. The baseline is retuned at every size and repeat with U.tuned_ensemble, the procedure of Lab 1.1 in one call. Retuning matters: hyperparameters good at 500 rows are bad at 50,000.</p></aside>
+</section>
+
+<section class="slide" data-label="The curve" id="curves-overlap" data-lo="LO1" data-minutes="3">
+  <div class="kicker">Lab 1.3, the course run (stand-in)</div>
+  <h2>On Bustan's late deliveries the two curves overlap at every size</h2>
+  <table class="t small">
+    <tr><th>Training orders</th><th>Tuned LightGBM, AUC (95% interval)</th><th>Stand-in, AUC (95% interval)</th></tr>
+    <tr><td>500</td><td>0.740 (0.704 to 0.775)</td><td>0.750 (0.725 to 0.775)</td></tr>
+    <tr><td>2,000</td><td>0.768 (0.733 to 0.804)</td><td>0.765 (0.754 to 0.775)</td></tr>
+    <tr><td>10,000</td><td>0.777 (0.747 to 0.807)</td><td>0.774 (0.770 to 0.778)</td></tr>
+    <tr><td>50,000 (supplied)</td><td>0.775 (0.764 to 0.786)</td><td>0.777 (0.777 to 0.778)</td></tr>
+  </table>
+  <p class="small mt-s">The paired difference at every size has an interval that contains zero: no size where one approach wins.</p>
+  <aside class="notes"><p>From data/reference/d1_3.json; 1,000 and 5,000 are in the file too. Two honest readings. First, both curves flatten after about 5,000 orders: the rest is the customer effect no column carries. Second, the tuned baseline's intervals are much wider: retuning on each sample makes it less stable. That instability is a cost too. A real pretrained model in Colab may give another picture: that is exactly why the method, not the number, is what the capstone keeps.</p></aside>
+</section>
+
+<section class="slide" data-label="Reading" id="reading-a-crossover" data-lo="LO1">
+  <div class="kicker">How to read a learning curve</div>
+  <h2>A crossover counts only where the interval of the difference leaves zero</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal flat"><h4>Pretrained wins</h4><p class="small mb0">The whole interval of (pretrained minus baseline) above zero.</p></div>
+    <div class="card c-coral flat"><h4>Baseline wins</h4><p class="small mb0">The whole interval below zero.</p></div>
+    <div class="card c-navy flat"><h4>Cannot tell</h4><p class="small mb0">The interval contains zero. Say so, and say what more evidence would decide it.</p></div>
+  </div>
+  <div class="callout warn small mt"><b>Overlapping error bars are not the test.</b> Two bars can overlap while the paired difference is clear, because the repeats are paired.</div>
+  <aside class="notes"><p>The pairing point surprises people. Each repeat draws one sample and scores both models on it, so a hard sample is hard for both. The interval of the difference is usually narrower than the two separate intervals suggest. In the course run it did not help: the differences still straddled zero.</p></aside>
+</section>
+
+<section class="slide" data-label="Extrapolation" id="beyond-the-last-point" data-lo="LO1">
+  <div class="kicker">What the curve does not say</div>
+  <h2>Do not extend a curve past its last measured size</h2>
+  <ul class="bullets">
+    <li>The supplied 50,000-order point exists because the curve could not be guessed from 10,000.</li>
+    <li>Run time grows differently: in the course run, 24 seconds for the baseline at 50,000 (tuning included) and 21 for the stand-in.</li>
+    <li>A real in-context model at 50,000 rows needs a GPU; that is a cost line, not a footnote.</li>
+  </ul>
+  <aside class="notes"><p>Seconds are means over repeats from the course run; the 50,000-order point comes from labs/_tools/make_reference.py. Ask the room to predict how the stand-in's run time would grow at 200,000 orders and why the nearest-neighbour half of it makes the answer uncomfortable. The stretch of Lab 1.3 plots run time per size.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-3" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>What does this point say?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">At 500 orders, three repeats give the pretrained model a mean AUC 0.011 above the tuned baseline. The 95% interval of the paired difference runs from -0.031 to +0.052. What goes in the memo?</p>
+    <div class="opts">
+      <div class="opt" data-ok>No difference detectable at 500 orders with three repeats</div>
+      <div class="opt" data-why="Reads the mean and ignores the interval: a positive mean inside a wide interval is not a win">The pretrained model wins on small data</div>
+      <div class="opt" data-why="Reads an interval that contains zero as proof of equality: absence of evidence is not evidence of absence">The two models are equally accurate at 500 orders</div>
+      <div class="opt" data-why="Blames the method for the sample: more repeats, not a different metric, narrow the interval">The comparison is invalid and should be dropped</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The interval contains zero, so the sign is not established. More repeats or more test customers would narrow it; until then, no claim either way.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. The 500-order numbers are the course run's own (data/reference/d1_3.json). The difference between A and C is the point of the slide: A reports what the evidence can say; C claims equality, which the evidence cannot show either.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-3" data-auto="lab" data-lab="1.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>This is the longest-running lab: about four minutes of computing in full mode on a laptop. Slow machines use quick mode (BUSTAN_QUICK=1: three sizes, two repeats, four configurations). Make sure participants start the scoring cell early and read while it runs. The supplied 50,000-order file says which model wrote it; in Colab with TabICL the participant's own sizes come from the real model and the 50,000 row stays the stand-in's: the plot legend says so.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
+<section class="slide" data-label="The claim" id="vendor-claim" data-lo="LO1">
+  <div class="kicker">Rafif's email</div>
+  <h2>"Beats gradient boosting on 35 of 36 benchmark datasets"</h2>
   <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+    <div class="chat">
+      <div class="msg user"><span class="who">Rafif</span>Look at this slide from the vendor. 35 out of 36! Should we just switch?</div>
+      <div class="msg ai"><span class="who">Sarab</span>Send me the table behind it, not the slide.</div>
+    </div>
+    <div class="card c-coral"><h4>Three questions for any claim</h4><p class="small mb0">Was the baseline tuned as much? Was the model scored on data it was built or selected on? How big is each win, with an interval?</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>The vendor and its 36 datasets are invented (data/leaderboard_claim.csv). Real benchmarks for tabular models exist and are better run than this one; the TabICLv2 paper reports results on TabArena and TALENT. The point is the reading habit, not this vendor. Sources: TabICLv2 (arXiv 2602.11139).</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Budgets" id="unequal-budgets" data-lo="LO1">
+  <div class="kicker">The first column to read</div>
+  <h2>The claim's boosted trees got zero tuning trials; the pretrained model ensembled eight passes</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">35 / 36</div><div class="lbl">wins as claimed: defaults against an ensemble</div></div>
+    <div class="stat"><div class="big">23 / 36</div><div class="lbl">wins against trees tuned with 100 trials</div></div>
+    <div class="stat"><div class="big">11 / 23</div><div class="lbl">wins once overlapping datasets are removed</div></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>Numbers from the course run of Lab 1.4 (data/reference/d1_4.json). Equal budget does not have to mean equal trials; it means the same compute or the same effort, stated. A pretrained model with eight ensemble members against one untuned tree model is not a fair fight in either direction.</p></aside>
+</section>
+
+<section class="slide" data-label="Overlap" id="pretraining-overlap" data-lo="LO1">
+  <div class="kicker">The second column to read</div>
+  <h2>A model scored on datasets it was selected on is grading its own homework</h2>
+  <div class="cols cols-2">
+    <ul class="bullets">
+      <li><b>Pretraining overlap</b>: the dataset, or a copy, was in the training data.</li>
+      <li><b>Selection overlap</b>: the dataset was used to choose the model's settings or checkpoint.</li>
+      <li>Either inflates the score on exactly that dataset.</li>
+    </ul>
+    <div class="card c-teal"><h4>In the table</h4><p class="small mb0">13 of 36 datasets carry the flag. Drop them before counting.</p></div>
+  </div>
+  <div class="callout note small mt">Pretraining on synthetic tables lowers the risk of the first kind; public validation suites keep the second alive.</div>
+  <aside class="notes"><p>Both TabICL and Chronos-2 describe pretraining on synthetic data, which reduces overlap with public benchmarks; model selection on public suites can still create it. Ask participants where they would look for the overlap list: the model card, the paper's appendix, the benchmark's own rules. Sources: TabICL (arXiv 2502.05564); Chronos-2 (arXiv 2510.15821).</p></aside>
+</section>
+
+<section class="slide" data-label="Size the win" id="paired-difference-slices" data-lo="LO1">
+  <div class="kicker">The third question</div>
+  <h2>Without overlap the average advantage is zero; it splits by table size</h2>
+  <table class="t small">
+    <tr><th>Clean datasets</th><th>Count</th><th>Pretrained minus tuned, AUC</th><th>95% interval</th></tr>
+    <tr><td>All</td><td>23</td><td>-0.0005</td><td>-0.005 to +0.004</td></tr>
+    <tr><td>Under 3,000 rows</td><td>10</td><td>+0.009</td><td>+0.005 to +0.013</td></tr>
+    <tr><td>3,000 rows or more</td><td>13</td><td>-0.008</td><td>-0.011 to -0.005</td></tr>
+  </table>
+  <p class="small mt-s">A bootstrap over datasets. Counting wins hid both effects.</p>
+  <aside class="notes"><p>From Lab 1.4's course run. The vendor table was generated to have a small-data advantage and a large-data disadvantage; Bustan's own curve did not show either at its sizes. That is the reply to Rafif: the claim shrinks to a small-table effect, and Bustan's own data does not confirm it.</p></aside>
+</section>
+
+<section class="slide" data-label="Own evidence" id="own-curve-beats-claim" data-lo="LO1 LO6">
+  <div class="kicker">The reply</div>
+  <h2>Someone else's benchmark sets a hypothesis; your own curve tests it</h2>
+  <div class="prompt s" data-tool="Reply to Rafif">The claim compared an eight-member pretrained ensemble with untuned trees. At equal tuning and without the 13 overlapping datasets, the advantage is zero on average: positive under 3,000 rows, negative above. On our late-delivery data the two approaches cannot be told apart at any size from 500 to 50,000 orders.</div>
+  <aside class="notes"><p>Three lines, as Lab 1.4 asks. Note that the reply is not "the vendor is lying": it says what the evidence supports. Day 4's adoption memo will add licence, cost and residency, and the capstone protocol makes this whole day repeatable for any task.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-4" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which fact voids the claim first?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">A benchmark table shows a pretrained model winning 30 of 32 datasets. Which single fact, if true, most undermines the claim?</p>
+    <div class="opts">
+      <div class="opt" data-why="Mistakes speed for accuracy: run time is a separate column of the decision">The pretrained model was slower on every dataset</div>
+      <div class="opt" data-why="Treats a public dataset as suspect by itself: public data is fine unless the model was built or selected on it">Most of the datasets are publicly available</div>
+      <div class="opt" data-why="Assumes small tables cannot be evidence: they are exactly where such models claim to help">Half of the datasets have fewer than 3,000 rows</div>
+      <div class="opt" data-ok>The boosted trees were run at default settings</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> An untuned baseline turns tuning effort into "model quality": every win may be the budget, not the model.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. Option B is the tempting one; the problem is overlap, not publicity. Bring the room back to the three questions on the claim slide.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-4" data-auto="lab" data-lab="1.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Short computations, so the lab is about reading and writing. Check every pair's three-line reply before they leave: does it say what was compared, what remains, and what Bustan's own curve says? The curve comes from the supplied data/reference/d1_3.json, so the lab does not depend on Lab 1.3 finishing.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
-  <div class="kicker">Day 1 · wrap-up</div>
-  <h2>Three things to keep</h2>
-  <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+<!-- ======================= CLOSE ======================= -->
+<section class="slide" data-label="Wrap-up" id="wrap-up">
+  <div class="kicker">Day 1 · Three things to keep</div>
+  <h2>A fair comparison is designed before it is run</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal"><h4>Budget and folds</h4><p class="small mb0">Write the tuning budget down; keep each customer on one side.</p></div>
+    <div class="card c-cyan"><h4>Curves, not points</h4><p class="small mb0">Compare across sizes, with intervals of the paired difference.</p></div>
+    <div class="card c-coral"><h4>Claims are hypotheses</h4><p class="small mb0">Equal budgets, no overlap, an interval; then your own data.</p></div>
   </div>
+  <aside class="notes"><p>Ask each participant to write one sentence for Ahlam that they could defend tomorrow. Collect two or three aloud. Remind them that the capstone rubric gives 25% to a fair comparison: today is that 25%.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
-  <div class="kicker">Next</div>
-  <h2>Day 2: Forecasting with pretrained models</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <div class="kicker">Tomorrow · Day 2</div>
+  <h2>Forecasting with pretrained models</h2>
+  <p class="lead">Zero-shot forecasts on 400 series against supplied backtests, the groups where a benchmark wins, Ramadan and Eid as covariates, and stacking.</p>
+  <ul class="bullets">
+    <li>Recall DS-304: the benchmark floor, rolling origins, MASE.</li>
+    <li>Colab users: Lab 2.1 installs a pretrained forecaster; start it early.</li>
+  </ul>
+  <aside class="notes"><p>Tell participants that Day 2 assumes rolling-origin backtesting from DS-304 and will not reteach it; one recap slide opens the day.</p></aside>
 </section>

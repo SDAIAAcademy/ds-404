@@ -1,0 +1,173 @@
+{
+ "answered_by": "stand-in (weekday profile with in-context holiday multipliers; not a pretrained model)",
+ "counts": {
+  "regular": 160,
+  "intermittent": 100,
+  "Ramadan items": 80,
+  "short": 60
+ },
+ "sql_by_group": [
+  {
+   "group": "Ramadan items",
+   "LightGBM (tuned)": 0.54905,
+   "seasonal naive": 0.96233,
+   "smoothing": 0.8511,
+   "zero-shot": 0.75983
+  },
+  {
+   "group": "intermittent",
+   "LightGBM (tuned)": 0.46899,
+   "seasonal naive": 0.79224,
+   "smoothing": 0.66172,
+   "zero-shot": 0.50069
+  },
+  {
+   "group": "regular",
+   "LightGBM (tuned)": 0.43952,
+   "seasonal naive": 0.71496,
+   "smoothing": 0.55927,
+   "zero-shot": 0.55131
+  },
+  {
+   "group": "short",
+   "LightGBM (tuned)": 0.65295,
+   "seasonal naive": 0.95832,
+   "smoothing": 0.84794,
+   "zero-shot": 0.83859
+  }
+ ],
+ "mase_by_group": [
+  {
+   "group": "Ramadan items",
+   "LightGBM (tuned)": 0.8668,
+   "seasonal naive": 1.38142,
+   "smoothing": 1.17765,
+   "zero-shot": 1.2105
+  },
+  {
+   "group": "intermittent",
+   "LightGBM (tuned)": 0.54475,
+   "seasonal naive": 0.96188,
+   "smoothing": 0.96152,
+   "zero-shot": 0.57072
+  },
+  {
+   "group": "regular",
+   "LightGBM (tuned)": 0.69679,
+   "seasonal naive": 1.09237,
+   "smoothing": 0.83952,
+   "zero-shot": 0.83519
+  },
+  {
+   "group": "short",
+   "LightGBM (tuned)": 1.00292,
+   "seasonal naive": 1.32505,
+   "smoothing": 1.14857,
+   "zero-shot": 1.23244
+  }
+ ],
+ "wins": [
+  {
+   "group": "Ramadan items",
+   "benchmark": "seasonal naive",
+   "diff": -0.2025,
+   "lo": -0.24532,
+   "hi": -0.16215,
+   "benchmark_wins": false
+  },
+  {
+   "group": "Ramadan items",
+   "benchmark": "smoothing",
+   "diff": -0.09127,
+   "lo": -0.13512,
+   "hi": -0.05081,
+   "benchmark_wins": false
+  },
+  {
+   "group": "Ramadan items",
+   "benchmark": "LightGBM (tuned)",
+   "diff": 0.21077,
+   "lo": 0.187,
+   "hi": 0.23506,
+   "benchmark_wins": true
+  },
+  {
+   "group": "intermittent",
+   "benchmark": "seasonal naive",
+   "diff": -0.29154,
+   "lo": -0.33865,
+   "hi": -0.24627,
+   "benchmark_wins": false
+  },
+  {
+   "group": "intermittent",
+   "benchmark": "smoothing",
+   "diff": -0.16103,
+   "lo": -0.17886,
+   "hi": -0.14479,
+   "benchmark_wins": false
+  },
+  {
+   "group": "intermittent",
+   "benchmark": "LightGBM (tuned)",
+   "diff": 0.0317,
+   "lo": 0.02467,
+   "hi": 0.03858,
+   "benchmark_wins": true
+  },
+  {
+   "group": "regular",
+   "benchmark": "seasonal naive",
+   "diff": -0.16365,
+   "lo": -0.17836,
+   "hi": -0.14885,
+   "benchmark_wins": false
+  },
+  {
+   "group": "regular",
+   "benchmark": "smoothing",
+   "diff": -0.00796,
+   "lo": -0.01508,
+   "hi": -0.00128,
+   "benchmark_wins": false
+  },
+  {
+   "group": "regular",
+   "benchmark": "LightGBM (tuned)",
+   "diff": 0.11179,
+   "lo": 0.10358,
+   "hi": 0.11906,
+   "benchmark_wins": true
+  },
+  {
+   "group": "short",
+   "benchmark": "seasonal naive",
+   "diff": -0.11973,
+   "lo": -0.18053,
+   "hi": -0.05526,
+   "benchmark_wins": false
+  },
+  {
+   "group": "short",
+   "benchmark": "smoothing",
+   "diff": -0.00934,
+   "lo": -0.06442,
+   "hi": 0.04956,
+   "benchmark_wins": false
+  },
+  {
+   "group": "short",
+   "benchmark": "LightGBM (tuned)",
+   "diff": 0.18564,
+   "lo": 0.15754,
+   "hi": 0.2166,
+   "benchmark_wins": true
+  }
+ ],
+ "rule": {
+  "Ramadan items": "LightGBM (tuned)",
+  "intermittent": "LightGBM (tuned)",
+  "regular": "LightGBM (tuned)",
+  "short": "zero-shot"
+ }
+}

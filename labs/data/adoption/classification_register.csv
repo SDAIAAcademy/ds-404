@@ -1,0 +1,5 @@
+dataset,level,personal_data,note
+"orders (with customer ids, depot, distance)",Restricted,yes,grocery customers include sole traders: a customer id and address identify a person
+"orders, aggregated by depot and week",Public,no,published in the annual report
+daily demand by product and depot,Restricted,no,commercially sensitive: supplier terms can be inferred
+"driver records (tenure, routes)",Restricted,yes,employee data

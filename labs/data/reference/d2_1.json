@@ -1,0 +1,51 @@
+{
+ "answered_by": "stand-in (weekday profile with in-context holiday multipliers; not a pretrained model)",
+ "table": [
+  {
+   "model": "LightGBM (tuned)",
+   "mase": 0.72184,
+   "sql": 0.4911,
+   "cover80": 0.81307
+  },
+  {
+   "model": "seasonal naive",
+   "mase": 1.14144,
+   "sql": 0.81145,
+   "cover80": 0.75157
+  },
+  {
+   "model": "smoothing",
+   "mase": 0.9735,
+   "sql": 0.67625,
+   "cover80": 0.70752
+  },
+  {
+   "model": "zero-shot",
+   "mase": 0.88274,
+   "sql": 0.60972,
+   "cover80": 0.73806
+  }
+ ],
+ "rel": [
+  {
+   "model": "LightGBM (tuned)",
+   "mase_vs_floor": 0.63239,
+   "sql_vs_floor": 0.60522
+  },
+  {
+   "model": "seasonal naive",
+   "mase_vs_floor": 1.0,
+   "sql_vs_floor": 1.0
+  },
+  {
+   "model": "smoothing",
+   "mase_vs_floor": 0.85287,
+   "sql_vs_floor": 0.83339
+  },
+  {
+   "model": "zero-shot",
+   "mase_vs_floor": 0.77335,
+   "sql_vs_floor": 0.7514
+  }
+ ]
+}

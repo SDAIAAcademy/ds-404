@@ -1,0 +1,53 @@
+[
+ {
+  "task": "late-delivery risk (tables)",
+  "model": "TabICLv2",
+  "kind": "pretrained tabular model",
+  "weights_licence": "BSD-3-Clause",
+  "commercial_use": "yes",
+  "outputs_restricted": "no",
+  "deployment": [
+   "self-hosted in Bustan's data centre in Riyadh",
+   "Google Colab (Google-run machines, location not chosen by the user)"
+  ],
+  "source": "https://github.com/soda-inria/tabicl"
+ },
+ {
+  "task": "late-delivery risk (tables)",
+  "model": "TabPFN-2.6",
+  "kind": "pretrained tabular model",
+  "weights_licence": "TabPFN-2.6 Non-Commercial License",
+  "commercial_use": "no: needs a separate commercial licence",
+  "outputs_restricted": "yes: outputs for non-commercial purposes only",
+  "deployment": [
+   "self-hosted in Bustan's data centre in Riyadh",
+   "the vendor's hosted service outside the Kingdom"
+  ],
+  "source": "https://huggingface.co/Prior-Labs/tabpfn_2_6"
+ },
+ {
+  "task": "daily demand (series)",
+  "model": "Chronos-2",
+  "kind": "pretrained forecaster",
+  "weights_licence": "Apache-2.0",
+  "commercial_use": "yes",
+  "outputs_restricted": "no",
+  "deployment": [
+   "self-hosted in Bustan's data centre in Riyadh",
+   "a cloud endpoint in a region outside the Kingdom"
+  ],
+  "source": "https://huggingface.co/amazon/chronos-2"
+ },
+ {
+  "task": "daily demand (series)",
+  "model": "TimesFM 2.5",
+  "kind": "pretrained forecaster",
+  "weights_licence": "Apache-2.0",
+  "commercial_use": "yes",
+  "outputs_restricted": "no",
+  "deployment": [
+   "self-hosted in Bustan's data centre in Riyadh"
+  ],
+  "source": "https://huggingface.co/google/timesfm-2.5-200m-pytorch"
+ }
+]

@@ -24,6 +24,7 @@
     "Tunes boosted-tree models with cross-validation",
     "Backtests forecasters with rolling-origin cross-validation",
     "Formulates a simple linear programme, or completes the pre-work",
+    "Setup: a laptop CPU with uv, or Google Colab. No key and no model download is needed on a laptop: the pretrained models run in a Colab runtime, and a labelled stand-in answers elsewhere. Run 00_setup_check before Day 1; see labs/README.md.",
     "Setup: a laptop CPU with uv, or Google Colab. No key and no model download is needed on a laptop: the pretrained models run in a Colab runtime, and a labelled stand-in answers elsewhere. Run 00_setup_check before Day 1; see labs/README.md."
   ],
   "site": {
@@ -349,7 +350,7 @@
         {
           "title": "Holidays that move",
           "outcomes": [
-            "Show why a 364-day lag misplaces Ramadan and Eid",
+            "Show why a yearly lag must respect both the week and the Hijri year",
             "Supply Ramadan and Eid as known future covariates",
             "Measure error in holiday weeks separately from ordinary weeks"
           ],
@@ -361,11 +362,11 @@
             "id": "2.3",
             "title": "Ramadan and Eid as covariates",
             "minutes": 25,
-            "summary": "Add Ramadan and Eid covariates and measure holiday-week error: the 364-day and 354-day lags, future covariates for the zero-shot model, and error split by holiday and ordinary weeks.",
+            "summary": "Add Ramadan and Eid covariates and measure holiday-week error: the 364-, 357- and 354-day lags, future covariates for the zero-shot model, and error split by holiday and ordinary weeks.",
             "href": "D2_3_add_ramadan_eid.ipynb",
             "steps": [
               {
-                "text": "Two lags: 364 and 354 days",
+                "text": "Three lags: 364, 357 and 354 days",
                 "minutes": 5
               },
               {

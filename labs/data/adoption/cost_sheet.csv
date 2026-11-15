@@ -1,0 +1,4 @@
+option,sar_per_hour,sar_per_1000
+self-hosted CPU server (existing),4.0,
+self-hosted GPU server (to buy or lease),38.0,
+"hosted service, per 1,000 predictions",,6.0

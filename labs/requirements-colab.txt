@@ -1,0 +1,3 @@
+# Colab already ships numpy, pandas, scipy, scikit-learn, lightgbm and matplotlib.
+pulp>=3.0
+highspy>=1.7
