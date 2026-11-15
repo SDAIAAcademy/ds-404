@@ -1,158 +1,405 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Day 2 moves from tables to series. Same question as yesterday, new data: does a zero-shot pretrained forecaster earn its place against benchmarks Bustan already runs? Open with the review checkpoint, then one recap slide of DS-304; do not reteach backtesting.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
-<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
-
-<section class="slide" id="s1-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" id="review-day1" data-lo="LO1">
+  <div class="kicker">Review of Day 1</div>
+  <h2>What would change Sarab's verdict?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">Yesterday the learning curves of the tuned baseline and the pretrained model overlapped at every size, with paired intervals around zero. Which new evidence would justify writing "the pretrained model wins below 1,000 orders"?</p>
+    <div class="opts">
+      <div class="opt" data-why="Counts someone else's datasets as Bustan's evidence: a benchmark sets a hypothesis, it does not settle it">A vendor table with 35 wins out of 36</div>
+      <div class="opt" data-why="Treats a higher mean as a win: without the interval the sign is not established">A higher mean AUC at 500 orders in one more run</div>
+      <div class="opt" data-ok>More repeats at 500 and 1,000 orders whose paired interval stays above zero</div>
+      <div class="opt" data-why="Changes the question: random folds flatter both models and say nothing about new customers">Rerunning the curves with random K-fold instead of held-out customers</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A win at a size needs the interval of the paired difference to leave zero on Bustan's own data, with the same held-out customers.</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Answer: C. Two minutes at most. If the room hesitates between B and C, show the 500-order row of yesterday's table again: a mean of +0.011 with an interval from -0.031 to +0.052.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
+<section class="slide" data-label="Recap DS-304" id="recap-backtest" data-lo="LO2">
+  <div class="kicker">Recap from DS-304, not retaught</div>
+  <h2>A forecaster counts only if it beats the floor in a rolling-origin backtest</h2>
   <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+    <div class="step c-navy"><b>Origin</b>cut the history at a date</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Forecast</b>28 days ahead from what was known</div>
+    <div class="arrow">→</div>
+    <div class="step c-cyan"><b>Score</b>against what happened</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Roll</b>to the next origin</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout note small mt">DS-304 built the floor, the smoothing and ARIMA models, Hijri regressors and the simple average. Today they are <b>supplied</b>: six origins, 400 series, three benchmarks.</div>
+  <aside class="notes"><p>Point participants who did not take DS-304 to its Day 1 sessions on the benchmark floor and rolling origins. The supplied backtests (labs/data/reference/benchmarks.npz) were written by labs/_tools/make_reference.py: a weekly seasonal naive, exponential smoothing on a weekday-adjusted series, and one global LightGBM with quantile objectives, tuned on the months before the first origin.</p></aside>
+</section>
+
+<!-- ======================= SESSION 1 ======================= -->
+<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
+
+<section class="slide" data-label="Zero-shot" id="zero-shot-is-one-more-method" data-lo="LO2">
+  <div class="kicker">What changes with a pretrained forecaster</div>
+  <h2>A zero-shot forecaster needs no training on your series, but it is scored like any other method</h2>
+  <div class="cols cols-2">
+    <ul class="bullets">
+      <li><b>Input</b>: each series' history up to the origin. No product, no depot, no features unless you pass covariates.</li>
+      <li><b>Output</b>: quantiles for the next 28 days.</li>
+      <li><b>No fit</b> on Bustan's data, so no tuning budget, and nothing to retrain each month.</li>
+      <li><b>Same windows</b> as the benchmarks, or the comparison means nothing.</li>
+    </ul>
+    <div class="card c-teal"><h4>Chronos-2</h4><p class="small mb0">A pretrained model for univariate, multivariate and covariate-informed forecasting, trained on synthetic data. Weights under Apache-2.0.</p></div>
+  </div>
+  <aside class="notes"><p>Chronos-2's paper describes zero-shot forecasting with covariates and in-context learning across a group of series; its pretraining uses synthetic datasets. TimesFM 2.5 is the other example in the tool slot; its weights on Hugging Face are also under Apache-2.0 (checked November 2026; the catalog's note of non-commercial weights for TimesFM did not match the model page). Sources: Ansari et al., Chronos-2 (arXiv 2510.15821); Hugging Face model pages amazon/chronos-2 and google/timesfm-2.5-200m-pytorch.</p></aside>
+</section>
+
+<section class="slide" data-label="Scaled scores" id="scaled-scores" data-lo="LO2">
+  <div class="kicker">Two numbers per series and origin</div>
+  <h2>Divide every error by the series' own scale, or the staples decide alone</h2>
+  <table class="t small">
+    <tr><th>Score</th><th>What it measures</th><th>Read</th></tr>
+    <tr><td><b>MASE</b></td><td>mean absolute error of the median, divided by the in-sample error of last week's copy</td><td>below 1 beats the naive in-sample</td></tr>
+    <tr><td><b>Scaled quantile loss</b></td><td>pinball loss over the 0.1, 0.5 and 0.9 quantiles, same scale</td><td>rewards sharp bands that still hold</td></tr>
+    <tr><td><b>80% coverage</b></td><td>share of days inside the 0.1 to 0.9 band</td><td>should be near 80%</td></tr>
+  </table>
+  <aside class="notes"><p>The scaled quantile loss here is twice the mean pinball loss over the three quantiles, divided by the MASE scale, so that its median part alone equals MASE. Scaled errors follow Hyndman and Athanasopoulos. A dairy line sells hundreds of cases a day and a specialty import two: unscaled, the dairy line is the whole average. Sources: Hyndman and Athanasopoulos, Forecasting: Principles and Practice, 3rd edition, chapter 5 (otexts.com/fpp3/accuracy.html).</p></aside>
+</section>
+
+<section class="slide" data-label="Pinball" id="pinball-loss" data-lo="LO2 LO4">
+  <div class="kicker">The loss behind every quantile</div>
+  <h2>The pinball loss charges a quantile forecast unequally for being low and being high</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="bustan.pinball"><code class="language-python">def pinball(y, q, tau):
+    d = y - q
+    return np.maximum(tau * d, (tau - 1) * d)
+
+# tau = 0.9: a forecast 10 below costs 9,
+# a forecast 10 above costs 1</code></pre>
+    <div class="card c-coral"><h4>Tomorrow's decision</h4><p class="small mb0">The same asymmetry is the newsvendor's: when a shortage costs nine times a leftover, order the 0.9 quantile. Day 3 starts here.</p></div>
+  </div>
+  <aside class="notes"><p>This is pre-work material; check that it landed. Ask: which quantile minimises the expected pinball loss with tau 0.9? The 0.9 quantile of the demand distribution. That one fact connects today's scores to tomorrow's orders.</p></aside>
+</section>
+
+<section class="slide" data-label="Lab 2.1 result" id="zero-shot-beats-floor" data-lo="LO2" data-minutes="3">
+  <div class="kicker">Lab 2.1, the course run (stand-in), four origins, 1,504 series-origins</div>
+  <h2>The zero-shot forecaster beats the floor and smoothing, not the tuned LightGBM</h2>
+  <table class="t small">
+    <tr><th>Method</th><th>MASE</th><th>Scaled quantile loss</th><th>Loss against the floor</th><th>80% coverage</th></tr>
+    <tr><td>Seasonal naive (floor)</td><td>1.141</td><td>0.811</td><td>1.000</td><td>75%</td></tr>
+    <tr><td>Smoothing</td><td>0.973</td><td>0.676</td><td>0.833</td><td>71%</td></tr>
+    <tr><td>Zero-shot (stand-in)</td><td>0.883</td><td>0.610</td><td>0.751</td><td>74%</td></tr>
+    <tr><td>LightGBM, tuned</td><td>0.722</td><td>0.491</td><td>0.605</td><td>81%</td></tr>
+  </table>
+  <aside class="notes"><p>From data/reference/d2_1.json. Products not launched at an origin are left out, which is why it is 1,504 and not 1,600. Say plainly that the zero-shot row is the stand-in's; Colab participants run Chronos-2 and should read their own row aloud. The LightGBM was tuned on Bustan's own history with holiday features: it had information the zero-shot model did not get. Three of four methods have bands that hold less than 80% of the time: remember that on Day 3.</p></aside>
+</section>
+
+<section class="slide" data-label="Same windows" id="same-windows" data-lo="LO2">
+  <div class="kicker">What makes the comparison fair</div>
+  <h2>Same origins, same horizon, same series, same scale</h2>
+  <div class="cols cols-2 gap-s">
+    <div class="card c-teal flat"><h4>Fair</h4><p class="small mb0">The zero-shot model is run at the four origins of the supplied backtests and scored with the same function.</p></div>
+    <div class="card c-coral flat"><h4>Unfair</h4><p class="small mb0">A vendor's accuracy on its benchmark, set beside Bustan's backtest. Different series, different windows, different scale.</p></div>
+  </div>
+  <div class="callout warn small mt"><b>Check it in code.</b> Lab 2.1 asserts that your scores match the helper's before printing a table.</div>
+  <aside class="notes"><p>The commonest mistake in this lab is an off-by-one origin: forecasting from the day after the origin, which leaks one day. The check in the lab catches it because the scores no longer match the helper's.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-1" data-lo="LO2">
+  <div class="kicker">Checkpoint</div>
+  <h2>Is the zero-shot forecaster useful here?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2">
+    <p class="lead">The zero-shot forecaster scores 0.75 of the floor's quantile loss; the tuned LightGBM scores 0.61. Ahlam asks whether the pretrained model is worth keeping. What is the best answer today?</p>
+    <div class="opts">
+      <div class="opt" data-ok>Not as a replacement; test where it wins and what it adds to an ensemble first</div>
+      <div class="opt" data-why="Equates second place with no value: a model can still win in a group or help an ensemble">No: it loses to LightGBM, so it has no use</div>
+      <div class="opt" data-why="Ignores the measured gap because the model needs no training: cheap to run is not the same as good enough">Yes: it needs no training, so it should replace LightGBM</div>
+      <div class="opt" data-why="Moves the goalposts: the floor is the minimum, not the target">Yes: it beats the floor, which is all a forecaster must do</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The average hides groups (Session 2) and a weaker model can still lower an ensemble's loss (Session 4). Both are measured today.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. If the room picks C, ask what the tuned LightGBM costs to retrain monthly against what the forecast error costs Bustan: that comparison is Day 3's.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-1" data-auto="lab" data-lab="2.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Colab: the first cell installs chronos-forecasting; Chronos-2 downloads into the runtime on first use. On a CPU runtime 400 series at four origins take a few minutes: quick mode (BUSTAN_QUICK=1) uses 100 series. Locally the stand-in answers in seconds. If the forecasting cell fails, the safety net loads the supplied zero-shot file and says so.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Averages hide" id="averages-hide-groups" data-lo="LO2">
+  <div class="kicker">Why one number is not enough</div>
+  <h2>An average over 400 series hides the groups where a method fails</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-teal flat"><h4>Regular</h4><p class="small mb0">160 series: staples and dairy, sold most days.</p></div>
+    <div class="card c-cyan flat"><h4>Intermittent</h4><p class="small mb0">100 series: specialty imports and catering items, many zero days.</p></div>
+    <div class="card c-coral flat"><h4>Ramadan items</h4><p class="small mb0">80 series: dates and juices, from the product master.</p></div>
+    <div class="card c-purple flat"><h4>Short</h4><p class="small mb0">60 series: products launched in the last six months.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Counts from Lab 2.2's course run, classified at the first origin. Ask the room which group they expect a pretrained model to handle worst, and write the guesses down. The lab checks them.</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Classify" id="classify-from-history" data-lo="LO2">
+  <div class="kicker">Classifying from the series itself</div>
+  <h2>Two numbers describe a demand pattern: how often it sells, and how much the sizes vary</h2>
+  <div class="cols cols-2">
+    <ul class="bullets">
+      <li><b>ADI</b>: average days between non-zero days over the last year.</li>
+      <li><b>CV squared</b>: variability of the non-zero sizes.</li>
+      <li>In the lab: <b>short</b> under 180 days of history; <b>intermittent</b> when ADI is 1.32 or more; the rest regular.</li>
+    </ul>
+    <div class="card c-coral"><h4>A class has a date</h4><p class="small mb0">A product launched in December is short in October and regular by May. Classify at the origin you forecast from.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>The lab's classes match the generator's answer key exactly for this data (the crosstab in Lab 2.2), which is a check of the code, not a property of real data: real catalogues blur the lines. Ramadan items are known from the product master, not inferred: use what the business already knows.</p></aside>
+</section>
+
+<section class="slide" data-label="By group" id="scores-by-group" data-lo="LO2" data-minutes="3">
+  <div class="kicker">Lab 2.2, the course run (stand-in), scaled quantile loss</div>
+  <h2>The tuned LightGBM wins every group; the zero-shot gap is smallest on intermittent items</h2>
+  <table class="t small">
+    <tr><th>Group</th><th>Seasonal naive</th><th>Smoothing</th><th>Zero-shot</th><th>LightGBM</th><th>Zero-shot gap</th></tr>
+    <tr><td>Intermittent</td><td>0.792</td><td>0.662</td><td>0.501</td><td>0.469</td><td>+0.032</td></tr>
+    <tr><td>Regular</td><td>0.715</td><td>0.559</td><td>0.551</td><td>0.440</td><td>+0.112</td></tr>
+    <tr><td>Short</td><td>0.958</td><td>0.848</td><td>0.839</td><td>0.653</td><td>+0.186</td></tr>
+    <tr><td>Ramadan items</td><td>0.962</td><td>0.851</td><td>0.760</td><td>0.549</td><td>+0.211</td></tr>
+  </table>
+  <p class="small mt-s">The gap is the paired difference, zero-shot minus LightGBM; every interval excludes zero. Against smoothing, the zero-shot model ties on short series.</p>
+  <aside class="notes"><p>From data/reference/d2_2.json. The intermittent group is the textbook place where zero-shot models are said to struggle; with the stand-in, that is where the gap is smallest. Two stories explain the large gaps: Ramadan items need the calendar (Session 3), and short series need what LightGBM borrows across series. Ask: what would you expect from Chronos-2, which can learn across a group of series in context?</p></aside>
+</section>
+
+<section class="slide" data-label="Short series" id="short-series-borrow" data-lo="LO2">
+  <div class="kicker">Recap from DS-304, applied</div>
+  <h2>A short series borrows strength from other series, or it has nothing to learn from</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal flat"><h4>Global model</h4><p class="small mb0">The LightGBM learns from all 400 series at once, so a new product starts with its category's pattern.</p></div>
+    <div class="card c-cyan flat"><h4>Zero-shot, one series</h4><p class="small mb0">Sees only the product's own few weeks; the stand-in falls back to its last eight weeks.</p></div>
+    <div class="card c-coral flat"><h4>In context, many series</h4><p class="small mb0">Models that read a group of related series together can borrow without training.</p></div>
+  </div>
+  <aside class="notes"><p>DS-304 Day 4 Session 2 covered new and short series; this slide is a pointer, not a lesson. Chronos-2's group attention shares information across series in a group: that is a claim to test in the capstone, not to assume. Sources: Chronos-2 (arXiv 2510.15821).</p></aside>
+</section>
+
+<section class="slide" data-label="Routing" id="routing-rule" data-lo="LO2 LO3">
+  <div class="kicker">From a group table to a rule</div>
+  <h2>Choose the method per group on earlier windows, then score it on later ones</h2>
+  <table class="t small">
+    <tr><th>Group</th><th>Chosen on 2025-10-05 and 2025-11-16</th><th>Why</th></tr>
+    <tr><td>Regular, intermittent, Ramadan items</td><td>LightGBM, tuned</td><td>lowest loss on the earlier windows</td></tr>
+    <tr><td>Short</td><td>zero-shot</td><td>no short series existed then: a method that needs no history</td></tr>
+  </table>
+  <div class="callout warn small mt"><b>A rule picked on the scored windows scores itself.</b> It will look better than it will be next quarter.</div>
+  <aside class="notes"><p>From Lab 2.2's course run. The default for the short group is a design choice the lab states: with no evidence, take the method that needs no training on the product. The stretch scores the routed forecast as a fifth method. Routing is the simplest ensemble; Session 4 learns weights instead.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-2" data-lo="LO2">
+  <div class="kicker">Checkpoint</div>
+  <h2>What do you do with this group?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2">
+    <p class="lead">For 60 short series the zero-shot forecaster and smoothing differ by -0.009 in scaled quantile loss, with a 95% interval from -0.064 to +0.050. Both trail LightGBM by about 0.19. What do you recommend for new products?</p>
+    <div class="opts">
+      <div class="opt" data-why="Reads a negative mean as a win: the interval crosses zero">Switch new products to the zero-shot model, which scored lower</div>
+      <div class="opt" data-why="Reads a tie as proof of equality and chooses on habit: the evidence says nothing about which is better">Keep smoothing because the two are proven equal</div>
+      <div class="opt" data-why="Drops the evidence for a guess: the group is measured, and LightGBM wins it clearly">Treat short series as unforecastable and order by hand</div>
+      <div class="opt" data-ok>Use the tuned LightGBM, which wins the group, and retest the pretrained model later</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The only difference that leaves zero in this group is LightGBM's lead. The zero-shot against smoothing comparison is undecided.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. Numbers from Lab 2.2's course run with the stand-in. Note the link to Day 1: same reading of intervals, different data.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-2" data-auto="lab" data-lab="2.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>This lab scores the supplied zero-shot forecasts so it does not depend on Lab 2.1. Participants with their own Chronos-2 forecasts from Colab can swap them in (Z[0] in the setup cell). Watch for a merge that duplicates the group column: the lab keeps the generator's group as group_key and the participant's as group.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Two cycles" id="two-cycles" data-lo="LO2 LO5">
+  <div class="kicker">Why holidays break yearly lags</div>
+  <h2>Demand follows the week and the Hijri year at once, and they do not line up</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal flat"><h4>364 days</h4><p class="small mb0">52 weeks: same weekday, but Ramadan has moved about eleven days.</p></div>
+    <div class="card c-cyan flat"><h4>354 days</h4><p class="small mb0">One Hijri year: right Ramadan day, wrong weekday.</p></div>
+    <div class="card c-coral flat"><h4>357 days</h4><p class="small mb0">51 weeks: same weekday, within three days of the Hijri date.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <p class="small mt-s">Ramadan 1446 began on 1 March 2025; Ramadan 1447 on 18 February 2026 (Umm al-Qura).</p>
+  <aside class="notes"><p>Fridays sell about a third of a weekday at Bustan's depots, so a lag that lands on the wrong weekday adds a large error every week. DS-304 used Hijri regressors in a regression; today the same knowledge is passed to a pretrained model as covariates. The dates are those used by the generator (labs/prepare_data.py).</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Three lags" id="three-lags-result" data-lo="LO2 LO5">
+  <div class="kicker">Lab 2.3, the course run</div>
+  <h2>From pre-Ramadan to Eid al-Fitr, the 51-week lag beats both yearly lags</h2>
+  <div class="bars mt">
+    <div class="row"><span>Lag 354 days</span><div class="bar" style="--w:61%;--c:var(--coral)"></div><span class="val">0.615</span></div>
+    <div class="row"><span>Lag 364 days</span><div class="bar" style="--w:57%;--c:var(--cyan)"></div><span class="val">0.574</span></div>
+    <div class="row"><span>Lag 357 days</span><div class="bar" style="--w:49%"></div><span class="val">0.487</span></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <p class="small mt">Mean absolute error relative to the window's mean, 80 Ramadan items, 4 February to 23 March 2026.</p>
+  <aside class="notes"><p>From data/reference/d2_3.json. The surprise for most rooms is that the "correct" Hijri lag of 354 days is the worst: it lands on the wrong weekday. No lag is good: the best still misses by half the level. That is why the holiday goes in as a covariate, not as a lag.</p></aside>
+</section>
+
+<section class="slide" data-label="Covariates" id="known-future-covariates" data-lo="LO2">
+  <div class="kicker">What may go into a forecast</div>
+  <h2>The calendar is a known future covariate; next week's sales are not</h2>
+  <table class="t small">
+    <tr><th>Input</th><th>Known at the origin?</th><th>Use</th></tr>
+    <tr><td>Pre-Ramadan, Ramadan, pre-Eid, Eid days</td><td>yes, published in advance</td><td>future covariate</td></tr>
+    <tr><td>A planned promotion</td><td>yes, if decided before the origin</td><td>future covariate</td></tr>
+    <tr><td>Temperature</td><td>only as a forecast</td><td>with care: pass the forecast, not the actual</td></tr>
+    <tr><td>Next week's sales of a related product</td><td>no</td><td>leakage</td></tr>
+  </table>
+  <aside class="notes"><p>Chronos-2's predict_df takes a future_df with the covariates for the forecast horizon; the lab's helper builds it from the calendar's five states. The stand-in uses the same states: it estimates one multiplier per state from the context it sees. Sources: chronos-forecasting README (github.com/amazon-science/chronos-forecasting).</p></aside>
+</section>
+
+<section class="slide" data-label="Code" id="covariates-in-code" data-lo="LO2">
+  <div class="kicker">Passing the calendar</div>
+  <h2>The covariates for the past and for the next 28 days go in the same call</h2>
+  <pre class="code s" data-file="bustan.zero_shot (Colab path)"><code class="language-python">pipe = Chronos2Pipeline.from_pretrained("amazon/chronos-2")
+pred = pipe.predict_df(
+    context_df,              # id, timestamp, target, ramadan, pre_eid, ...
+    future_df=future_df,     # id, timestamp, ramadan, pre_eid, ... (next 28 days)
+    prediction_length=28,
+    quantile_levels=[0.1, 0.5, 0.9],
+    id_column="id", timestamp_column="timestamp", target="target")</code></pre>
+  <aside class="notes"><p>The call follows the package's README example. It was not run in the course's own build (no weights were downloaded for it); the stand-in answered. The first Colab run of the cohort is the check: if the column names of the output differ in a newer version, the helper's last lines need the change. Sources: chronos-forecasting README.</p></aside>
+</section>
+
+<section class="slide" data-label="Holiday split" id="holiday-split" data-lo="LO2" data-minutes="3">
+  <div class="kicker">Lab 2.3, the course run (stand-in), scaled quantile loss</div>
+  <h2>Covariates cut the zero-shot holiday-day loss by 10% and did not hurt ordinary days</h2>
+  <table class="t small">
+    <tr><th>Method</th><th>Holiday days</th><th>Ordinary days</th></tr>
+    <tr><td>Smoothing</td><td>0.808</td><td>0.608</td></tr>
+    <tr><td>Zero-shot</td><td>0.744</td><td>0.517</td></tr>
+    <tr><td>Zero-shot + covariates</td><td>0.666</td><td>0.482</td></tr>
+    <tr><td>LightGBM, tuned (had the calendar)</td><td>0.471</td><td>0.473</td></tr>
+  </table>
+  <p class="small mt-s">On the 80 Ramadan items alone: 0.997 without covariates, 0.727 with them.</p>
+  <aside class="notes"><p>From data/reference/d2_3.json. LightGBM's holiday and ordinary losses are nearly equal: it learned the calendar from three years of Bustan's data. The zero-shot model learned it only from the context it was given, about 17 months. Ask: what would a longer context buy, and what would it cost in run time?</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-3" data-lo="LO2 LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which lag for a Ramadan item?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2 LO5">
+    <p class="lead">A planner forecasts dates (the fruit) for next Ramadan by copying last year. Bustan's demand is low on Fridays. Which single lag gives the smallest error over Ramadan and Eid?</p>
+    <div class="opts">
+      <div class="opt" data-why="Keeps the weekday but forgets that Ramadan moves about eleven days earlier each Gregorian year">364 days, one Gregorian year in whole weeks</div>
+      <div class="opt" data-ok>357 days, 51 whole weeks</div>
+      <div class="opt" data-why="Aligns the Hijri date but lands on another weekday, so every Friday dip is misplaced">354 days, one Hijri year</div>
+      <div class="opt" data-why="Ignores both cycles: a Gregorian year of 365 days fits neither the week nor Ramadan">365 days, one calendar year</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> 357 days keeps the weekday and lands within three days of the same Hijri date: both cycles are close to aligned.</div>
+  </div>
+  <aside class="notes"><p>Answer: B, matching the lab's three-lag table. Follow with: why is even the best lag still a poor forecast? Because it copies one year's noise; covariates estimate the holiday effect from several years.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-3" data-auto="lab" data-lab="2.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>The zero-shot cells run the stand-in in seconds locally; in Colab with Chronos-2, eight calls over 400 series take several minutes on a CPU runtime, so quick mode is advised there. Check that participants build the future states from the calendar, never from the actual demand.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO3">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Recap average" id="recap-simple-average" data-lo="LO3">
+  <div class="kicker">Recap from DS-304, then one step further</div>
+  <h2>The simple average is hard to beat; learned weights must earn their extra risk</h2>
+  <div class="cols cols-2 gap-s">
+    <div class="card c-teal flat"><h4>Simple average</h4><p class="small mb0">No weights to estimate, so nothing to overfit. Works when the members are comparably good.</p></div>
+    <div class="card c-coral flat"><h4>Stacking</h4><p class="small mb0">Weights learned from earlier forecasts. Wins when the members differ in quality, if the weights are estimated honestly.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Forecasting: Principles and Practice notes that simple combinations are often hard to beat. DS-304 Day 4 Session 3 showed it on Shams Power's feeders. Here the members are very unequal (the floor and the tuned LightGBM), which is exactly when the simple average suffers. Sources: Hyndman and Athanasopoulos, FPP3 chapter 13 (otexts.com/fpp3/combinations.html).</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO3">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="No leakage" id="rolling-origin-stacking" data-lo="LO3">
+  <div class="kicker">How the weights are learned</div>
+  <h2>Weights for an origin come only from windows that ended before it</h2>
+  <table class="t small">
+    <tr><th>Scored origin</th><th>Weights fitted on</th></tr>
+    <tr><td>2026-01-04</td><td>2025-10-05, 2025-11-16</td></tr>
+    <tr><td>2026-02-15</td><td>the three before it</td></tr>
+    <tr><td>2026-03-15</td><td>the four before it</td></tr>
+    <tr><td>2026-05-10</td><td>the five before it</td></tr>
+  </table>
+  <div class="callout tip small mt"><b>The rolling-origin forecasts are the out-of-fold predictions of time series.</b> Each was made without its own answers.</div>
+  <aside class="notes"><p>The same idea on tables is out-of-fold stacking: the meta-model learns from predictions each base model made on rows it did not train on. On series, folds are origins and only earlier ones may train the weights. The best single model is also chosen on earlier windows; otherwise it gets an advantage the stack does not.</p></aside>
+</section>
+
+<section class="slide" data-label="Right loss" id="fit-the-judged-loss" data-lo="LO3">
+  <div class="kicker">Lab 2.4, the course run (stand-in)</div>
+  <h2>Fit the weights on the loss you will be judged on</h2>
+  <table class="t small">
+    <tr><th>Fitted on</th><th>LightGBM</th><th>Smoothing</th><th>Zero-shot + covariates</th><th>Floor</th></tr>
+    <tr><td>Scaled quantile loss</td><td>0.81 to 0.95</td><td>0</td><td>0.05 to 0.19</td><td>0</td></tr>
+    <tr><td>Least squares on medians</td><td>0.58 to 0.61</td><td>0.18 to 0.39</td><td>0 to 0.24</td><td>0</td></tr>
+  </table>
+  <p class="small mt-s">Ranges over the four scored origins. Least squares chases the large Ramadan spikes and gives smoothing weight it does not deserve on quantile loss.</p>
+  <aside class="notes"><p>From data/reference/d2_4.json. The lab's exercise fits weights by minimising the scaled quantile loss over a softmax (Nelder-Mead); the least-squares weights are shown for comparison. Point out that the zero-shot model's weight grows with every origin: as Ramadan windows enter the training origins, the covariate model earns its place.</p></aside>
+</section>
+
+<section class="slide" data-label="The gain" id="stack-gain-interval" data-lo="LO3" data-minutes="3">
+  <div class="kicker">Lab 2.4, the course run (stand-in), against the best single model</div>
+  <h2>The stack's gain is real and tiny: 0.4%, for running four models</h2>
+  <div class="bars mt">
+    <div class="row"><span>Stack, judged loss</span><div class="bar" style="--w:4%"></div><span class="val">+0.4% (+0.0012 to +0.0028)</span></div>
+    <div class="row"><span>Least-squares stack</span><div class="bar" style="--w:75%;--c:var(--coral)"></div><span class="val">-7.5% (-0.041 to -0.033)</span></div>
+    <div class="row"><span>Simple average</span><div class="bar" style="--w:100%;--c:var(--coral)"></div><span class="val">-18% (-0.094 to -0.083)</span></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <p class="small mt">Gain in scaled quantile loss over the best single model (always the tuned LightGBM), bootstrap over series.</p>
+  <aside class="notes"><p>Bar lengths show the size of the change; the sign is in the label. The best single model's mean loss was 0.491; the stack's 0.489. The interval excludes zero, so the gain is real, but it is under 2%: the lab's verdict asks to weigh it against fitting, running and monitoring four models every week. That is the "worth their cost" of the session title.</p></aside>
+</section>
+
+<section class="slide" data-label="Worth it?" id="ensemble-cost-line" data-lo="LO3 LO6">
+  <div class="kicker">The decision</div>
+  <h2>An ensemble is adopted when its gain beats its running cost</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal flat"><h4>Gain</h4><p class="small mb0">With an interval, against the best single model chosen fairly.</p></div>
+    <div class="card c-cyan flat"><h4>Cost</h4><p class="small mb0">Every member fitted, run and monitored every cycle; one more licence to check.</p></div>
+    <div class="card c-coral flat"><h4>Decision</h4><p class="small mb0">Here: keep LightGBM alone, and keep the zero-shot model on watch for holiday windows.</p></div>
+  </div>
+  <aside class="notes"><p>Tomorrow puts a price on forecast error: regret in riyals. Then a 0.4% gain can be compared with the cost of running four models in the same currency. Ask participants to write today's ensemble decision in one sentence for Ahlam.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-4" data-lo="LO3">
+  <div class="kicker">Checkpoint</div>
+  <h2>Was the stack fitted honestly?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">An analyst fits stacking weights on all six origins and reports that the stack beats the best single model on origins three to six. What is wrong?</p>
+    <div class="opts">
+      <div class="opt" data-why="Blames the number of models, not the procedure: four members are fine when the weights are fitted honestly">Four members are too many for six origins</div>
+      <div class="opt" data-why="Thinks the loss choice is the flaw: the judged loss is the right one to fit on">The weights were fitted on quantile loss</div>
+      <div class="opt" data-ok>The weights saw the windows they are scored on</div>
+      <div class="opt" data-why="Confuses the comparison: the best single model must be chosen on earlier windows too, but that is not the main fault here">The best single model was the tuned LightGBM</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Weights for an origin must come from windows that ended before it; otherwise the stack is scored on its own training data.</div>
+  </div>
+  <aside class="notes"><p>Answer: C. Ask which line of the lab enforces it: the dictionary comprehension that fits W[k] on range(k).</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-4" data-auto="lab" data-lab="2.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>The weight fit takes a few seconds per origin with Nelder-Mead. A common slip: weights that do not sum to one because the softmax was skipped; the check catches it. Early finishers fit one weight set per group (stretch) and should report whether the gain survives its interval.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
-  <div class="kicker">Day 2 · wrap-up</div>
-  <h2>Three things to keep</h2>
-  <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+<!-- ======================= CLOSE ======================= -->
+<section class="slide" data-label="Wrap-up" id="wrap-up">
+  <div class="kicker">Day 2 · Three things to keep</div>
+  <h2>Score a pretrained forecaster like any other method, by group and by holiday</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal"><h4>Same windows</h4><p class="small mb0">The supplied backtest's origins, horizon and scale.</p></div>
+    <div class="card c-cyan"><h4>Groups and holidays</h4><p class="small mb0">Averages hide where a method fails; the calendar is a covariate.</p></div>
+    <div class="card c-coral"><h4>Ensembles pay or go</h4><p class="small mb0">Weights from earlier windows, on the judged loss, with an interval.</p></div>
   </div>
+  <aside class="notes"><p>Collect one sentence per participant for Ahlam on the forecaster question. Tomorrow turns quantile forecasts into orders, so remind the room that the coverage column of Lab 2.1 will matter.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
-  <div class="kicker">Next</div>
-  <h2>Day 3: From forecast to order</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <div class="kicker">Tomorrow · Day 3</div>
+  <h2>From forecast to order</h2>
+  <p class="lead">Newsvendor quantities, an order and truck programme for one depot week, forecasters ranked by regret, and the plan under simulated demand.</p>
+  <ul class="bullets">
+    <li>Revisit the pre-work on newsvendor logic and linear programmes.</li>
+    <li>Run the setup check's small optimisation once more: it proves the solver works.</li>
+  </ul>
+  <aside class="notes"><p>Day 3 uses PuLP with the HiGHS solver; both install with the course environment and in Colab from requirements-colab.txt.</p></aside>
 </section>
