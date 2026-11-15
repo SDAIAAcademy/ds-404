@@ -71,7 +71,7 @@
   ],
   "case_study": {
     "name": "Bustan Food Wholesale",
-    "summary": "Bustan Food Wholesale is a fictional food wholesaler with depots in Riyadh, Jeddah and Dammam and a new northern region around Hail and Tabuk. Participants test a pretrained tabular model against a tuned boosted-tree baseline on 80,000 orders, score zero-shot forecasters with and without Ramadan and Eid covariates on 400 daily demand series over three Hijri years, stack forecasters, turn forecasts into orders and truck plans by optimisation, rank forecasters by the regret they cause, validate a model under the shift of the new region and end with an adoption decision on licence, cost and data residency. All data is synthetic and generated with a fixed seed."
+    "summary": "Bustan Food Wholesale is a fictional food wholesaler with depots in Riyadh, Buraidah, Jeddah and Dammam and a new northern region around Hail and Tabuk. Participants test a pretrained tabular model against a tuned boosted-tree baseline on 80,000 orders, score zero-shot forecasters with and without Ramadan and Eid covariates on 400 daily demand series over three Hijri years, stack forecasters, turn forecasts into orders and truck plans by optimisation, rank forecasters by the regret they cause, validate a model under the shift of the new region and end with an adoption decision on licence, cost and data residency. All data is synthetic and generated with a fixed seed."
   },
   "format": "intensive",
   "format_note": "Intensive: 4 teaching days of four sessions and a capstone day, with guided pre-work and a tracked follow-up task",
@@ -832,6 +832,142 @@
       "examples": [
         "MAPIE",
         "course-provided implementations"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "group": "Pretrained tabular models and their licences",
+      "items": [
+        {
+          "title": "Qu and others: TabICL: A Tabular Foundation Model for In-Context Learning on Large Data",
+          "url": "https://arxiv.org/abs/2502.05564"
+        },
+        {
+          "title": "Qu and others: TabICLv2: A better, faster, scalable, and open tabular foundation model",
+          "url": "https://arxiv.org/abs/2602.11139"
+        },
+        {
+          "title": "TabICL repository and README (BSD-3-Clause)",
+          "url": "https://github.com/soda-inria/tabicl"
+        },
+        {
+          "title": "TabPFN-2.6: model card",
+          "url": "https://huggingface.co/Prior-Labs/tabpfn_2_6"
+        },
+        {
+          "title": "TabPFN-2.6: licence file (non-commercial)",
+          "url": "https://huggingface.co/Prior-Labs/tabpfn_2_6/raw/main/LICENSE"
+        },
+        {
+          "title": "TabPFN-2.5: licence file (non-commercial)",
+          "url": "https://huggingface.co/Prior-Labs/tabpfn_2_5/raw/main/LICENSE"
+        }
+      ]
+    },
+    {
+      "group": "Pretrained forecasters and their licences",
+      "items": [
+        {
+          "title": "Ansari and others: Chronos-2: From Univariate to Universal Forecasting",
+          "url": "https://arxiv.org/abs/2510.15821"
+        },
+        {
+          "title": "Chronos-2: model card (Apache-2.0)",
+          "url": "https://huggingface.co/amazon/chronos-2"
+        },
+        {
+          "title": "chronos-forecasting repository and README",
+          "url": "https://github.com/amazon-science/chronos-forecasting"
+        },
+        {
+          "title": "Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)",
+          "url": "https://arxiv.org/abs/2310.10688"
+        },
+        {
+          "title": "TimesFM 2.5: model card (Apache-2.0)",
+          "url": "https://huggingface.co/google/timesfm-2.5-200m-pytorch"
+        },
+        {
+          "title": "TimesFM repository",
+          "url": "https://github.com/google-research/timesfm"
+        }
+      ]
+    },
+    {
+      "group": "Baselines, evaluation and ensembles",
+      "items": [
+        {
+          "title": "Bergstra and Bengio (2012): Random Search for Hyper-Parameter Optimization",
+          "url": "https://jmlr.org/papers/v13/bergstra12a.html"
+        },
+        {
+          "title": "LightGBM documentation",
+          "url": "https://lightgbm.readthedocs.io/en/stable/"
+        },
+        {
+          "title": "Hyndman and Athanasopoulos: FPP3, evaluating point forecast accuracy (scaled errors)",
+          "url": "https://otexts.com/fpp3/accuracy.html"
+        },
+        {
+          "title": "Hyndman and Athanasopoulos: FPP3, forecast combinations",
+          "url": "https://otexts.com/fpp3/combinations.html"
+        }
+      ]
+    },
+    {
+      "group": "Decisions and optimisation",
+      "items": [
+        {
+          "title": "Elmachtoub and Grigas: Smart \"Predict, then Optimize\"",
+          "url": "https://arxiv.org/abs/1710.08005"
+        },
+        {
+          "title": "PuLP on PyPI",
+          "url": "https://pypi.org/project/PuLP/"
+        },
+        {
+          "title": "HiGHS: high performance software for linear optimisation",
+          "url": "https://highs.dev/"
+        }
+      ]
+    },
+    {
+      "group": "Shift and conformal prediction",
+      "items": [
+        {
+          "title": "Tibshirani, Barber, Candès and Ramdas (2019): Conformal Prediction Under Covariate Shift",
+          "url": "https://arxiv.org/abs/1904.06019"
+        },
+        {
+          "title": "MAPIE documentation",
+          "url": "https://mapie.readthedocs.io/en/stable/"
+        }
+      ]
+    },
+    {
+      "group": "National references",
+      "items": [
+        {
+          "title": "National Data Governance Policies, including the Data Classification Policy (NDMO)",
+          "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/DataClassificationPolicy.pdf"
+        },
+        {
+          "title": "Personal Data Protection Law",
+          "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/PersonalDataProtectionLaw.pdf"
+        },
+        {
+          "title": "Implementing Regulation of the Personal Data Protection Law",
+          "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf"
+        },
+        {
+          "title": "Regulation on Personal Data Transfer outside the Kingdom",
+          "url": "https://sdaia.gov.sa/Documents/RegulationonPersonalDataEN.pdf"
+        },
+        {
+          "title": "AI Ethics Principles",
+          "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf"
+        }
       ]
     }
   ]

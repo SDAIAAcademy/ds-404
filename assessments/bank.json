@@ -3,163 +3,844 @@
   "version": 1,
   "questions": [
     {
-      "id": "q-example-1",
+      "id": "q-prework-pinball-01",
       "type": "single",
-      "prompt": "REPLACE: a practice question on LO1, as a short scenario",
+      "prompt": "Pre-work. A forecaster's 0.9 quantile for tomorrow is 120 cases; 100 cases are sold. What is the pinball loss at tau 0.9?",
       "options": [
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: the right answer",
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: a wrong option that a common misconception makes tempting"
+        "2",
+        "18",
+        "20",
+        "10"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "The forecast is 20 above the actual; above the quantile the loss is (1 - 0.9) x 20 = 2.",
+      "misconceptions": [
+        "",
+        "Charges the over-forecast at tau instead of 1 - tau: 0.9 x 20 is the price of being 20 below",
+        "Uses the plain absolute error, which ignores the quantile",
+        "Uses half the absolute error, the loss of the median"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day2",
+      "session": 1,
+      "slide": "pinball-loss",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-prework-newsvendor-01",
+      "type": "single",
+      "prompt": "Pre-work. A case short costs SAR 30 and a case left over SAR 10. Next week's demand is roughly normal with mean 400 and standard deviation 50. About how many cases should be ordered?",
+      "options": [
+        "400",
+        "375",
+        "434",
+        "466"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "The critical ratio is 30 / (30 + 10) = 0.75; its normal quantile is 0.674, so 400 + 0.674 x 50 = 434.",
+      "misconceptions": [
+        "Orders the mean, right only when a shortage and a leftover cost the same",
+        "Turns the ratio the wrong way round and orders below the mean",
+        "",
+        "Uses the 0.9 quantile: the ratio here is 0.75, not 0.9"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day3",
+      "session": 1,
+      "slide": "critical-ratio",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-prework-lp-01",
+      "type": "single",
+      "prompt": "Pre-work. Imad writes the week's order as a linear programme. Which of these is a constraint?",
+      "options": [
+        "Minimise the cost of trips plus the cost of shortages",
+        "The number of cases of rice to order",
+        "The SAR 2,400 a truck trip costs",
+        "The volume ordered from one supplier fits the trucks booked for it"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "A constraint limits the choices: here volume against the capacity of the trucks booked.",
+      "misconceptions": [
+        "Names the objective, what is minimised, not a limit on the choices",
+        "Names a decision variable, which the solver chooses",
+        "Names a parameter, a fixed number in the objective",
+        ""
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day3",
+      "session": 2,
+      "slide": "integer-programme",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-prework-coverage-01",
+      "type": "single",
+      "prompt": "Pre-work. A forecaster's 80% bands held the actual demand on 62 of 100 days. What does that tell you?",
+      "options": [
+        "The bands are too wide",
+        "The bands are too narrow: the forecaster is more confident than it should be",
+        "The median forecast is biased",
+        "Nothing: 62% is close enough to 80%"
       ],
       "correct": [
         1
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "Too few days inside the band means the band is too narrow; quantiles near the tails are too close to the median.",
       "misconceptions": [
-        "REPLACE: the misconception behind this option",
+        "Reverses the direction: wide bands hold the actual more often, not less",
         "",
-        "REPLACE: the misconception behind this option",
-        "REPLACE: the misconception behind this option"
+        "Confuses coverage with bias: a centred forecast with narrow bands misses on both sides",
+        "Ignores the size of the gap: 18 points on 100 days is far outside sampling noise"
+      ],
+      "lo": [
+        "LO2",
+        "LO4"
+      ],
+      "day": "day2",
+      "session": 1,
+      "slide": "scaled-scores",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-budget-fair-01",
+      "type": "single",
+      "prompt": "A pretrained tabular model scores 0.781 AUC in one 40-second run. Your LightGBM scores 0.779 after a search of 103 fits that took 25 seconds. Which comparison is fair?",
+      "options": [
+        "The pretrained model wins: it scored higher",
+        "LightGBM wins: it needed less time",
+        "Accuracy with intervals for both, and the full time each took, tuning included, on the same folds",
+        "Neither: models of different families cannot be compared"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "A fair table carries both the score with its interval and the total compute, search included, on identical folds.",
+      "misconceptions": [
+        "Reads a difference of 0.002 without an interval as a win",
+        "Judges on time alone and forgets the score",
+        "",
+        "Gives up a comparison that a shared metric on shared folds makes possible"
       ],
       "lo": [
         "LO1"
       ],
       "day": "day1",
       "session": 1,
-      "level": "apply",
+      "slide": "budget-before-search",
+      "level": "evaluate",
       "pool": "practice",
       "weight": 1
     },
     {
-      "id": "q-example-2",
-      "type": "tf",
-      "prompt": "REPLACE: a statement on LO2 that is true",
+      "id": "q-grouped-cv-01",
+      "type": "single",
+      "prompt": "Bustan's 1,500 customers each place dozens of orders. The late-delivery model will score orders from customers it has never seen. Which cross-validation estimates that?",
       "options": [
-        "True",
-        "False"
+        "Folds grouped by customer, so that no customer is on both sides",
+        "Random 5-fold, because it uses every order",
+        "Stratified folds on the late flag",
+        "Leave-one-order-out"
       ],
       "correct": [
         0
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "Only folds that hold whole customers out test the model on customers it has not seen.",
       "misconceptions": [
         "",
-        "REPLACE: the misconception behind this option"
+        "Mixes a customer's orders across folds, so the model recognises customers",
+        "Balances the outcome but still puts each customer on both sides",
+        "Leaks the most: every other order of the same customer stays in training"
       ],
       "lo": [
-        "LO2"
-      ],
-      "day": "day1",
-      "session": 1,
-      "level": "understand",
-      "pool": "practice",
-      "weight": 1
-    },
-    {
-      "id": "q-example-3",
-      "type": "single",
-      "prompt": "REPLACE: a practice question on LO3, as a short scenario",
-      "options": [
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: the right answer",
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: a wrong option that a common misconception makes tempting"
-      ],
-      "correct": [
-        1
-      ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
-      "misconceptions": [
-        "REPLACE: the misconception behind this option",
-        "",
-        "REPLACE: the misconception behind this option",
-        "REPLACE: the misconception behind this option"
-      ],
-      "lo": [
-        "LO3"
-      ],
-      "day": "day1",
-      "session": 1,
-      "level": "apply",
-      "pool": "practice",
-      "weight": 1
-    },
-    {
-      "id": "q-example-4",
-      "type": "tf",
-      "prompt": "REPLACE: a statement on LO4 that is true",
-      "options": [
-        "True",
-        "False"
-      ],
-      "correct": [
-        0
-      ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
-      "misconceptions": [
-        "",
-        "REPLACE: the misconception behind this option"
-      ],
-      "lo": [
-        "LO4"
-      ],
-      "day": "day1",
-      "session": 1,
-      "level": "understand",
-      "pool": "practice",
-      "weight": 1
-    },
-    {
-      "id": "q-example-5",
-      "type": "single",
-      "prompt": "REPLACE: a practice question on LO5, as a short scenario",
-      "options": [
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: the right answer",
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: a wrong option that a common misconception makes tempting"
-      ],
-      "correct": [
-        1
-      ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
-      "misconceptions": [
-        "REPLACE: the misconception behind this option",
-        "",
-        "REPLACE: the misconception behind this option",
-        "REPLACE: the misconception behind this option"
-      ],
-      "lo": [
+        "LO1",
         "LO5"
       ],
       "day": "day1",
       "session": 1,
+      "slide": "customers-repeat",
       "level": "apply",
       "pool": "practice",
       "weight": 1
     },
     {
-      "id": "q-example-6",
-      "type": "tf",
-      "prompt": "REPLACE: a statement on LO6 that is true",
+      "id": "q-crossover-01",
+      "type": "single",
+      "prompt": "At 1,000 orders the pretrained model scores 0.760 and the tuned baseline 0.752; the paired difference is +0.008 with a 95% interval from -0.019 to +0.035. What do you report?",
       "options": [
-        "True",
-        "False"
+        "The pretrained model wins at 1,000 orders",
+        "The baseline wins: its interval is wider",
+        "The models are proven equal at 1,000 orders",
+        "No difference can be told apart at 1,000 orders with these repeats"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "An interval that contains zero leaves the sign undecided; more repeats could narrow it.",
+      "misconceptions": [
+        "Reads the mean as a win when the interval includes zero",
+        "Confuses a wider interval with a better model",
+        "Reads absence of evidence as proof of equality",
+        ""
+      ],
+      "lo": [
+        "LO1"
+      ],
+      "day": "day1",
+      "session": 3,
+      "slide": "reading-a-crossover",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-overlap-01",
+      "type": "single",
+      "prompt": "A vendor reports wins on 20 of 24 datasets. You learn that 8 of the 24 were in the suite used to select the model during pretraining. What do you do first?",
+      "options": [
+        "Accept the claim: 20 of 24 is a large majority",
+        "Drop the 8 overlapping datasets and recount with paired intervals",
+        "Ask for more datasets of the same kind",
+        "Rerun only the 4 losses"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Datasets the model was selected on cannot test it; recount on the rest, with paired differences and intervals.",
+      "misconceptions": [
+        "Counts wins without asking whether the test sets were independent of the model",
+        "",
+        "Adds data without removing the leak",
+        "Looks only where the claim failed, keeping the leaked wins"
+      ],
+      "lo": [
+        "LO1"
+      ],
+      "day": "day1",
+      "session": 4,
+      "slide": "pretraining-overlap",
+      "level": "analyze",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-scaled-error-01",
+      "type": "single",
+      "prompt": "Why are forecast errors divided by each series' own naive error before averaging over 400 series?",
+      "options": [
+        "So that high-volume staples do not decide the average alone",
+        "To turn the errors into percentages",
+        "Because pretrained models need scaled inputs",
+        "To remove the effect of holidays"
       ],
       "correct": [
         0
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "Unscaled, a staple selling hundreds of cases a day outweighs a specialty item selling two.",
       "misconceptions": [
         "",
-        "REPLACE: the misconception behind this option"
+        "Confuses scaling by a naive error with a percentage error, which fails on zero days",
+        "Mixes up scaling the inputs of a model with scaling the scores",
+        "Scaling changes the units, not which days are hard"
+      ],
+      "lo": [
+        "LO2"
+      ],
+      "day": "day2",
+      "session": 1,
+      "slide": "scaled-scores",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-same-windows-01",
+      "type": "single",
+      "prompt": "A zero-shot forecaster was scored on the last four weeks of data; the supplied benchmarks on six rolling origins over eight months. The zero-shot score is better. What do you conclude?",
+      "options": [
+        "The zero-shot forecaster is better",
+        "The benchmarks are better: they were tested more",
+        "Nothing yet: score the zero-shot forecaster at the same six origins and horizon",
+        "Average the two scores"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Different windows have different difficulty; only the same origins, horizon and series make the comparison.",
+      "misconceptions": [
+        "Compares scores from different windows as if the windows were equally hard",
+        "Rewards the number of tests, not their content",
+        "",
+        "Averages scores that measure different things"
+      ],
+      "lo": [
+        "LO2"
+      ],
+      "day": "day2",
+      "session": 1,
+      "slide": "same-windows",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-intermittent-01",
+      "type": "single",
+      "prompt": "Over the last year a catering product sold on one day in three on average (ADI 3.0), with sizes that vary little. How does the lab classify it at that origin?",
+      "options": [
+        "Regular",
+        "Short",
+        "Ramadan item",
+        "Intermittent"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "An average gap of 1.32 days or more between sales marks a series as intermittent in the lab.",
+      "misconceptions": [
+        "Looks at the size variability only, not at how often it sells",
+        "Confuses many zero days with a short history",
+        "Uses a product-master group that this product does not belong to",
+        ""
+      ],
+      "lo": [
+        "LO2"
+      ],
+      "day": "day2",
+      "session": 2,
+      "slide": "classify-from-history",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-future-covariate-01",
+      "type": "single",
+      "prompt": "Which input may be passed as a known future covariate when forecasting the next 28 days of dates (the fruit) at Riyadh?",
+      "options": [
+        "The Ramadan and Eid days in the next 28 days from the Umm al-Qura calendar",
+        "Next week's actual sales of dates at Jeddah",
+        "The actual temperature of the next 28 days",
+        "The total of next month's orders"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "The calendar is published in advance, so it is known at the origin.",
+      "misconceptions": [
+        "",
+        "Uses another series' future, which is not known at the origin",
+        "Uses actual weather that only a weather forecast could stand in for",
+        "Leaks the target itself"
+      ],
+      "lo": [
+        "LO2"
+      ],
+      "day": "day2",
+      "session": 3,
+      "slide": "known-future-covariates",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-stack-leak-01",
+      "type": "single",
+      "prompt": "Stacking weights for the origin 2026-03-15 are fitted on the forecasts of all six origins. What is wrong?",
+      "options": [
+        "Nothing: more origins give better weights",
+        "The weights saw the window they are scored on",
+        "Six origins are too few for four weights",
+        "Weights must be fitted per series"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Weights for an origin may use only windows that ended before it.",
+      "misconceptions": [
+        "Treats more data as always better, even when it includes the test window",
+        "",
+        "Blames the count of origins instead of the leak",
+        "Adds a requirement the method does not have"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day2",
+      "session": 4,
+      "slide": "rolling-origin-stacking",
+      "level": "analyze",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-simple-average-01",
+      "type": "single",
+      "prompt": "When is the simple average of four forecasters most likely to lose to the best single one?",
+      "options": [
+        "When the four forecasters are about equally good",
+        "When the series are long",
+        "When one forecaster is far better than the others",
+        "When the forecasts are quantiles"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Equal weights give a weak member as much say as the best one; that costs most when quality differs a lot.",
+      "misconceptions": [
+        "Describes the case where the simple average does well",
+        "Series length does not decide whether equal weights fit",
+        "",
+        "Quantile forecasts can be averaged like point forecasts"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day2",
+      "session": 4,
+      "slide": "recap-simple-average",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-gain-interval-01",
+      "type": "single",
+      "prompt": "A stack beats the best single model by 0.3% in scaled quantile loss, with a 95% bootstrap interval over series from -0.1% to +0.7%. What do you tell Ahlam?",
+      "options": [
+        "Adopt the stack: it is better on average",
+        "Drop the stack: it is worse",
+        "The stack is proven equal to the best model",
+        "The gain is not established; keep the single model unless more windows separate them"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "An interval that includes zero does not establish a gain, and the stack costs more to run.",
+      "misconceptions": [
+        "Adopts on a mean whose interval includes zero",
+        "Reads an undecided interval as a loss",
+        "Reads an undecided interval as proof of equality",
+        ""
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day2",
+      "session": 4,
+      "slide": "stack-gain-interval",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-judged-loss-01",
+      "type": "single",
+      "prompt": "Forecasts will be judged by scaled quantile loss. On which loss should the stacking weights be fitted?",
+      "options": [
+        "Scaled quantile loss, on earlier windows",
+        "Squared error of the medians, because it is smooth",
+        "Accuracy of the 0.5 quantile only",
+        "Whichever loss gives the largest weight to the newest model"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Weights fitted on the judged loss optimise what will be scored; least squares chases large spikes instead.",
+      "misconceptions": [
+        "",
+        "Prefers a convenient loss to the one that is judged",
+        "Ignores the 0.1 and 0.9 quantiles that are judged too",
+        "Chooses the loss by the answer it gives"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day2",
+      "session": 4,
+      "slide": "fit-the-judged-loss",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-regret-error-01",
+      "type": "single",
+      "prompt": "Forecaster A has lower scaled quantile loss than B over a quarter, but A's orders cost more. Which explanation fits best?",
+      "options": [
+        "Regret does not depend on the forecaster",
+        "A's errors fall on products and quantiles where errors cost most",
+        "The loss was computed on the wrong days",
+        "B was tuned on the test quarter"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Error weighs every product and quantile alike; regret weighs each error by what it costs in the order it causes.",
+      "misconceptions": [
+        "Forgets that the orders come from each forecaster's quantiles",
+        "",
+        "Blames the measure without evidence of a mistake",
+        "Invents a leak the question gives no sign of"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day3",
+      "session": 3,
+      "slide": "error-vs-regret",
+      "level": "analyze",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-binding-01",
+      "type": "single",
+      "prompt": "In the solved plan the limit of two reefers has zero slack. Re-solving with three reefers gives the same objective. What is the third reefer worth this week?",
+      "options": [
+        "SAR 3,200, the price of a trip",
+        "As much as the depot space is worth",
+        "Nothing: the constraint is tight but does not limit the plan",
+        "It cannot be known without the dual prices"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "The value of relaxing a constraint is the drop in the objective when it is relaxed; here there is none.",
+      "misconceptions": [
+        "Confuses the cost of a resource with its value to this plan",
+        "Transfers the value of another constraint",
+        "",
+        "Re-solving is the direct way to price a constraint in an integer programme"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day3",
+      "session": 2,
+      "slide": "binding-constraints",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-integer-trucks-01",
+      "type": "single",
+      "prompt": "The dry goods need 75 cubic metres; a truck carries 60. A linear relaxation books 1.25 trucks. Why are trucks integer variables?",
+      "options": [
+        "To make the solver faster",
+        "Because cases are integers",
+        "Because 1.25 trucks is easier to round later",
+        "Because a trip is paid whole: 1.25 trucks underprices the plan"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "Half a truck costs a whole trip; a continuous count makes small loads look cheap.",
+      "misconceptions": [
+        "Integer variables make solving slower, not faster",
+        "Cases are integers too, but rounding hundreds of cases barely matters",
+        "Rounding after solving can break the other constraints",
+        ""
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day3",
+      "session": 2,
+      "slide": "why-integers",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-joint-shortage-01",
+      "type": "single",
+      "prompt": "A plan's simulation assumes products are independent and reports a 2% chance that five products run short in the same week. Past errors show a shared weekly shock. What happens to that 2%?",
+      "options": [
+        "It rises: shared shocks make shortages arrive together",
+        "It falls: shared shocks cancel out",
+        "It stays: each product's own risk is unchanged",
+        "It cannot change without new orders"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Correlation leaves each product's marginal risk similar but makes joint shortages more likely.",
+      "misconceptions": [
+        "",
+        "Thinks correlated errors offset each other, which only negatively correlated ones do",
+        "Looks at each product's own risk and misses the joint event",
+        "Forgets that demand, not the plan, carries the shock"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day3",
+      "session": 4,
+      "slide": "shared-shocks",
+      "level": "analyze",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-adversarial-01",
+      "type": "single",
+      "prompt": "An adversarial classifier separates last year's orders from this month's with AUC 0.52. What can you conclude?",
+      "options": [
+        "The model will work this month",
+        "The features show no shift the classifier can see; outcomes may still have shifted",
+        "There is no shift of any kind",
+        "The classifier is broken"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Adversarial validation tests the inputs only; label and concept shift need outcomes.",
+      "misconceptions": [
+        "Jumps from similar inputs to a working model",
+        "",
+        "Ignores label and concept shift, which the test cannot see",
+        "Reads an AUC near 0.5 as a failure, when it is the expected result without input shift"
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "adversarial-validation",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-temporal-leak-01",
+      "type": "single",
+      "prompt": "A temporal split trains on the first 80% of days and tests on the last 20%. The same customers order in both periods, and the model will serve a new region's customers. What does the temporal score overstate?",
+      "options": [
+        "Nothing: a temporal split never leaks",
+        "The effect of holidays",
+        "The size of the region",
+        "How well the model ranks customers it has not seen"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "Repeat customers sit on both sides of the date, so the score rewards recognising them.",
+      "misconceptions": [
+        "Assumes time order alone removes every leak",
+        "Names a seasonal issue unrelated to the leak",
+        "Region size does not enter the split",
+        ""
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 2,
+      "slide": "four-schemes",
+      "level": "analyze",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-weights-correct-01",
+      "type": "single",
+      "prompt": "Weighted conformal intervals use weights from an adversarial classifier. Which shift can they correct?",
+      "options": [
+        "A change in how the features are distributed, with the same link to the outcome",
+        "A change in the link between distance and lateness",
+        "Any shift, if the weights are clipped",
+        "A change in the late rate with the same features"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Density-ratio weights reweight old rows toward the new inputs; they cannot create a link the old rows never had.",
+      "misconceptions": [
+        "",
+        "Expects reweighting to reproduce a relationship that changed",
+        "Thinks clipping adds a guarantee; it trades coverage for stability",
+        "A change in the outcome rate alone leaves p(x) unchanged, so the weights do not see it"
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 3,
+      "slide": "density-ratio-weights",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-hijri-validation-01",
+      "type": "single",
+      "prompt": "A demand model was validated on January and February 2026 and will forecast the weeks before Eid al-Fitr 1448. Which validation estimates that error?",
+      "options": [
+        "The January and February scores, since they are recent",
+        "Random days from the last year",
+        "Rolling origins whose test windows covered the weeks before the past Eids al-Fitr",
+        "A split by product"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Ramadan moves about eleven days a year; only test windows that held past pre-Eid weeks measure that season.",
+      "misconceptions": [
+        "Takes recent for representative, though the season differs",
+        "Mixes days from all seasons and leaks neighbouring days",
+        "",
+        "Holds products out, which answers a different question"
+      ],
+      "lo": [
+        "LO2",
+        "LO5"
+      ],
+      "day": "day2",
+      "session": 3,
+      "slide": "two-cycles",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-licence-outputs-01",
+      "type": "single",
+      "prompt": "A model's weights are free to download, but its licence says its outputs may be used for non-commercial purposes only. Bustan wants it to set weekly orders. What follows?",
+      "options": [
+        "Allowed: downloading was free",
+        "Allowed if it runs on Bustan's own servers",
+        "Allowed once its accuracy beats the baseline",
+        "Not allowed without a separate commercial licence"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "Setting orders is commercial use of the outputs, which the licence excludes wherever the model runs.",
+      "misconceptions": [
+        "Confuses free access with permitted use",
+        "Thinks hosting changes the licence: residency and licence are separate checks",
+        "Lets accuracy override a licence condition",
+        ""
       ],
       "lo": [
         "LO6"
       ],
-      "day": "day1",
-      "session": 1,
+      "day": "day4",
+      "session": 4,
+      "slide": "licences",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-residency-01",
+      "type": "single",
+      "prompt": "Bustan's order records hold customer ids of sole traders. A candidate runs only as a cloud endpoint outside the Kingdom. What must happen before those records are sent?",
+      "options": [
+        "Nothing, if the data is encrypted in transit",
+        "A purpose allowed by the Personal Data Protection Law, a transfer risk assessment and appropriate safeguards, or self-hosting instead",
+        "Only the customers' consent by email",
+        "A faster network link"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "The PDPL's Article 29 and the transfer regulation set the conditions; self-hosting in the Kingdom avoids the transfer.",
+      "misconceptions": [
+        "Treats encryption as a substitute for the legal conditions",
+        "",
+        "Reduces the conditions to consent alone",
+        "Answers a technical question that was not asked"
+      ],
+      "lo": [
+        "LO6"
+      ],
+      "day": "day4",
+      "session": 4,
+      "slide": "residency",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-cost-decides-01",
+      "type": "single",
+      "prompt": "Running a pretrained forecaster costs about SAR 50 a month self-hosted. The course's evidence shows it does not beat the tuned LightGBM overall. What is the adoption decision?",
+      "options": [
+        "Adopt it: it is cheap",
+        "Adopt it for every series: it needs no training",
+        "Not as a replacement; at most as a member where it adds measured value, such as holiday windows",
+        "Reject pretrained forecasters for good"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Low cost does not make a model useful; adopt where the evidence shows value, with that condition written down.",
+      "misconceptions": [
+        "Lets a low price stand in for evidence",
+        "Takes no training for no cost of being wrong",
+        "",
+        "Generalises one result to every future model"
+      ],
+      "lo": [
+        "LO6"
+      ],
+      "day": "day4",
+      "session": 4,
+      "slide": "adoption-table",
+      "level": "evaluate",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-four-checks-01",
+      "type": "single",
+      "prompt": "A candidate has an Apache-2.0 licence, can be self-hosted in Riyadh and costs little to run, but it was never evaluated on Bustan's data. What is the right decision today?",
+      "options": [
+        "Not now: evaluate it on Bustan's data first",
+        "Go: the licence, residency and cost all allow it",
+        "No-go: unevaluated models are never adopted",
+        "Go with conditions: monitor it after adoption"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Accuracy is one of the four checks; without evidence on Bustan's data it is not met yet.",
+      "misconceptions": [
+        "",
+        "Skips the accuracy check",
+        "Turns 'not yet evaluated' into a permanent refusal",
+        "Moves the evaluation after the decision it should inform"
+      ],
+      "lo": [
+        "LO6"
+      ],
+      "day": "day4",
+      "session": 4,
+      "slide": "four-checks",
       "level": "understand",
       "pool": "practice",
       "weight": 1

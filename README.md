@@ -39,7 +39,11 @@ Participants decide when pretrained models, ensembles and decision-aware pipelin
 
 ## Case study
 
-**REPLACE: the name of the fictional organisation every lab works on.** REPLACE: two sentences on the case study and its synthetic data
+**Bustan Food Wholesale** (بستان لتجارة المواد الغذائية بالجملة) is a fictional food wholesaler with depots in Riyadh, Buraidah, Jeddah and Dammam and a northern region around Hail and Tabuk opened in August 2025. Every lab works on its synthetic data, generated with a fixed seed by `labs/prepare_data.py`: 80,000 orders with delivery hours, 400 daily demand series over three Hijri years with Ramadan and both Eids, a cost and truck table, a vendor benchmark claim and the adoption files (candidate licences, classification register, cost sheet).
+
+People in the case: Ahlam Al-Kuwaileet (head of supply planning, the decision owner), Shadi Al-Baiz (operations manager of the northern region), Imad Al-Sharqi (fleet and depot capacity planner), Asil Al-Rajeh (data protection officer), Rafif Al-Moaibed (analyst who forwarded the vendor claim) and Sarab Al-Mashouq (senior data scientist: the participant's role).
+
+**Pretrained models in the labs.** The real models (TabICL, Chronos-2) run only in a Google Colab runtime, where their weights download; nothing is downloaded to a laptop and no API key is needed. Everywhere else a labelled stand-in answers, and every result says which one did. The course's own reference results were written by the stand-ins.
 
 <!-- academy:labs -->
 ## Labs
@@ -70,7 +74,7 @@ Every lab is a notebook in `labs/`. Open it in Google Colab from the course page
 
 An evaluation protocol and adoption decision for one structured-data task (two pretrained candidates, a tuned baseline, an ensemble, validation under a stated shift, regret where relevant) in a public repository whose README reports measured results; defence before two assessors
 
-**Submission:** REPLACE: what participants submit and how: a public repository link, or a shared folder for a course without code
+**Submission:** a public GitHub repository link: the evaluation protocol run end to end, a README that reports the measured results with intervals and the adoption decision with its conditions, the run logs and a verification note on AI-assisted steps. Start from `labs/capstone/`. The defence is 10 minutes, then 10 minutes of questions from two assessors, one of whom names a new shift scenario.
 
 ## Prerequisites
 
@@ -95,12 +99,56 @@ Each line is a capability; the examples are interchangeable.
 <!-- academy:sources -->
 ## Sources
 
-- REPLACE: every source the course cites, with its address, in course.json under "sources"; this list is written from there
+### Pretrained tabular models and their licences
+
+- [Qu and others: TabICL: A Tabular Foundation Model for In-Context Learning on Large Data](https://arxiv.org/abs/2502.05564)
+- [Qu and others: TabICLv2: A better, faster, scalable, and open tabular foundation model](https://arxiv.org/abs/2602.11139)
+- [TabICL repository and README (BSD-3-Clause)](https://github.com/soda-inria/tabicl)
+- [TabPFN-2.6: model card](https://huggingface.co/Prior-Labs/tabpfn_2_6)
+- [TabPFN-2.6: licence file (non-commercial)](https://huggingface.co/Prior-Labs/tabpfn_2_6/raw/main/LICENSE)
+- [TabPFN-2.5: licence file (non-commercial)](https://huggingface.co/Prior-Labs/tabpfn_2_5/raw/main/LICENSE)
+
+### Pretrained forecasters and their licences
+
+- [Ansari and others: Chronos-2: From Univariate to Universal Forecasting](https://arxiv.org/abs/2510.15821)
+- [Chronos-2: model card (Apache-2.0)](https://huggingface.co/amazon/chronos-2)
+- [chronos-forecasting repository and README](https://github.com/amazon-science/chronos-forecasting)
+- [Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)](https://arxiv.org/abs/2310.10688)
+- [TimesFM 2.5: model card (Apache-2.0)](https://huggingface.co/google/timesfm-2.5-200m-pytorch)
+- [TimesFM repository](https://github.com/google-research/timesfm)
+
+### Baselines, evaluation and ensembles
+
+- [Bergstra and Bengio (2012): Random Search for Hyper-Parameter Optimization](https://jmlr.org/papers/v13/bergstra12a.html)
+- [LightGBM documentation](https://lightgbm.readthedocs.io/en/stable/)
+- [Hyndman and Athanasopoulos: FPP3, evaluating point forecast accuracy (scaled errors)](https://otexts.com/fpp3/accuracy.html)
+- [Hyndman and Athanasopoulos: FPP3, forecast combinations](https://otexts.com/fpp3/combinations.html)
+
+### Decisions and optimisation
+
+- [Elmachtoub and Grigas: Smart "Predict, then Optimize"](https://arxiv.org/abs/1710.08005)
+- [PuLP on PyPI](https://pypi.org/project/PuLP/)
+- [HiGHS: high performance software for linear optimisation](https://highs.dev/)
+
+### Shift and conformal prediction
+
+- [Tibshirani, Barber, Candès and Ramdas (2019): Conformal Prediction Under Covariate Shift](https://arxiv.org/abs/1904.06019)
+- [MAPIE documentation](https://mapie.readthedocs.io/en/stable/)
+
+### National references
+
+- [National Data Governance Policies, including the Data Classification Policy (NDMO)](https://sdaia.gov.sa/en/SDAIA/about/Documents/DataClassificationPolicy.pdf)
+- [Personal Data Protection Law](https://sdaia.gov.sa/en/SDAIA/about/Documents/PersonalDataProtectionLaw.pdf)
+- [Implementing Regulation of the Personal Data Protection Law](https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf)
+- [Regulation on Personal Data Transfer outside the Kingdom](https://sdaia.gov.sa/Documents/RegulationonPersonalDataEN.pdf)
+- [AI Ethics Principles](https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf)
 <!-- /academy:sources -->
 
 ### National references
 
-- NDMO Data Classification Policy: REPLACE: the address of the official text
-- Personal Data Protection Law and its implementing regulations: REPLACE: the address of the official text
-- Regulation on Personal Data Transfer: REPLACE: the address of the official text
-- SDAIA AI Ethics Principles: REPLACE: the address of the official text
+- NDMO National Data Governance Policies, including the Data Classification Policy: https://sdaia.gov.sa/en/SDAIA/about/Documents/DataClassificationPolicy.pdf
+- Personal Data Protection Law: https://sdaia.gov.sa/en/SDAIA/about/Documents/PersonalDataProtectionLaw.pdf, and its Implementing Regulation: https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf
+- Regulation on Personal Data Transfer outside the Kingdom: https://sdaia.gov.sa/Documents/RegulationonPersonalDataEN.pdf
+- SDAIA AI Ethics Principles: https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf
+
+**The transfer rules in brief (Day 4, Session 4).** Article 29 of the Personal Data Protection Law allows personal data to be transferred outside the Kingdom only for the purposes it lists, with a level of protection at least equivalent to the Law's and limited to the minimum data needed. The Regulation on Personal Data Transfer outside the Kingdom requires a risk assessment before a transfer in the cases of its Article 7 (purpose and legal basis, nature and scope, safeguards, data minimisation, possible effects, mitigations) and, in the exempted cases of its Article 4, appropriate safeguards: standard contractual clauses, binding common rules or a certificate of accreditation. The National Data Governance Policies set four classification levels (Top Secret, Secret, Restricted, Public) for data held by public entities; Bustan, a private company, applies the same levels in its own register. This summary is a teaching aid, not legal advice: read the official texts.

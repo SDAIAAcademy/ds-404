@@ -6,7 +6,7 @@
 # models can run here or the stand-in will answer.
 #
 # **Pre-work.** Before Day 1, complete the three hours of guided pre-work on quantile loss, newsvendor logic
-# and linear programmes, and its entry quiz (the practice questions tagged "pre-work" on the course page).
+# and linear programmes, and its entry quiz: the practice questions on the course page whose prompt starts with "Pre-work".
 
 # %%
 import os, sys, subprocess

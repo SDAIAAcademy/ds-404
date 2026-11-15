@@ -28,13 +28,28 @@
 
 <section class="slide" id="format" data-label="Format">
   <div class="kicker">Format</div>
-  <h2>REPLACE: how many minutes each presentation and its questions take</h2>
+  <h2>Ten minutes to defend the decision, ten minutes of questions from two assessors</h2>
   <div class="cols cols-3">
-    <div class="card c-teal"><h4>1 · The problem</h4><p class="small mb0">Who, what, why now. One slide.</p></div>
-    <div class="card c-cyan"><h4>2 · What you built</h4><p class="small mb0">Design, decisions, trade-offs. Then the live demo.</p></div>
-    <div class="card c-coral"><h4>3 · What you measured</h4><p class="small mb0">Baseline, improvement, failures found, what comes next.</p></div>
+    <div class="card c-teal"><h4>1 · The task and the decision</h4><p class="small mb0">Which task, who decides, what is decided. One slide.</p></div>
+    <div class="card c-cyan"><h4>2 · The protocol</h4><p class="small mb0">The tuned baseline and its budget, two pretrained candidates, the ensemble, the validation scheme and the shift it matches.</p></div>
+    <div class="card c-coral"><h4>3 · Results and conditions</h4><p class="small mb0">Every number with its interval and its run; regret where a decision follows; the adoption decision with its conditions.</p></div>
   </div>
-  <div class="callout note mt"><b>Peer feedback.</b> After each talk, everyone writes one strength, one question and one suggestion.</div>
+  <div class="callout note mt"><b>Peer feedback.</b> After each defence, everyone writes one strength, one question and one suggestion.</div>
+  <aside class="notes"><p>Keep time strictly: ten minutes, then questions. The case data is Bustan's, synthetic; a participant may use another public structured dataset if the shift and the decision are stated as clearly.</p></aside>
+</section>
+
+<section class="slide" id="shift-question" data-label="The shift question" data-lo="LO5">
+  <div class="kicker">Inside the ten minutes of questions</div>
+  <h2>An assessor names a new shift; you predict which result changes before you re-run</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Scenario</b>e.g. a third region, a supplier change, Ramadan inside the test window</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Prediction</b>which validation number moves, and which way</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Re-run</b>the protocol on the new split, live or right after</div>
+  </div>
+  <div class="callout tip mt"><b>What earns the marks.</b> A prediction with a reason, then an honest comparison with the re-run, whichever way it went.</div>
+  <aside class="notes"><p>Assessors: choose a scenario the repository can re-run in minutes, such as holding out Tabuk, moving the temporal cut before Ramadan 1447, or dropping one segment from training. Score the reasoning under "Validation under shift", not whether the prediction was right.</p></aside>
 </section>
 
 <section class="slide order" id="running-order" data-label="Running order">
@@ -83,8 +98,9 @@
   <div class="kicker">After the course</div>
   <h2>Keep going</h2>
   <ul class="bullets">
-    <li><b>Your project stays yours:</b> keep it reproducible and add the next improvement you named today</li>
-    <li><b>Next Academy course:</b> REPLACE: the course that follows this one</li>
+    <li><b>Your project stays yours:</b> keep it reproducible, and re-run the protocol when the data or the candidates change</li>
+    <li><b>The follow-up task:</b> apply the protocol to one model decision in your own work and report it as the trainer sets out</li>
+    <li><b>Next in the Academy:</b> no catalog course follows DS-404; DS-304 and DS-305 are its foundations if a colleague needs them</li>
   </ul>
 </section>
 
