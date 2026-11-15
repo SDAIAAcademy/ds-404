@@ -45,6 +45,15 @@ People in the case: Ahlam Al-Kuwaileet (head of supply planning, the decision ow
 
 **Pretrained models in the labs.** The real models (TabICL, Chronos-2) run only in a Google Colab runtime, where their weights download; nothing is downloaded to a laptop and no API key is needed. Everywhere else a labelled stand-in answers, and every result says which one did. The course's own reference results were written by the stand-ins.
 
+## How the course is organised
+
+- **Pre-work, before Day 1 (about three hours).** Quantile (pinball) loss, newsvendor logic and simple linear programmes, with an entry quiz: the four practice questions that start with "Pre-work." on the course's practice page. Run `00_setup_check.ipynb`, which also solves a small integer programme with HiGHS. Day 2 checks the pinball loss and Day 3 the newsvendor result and the programme instead of teaching them again.
+- **Every lab starts from a supplied reference state**: the data files and, in `labs/data/reference/`, the results earlier labs would have produced. No lab depends on a participant's earlier run, and every exercise has a safety net.
+- **AI policy.** AI off for the supervised check and for the Day 1 baseline (Lab 1.1). In the other labs an assistant may give hints, not finished pipelines. In the capstone any use of AI is allowed, with a verification note on assisted steps and a live defence.
+- **Responsible use.** Comparisons report error by depot region and customer segment (by depot for the demand series), and Day 4 compares them before and after the shift to the northern region, so that a model that serves new or remote depots worse is caught before adoption. The Day 4 adoption lab applies Bustan's classification levels and the personal data transfer rules before a hosted model may receive its records.
+- **Assessment.** An AI-off supervised check (choose a validation scheme for a described shift, compute a newsvendor quantity, read a learning curve) 20%; the capstone rubric 60%; the defence before two assessors 20%. Passing: 70% overall, with at least 60% on the capstone rubric and on the supervised check.
+- **Follow-up, within three weeks of the course.** Apply the evaluation protocol to one workplace or public dataset and report the measured results to the trainer.
+
 <!-- academy:labs -->
 ## Labs
 

@@ -167,7 +167,7 @@
 k = int(np.ceil((n + 1) * 0.9))
 q = np.sort(scores)[k - 1]                      # interval: prediction ± q</code></pre>
   <div class="callout warn small mt">Lab 4.1's adversarial AUC of 0.95 says the northern orders are not exchangeable with the old ones.</div>
-  <aside class="notes"><p>DS-305 is a prerequisite and not built yet; if participants have not met split conformal, take three minutes on this slide: sort the calibration errors, take the 90th percentile with the small-sample correction, add and subtract it. The intervals are on log hours, so in hours they are multiplicative: from 0.37 to 2.71 times the prediction in the course run.</p></aside>
+  <aside class="notes"><p>Split conformal belongs to DS-305, a prerequisite; if participants have not met it, take three minutes on this slide: sort the calibration errors, take the 90th percentile with the small-sample correction, add and subtract it. The intervals are on log hours, so in hours they are multiplicative: from 0.37 to 2.71 times the prediction in the course run.</p></aside>
 </section>
 
 <section class="slide" data-label="Weights" id="density-ratio-weights" data-lo="LO5">
@@ -275,16 +275,16 @@ q = np.sort(scores)[k - 1]                      # interval: prediction ± q</cod
   <div class="kicker">Checkpoint</div>
   <h2>Which option can Bustan use for late-delivery risk?</h2>
   <div class="quiz" data-type="single" data-lo="LO6">
-    <p class="lead">A vendor offers TabPFN-2.6 as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?</p>
+    <p class="lead">A cloud reseller offers the open TabPFN-2.6 weights as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?</p>
     <div class="opts">
-      <div class="opt" data-why="Puts cost first: SAR 14 a month is trivial next to the other two checks">The price per prediction</div>
+      <div class="opt" data-why="Puts cost first: a few riyals per thousand predictions is trivial next to the other two checks">The price per prediction</div>
       <div class="opt" data-ok>The licence: its outputs are for non-commercial use only</div>
       <div class="opt" data-why="Treats the benchmark as evidence for Bustan: it is a hypothesis to test on Bustan's own data">The benchmark score is not high enough</div>
       <div class="opt" data-why="Names a real obstacle but not the first: even self-hosted in Riyadh, the licence forbids commercial use">Only the transfer of personal data outside the Kingdom</div>
     </div>
-    <div class="callout tip why"><b>Why.</b> Self-hosting would solve the residency question; nothing Bustan can do solves the licence without a separate commercial agreement.</div>
+    <div class="callout tip why"><b>Why.</b> Self-hosting would solve the residency question; a reseller cannot grant commercial rights it does not hold, so only a separate commercial agreement with the model's maker solves the licence.</div>
   </div>
-  <aside class="notes"><p>Answer: B. D is the strongest distractor; point out that the residency problem has a remedy (self-hosting) and the licence does not.</p></aside>
+  <aside class="notes"><p>Answer: B. D is the strongest distractor; point out that the residency problem has a remedy (self-hosting) and the licence does not. If someone asks about the maker's own hosted service: that is a different contract, with its own terms and its own residency question, and it would be assessed on those.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-4" data-auto="lab" data-lab="4.4">

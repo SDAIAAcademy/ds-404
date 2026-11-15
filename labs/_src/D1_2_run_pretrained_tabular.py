@@ -161,8 +161,30 @@ except NotImplementedError:
                           for n, d, t in (("tuned LightGBM", gbm, base["fits"] * gbm.fit_s.mean()), (info["model"], pre, 0.0))])
 print(table.round(4).to_string(index=False))
 U.check(table.tuning_s.iloc[0] > table.fit_s.iloc[0], "the baseline's tuning costs more than one fit")
+
+# %% [markdown]
+# **By region and segment (given).** Every comparison in this course also reports the error by depot region and
+# customer segment, so that a model that serves one group worse is seen before adoption. The cell below refits
+# both models on the same folds, keeps the out-of-fold probabilities and scores each group. Groups of a few
+# dozen orders give wide-moving AUCs: read large gaps only.
+
+# %%
+oof = {"tuned LightGBM": np.full(len(y), np.nan), "pretrained or stand-in": np.full(len(y), np.nan)}
+for tr, te in folds:
+    oof["tuned LightGBM"][te] = U.lgbm(**best_cfg).fit(X.iloc[tr], y[tr]).predict_proba(X.iloc[te])[:, 1]
+    oof["pretrained or stand-in"][te] = make_pretrained().fit(X.iloc[tr], y[tr]).predict_proba(X.iloc[te])[:, 1]
+groups = []
+for col in ("region", "segment"):
+    for g, idx in data.groupby(col).groups.items():
+        idx = np.asarray(idx)
+        if len(np.unique(y[idx])) == 2:
+            groups.append({"by": col, "group": g, "orders": len(idx), "late_rate": y[idx].mean(),
+                           **{k: U.auc(y[idx], p[idx]) for k, p in oof.items()}})
+by_group = pd.DataFrame(groups)
+print(by_group.round(3).to_string(index=False))
+U.check(set(by_group.by) == {"region", "segment"}, "AUC by region and by segment for both models")
 U.save_reference("d1_2", {"n": N, "folds": len(folds), "answered_by": info["model"], "table": table.to_dict("records"),
-                          "diff": [m, lo, hi]})
+                          "diff": [m, lo, hi], "by_group": by_group.to_dict("records")})
 
 # %% [markdown]
 # ## 5 · What changed in the preprocessing (3')
@@ -179,9 +201,8 @@ print("segment codes:", dict(enumerate(U.SEGMENTS)))
 # %% [markdown]
 # ## ✱ Stretch · Raw categories
 #
-# Pass `segment` as text (`data.segment`) to the pretrained model instead of the code. TabICL and the
-# Does the model accept it (read its documentation first), and does the AUC move? The stand-in one-hot encodes the
-# code already.
+# Pass `segment` as text (`data.segment`) to the pretrained model instead of the code. Does the model accept it
+# (read its documentation first), and does the AUC move? The stand-in one-hot encodes the code already.
 
 # %% [markdown]
 # ## Checkpoint

@@ -24,7 +24,6 @@
     "Tunes boosted-tree models with cross-validation",
     "Backtests forecasters with rolling-origin cross-validation",
     "Formulates a simple linear programme, or completes the pre-work",
-    "Setup: a laptop CPU with uv, or Google Colab. No key and no model download is needed on a laptop: the pretrained models run in a Colab runtime, and a labelled stand-in answers elsewhere. Run 00_setup_check before Day 1; see labs/README.md.",
     "Setup: a laptop CPU with uv, or Google Colab. No key and no model download is needed on a laptop: the pretrained models run in a Colab runtime, and a labelled stand-in answers elsewhere. Run 00_setup_check before Day 1; see labs/README.md."
   ],
   "site": {

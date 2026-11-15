@@ -168,8 +168,20 @@ print("lowest quantile loss:", best)
 cov = table.cover80.sort_values()
 print(cov.round(3).to_string())
 U.check(cov.between(0, 1).all(), "coverage is a share")
+
+# %% [markdown]
+# **By depot (given).** Every comparison in this course also reports the error by depot region, so that a method
+# that serves one depot worse is seen before adoption. Read the zero-shot row against LightGBM's at each depot.
+
+# %%
+depot_of = U.meta().set_index("series").depot_name
+by_depot = (long.assign(depot=long.series.map(depot_of))
+            .pivot_table(index="model", columns="depot", values="sql", aggfunc="mean"))
+print(by_depot.round(3).to_string())
+U.check(by_depot.shape[1] >= 2 and by_depot.notna().all().all(), "scaled quantile loss for every depot and method")
 U.save_reference("d2_1", {"answered_by": info["model"], "table": table.reset_index().to_dict("records"),
-                          "rel": rel.reset_index().to_dict("records")})
+                          "rel": rel.reset_index().to_dict("records"),
+                          "by_depot": by_depot.reset_index().to_dict("records")})
 
 # %% [markdown]
 # ## ✱ Stretch · A shorter context

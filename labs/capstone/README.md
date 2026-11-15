@@ -9,7 +9,7 @@ You chose it at the end of Lab 4.4 (`CAPSTONE_TASK`):
 | Task | Data | Pretrained candidates | Tuned baseline | Shift to validate under | Decision to price |
 |---|---|---|---|---|---|
 | Late-delivery risk (tables) | `data/orders.csv.gz` | two tabular models (in the course: TabICLv2, and a second of your choice whose licence you check) | LightGBM under a stated budget | the northern region, or a shift you justify | which orders to warn dispatchers about, or the promised hours |
-| Daily demand (series) | `data/demand.npz` | two forecasters (in the course: Chronos-2 and TimesFM 2.5) | the supplied LightGBM backtests or your own | holiday windows, short series, or the northern depots | the weekly orders of Day 3 |
+| Daily demand (series) | `data/demand.npz` | two forecasters (in the course: Chronos-2 and TimesFM 2.5) | the supplied LightGBM backtests or your own | holiday windows, short series, or one depot held out (the demand series have no northern depot) | the weekly orders of Day 3 |
 
 You may use another public structured dataset instead, if you state its shift and its decision as clearly. Never use real customer or personal data.
 
