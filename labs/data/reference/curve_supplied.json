@@ -1,0 +1,46 @@
+{
+ "size": 50000,
+ "repeats": [
+  {
+   "repeat": 0,
+   "gbm_auc": 0.77785,
+   "pre_auc": 0.77669,
+   "gbm_seconds": 17.13742,
+   "pre_seconds": 22.50873,
+   "pretrained": "stand-in (spline logistic + nearest neighbours; not a pretrained model)"
+  },
+  {
+   "repeat": 1,
+   "gbm_auc": 0.78287,
+   "pre_auc": 0.77724,
+   "gbm_seconds": 26.9633,
+   "pre_seconds": 21.94909,
+   "pretrained": "stand-in (spline logistic + nearest neighbours; not a pretrained model)"
+  },
+  {
+   "repeat": 2,
+   "gbm_auc": 0.76078,
+   "pre_auc": 0.77696,
+   "gbm_seconds": 25.95266,
+   "pre_seconds": 21.91819,
+   "pretrained": "stand-in (spline logistic + nearest neighbours; not a pretrained model)"
+  },
+  {
+   "repeat": 3,
+   "gbm_auc": 0.77268,
+   "pre_auc": 0.77729,
+   "gbm_seconds": 23.49215,
+   "pre_seconds": 20.02861,
+   "pretrained": "stand-in (spline logistic + nearest neighbours; not a pretrained model)"
+  },
+  {
+   "repeat": 4,
+   "gbm_auc": 0.78037,
+   "pre_auc": 0.77793,
+   "gbm_seconds": 28.48139,
+   "pre_seconds": 21.29137,
+   "pretrained": "stand-in (spline logistic + nearest neighbours; not a pretrained model)"
+  }
+ ],
+ "note": "written by _tools/make_reference.py; the pretrained column is the STAND-IN"
+}

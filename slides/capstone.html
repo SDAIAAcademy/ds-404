@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-ax="deck" data-track="data-science">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capstone · Capstone project presentations · Advanced Modelling for Structured Data</title>
+<meta name="generator" content="SDAIA Academy engine 1.0.0">
+<link rel="icon" href="../_engine/icon.svg">
+<link rel="alternate" type="text/markdown" href="capstone.md">
+<link rel="describedby" href="../llms.txt">
+<link rel="stylesheet" href="../_engine/academy.css">
+</head>
+<body>
+<div class="deck" data-course="Advanced Modelling for Structured Data" data-track="data-science" data-day="Capstone">
+<section class="slide title" id="title" data-auto="title" data-label="Welcome" data-n="1">
+  <div class="kicker">SDAIA Academy · Advanced Modelling for Structured Data</div>
+  <h1>Capstone project presentations</h1>
+  <p class="lead mt">Capstone: An evaluation protocol and an adoption decision, defended before two assessors</p>
+  <div class="meta"><span class="track">Data Science Track</span><span>4 teaching days + capstone day</span><span>10 min talk and demo · 10 min Q&amp;A</span><span>DS-404</span></div>
+  <aside class="notes">Today is theirs: keep your own talking to the opening and the closing. Confirm the running order and the demo setup (screen sharing, accounts, a recorded backup) first.</aside>
+</section>
+
+<section class="slide" id="agenda" data-label="Agenda" data-n="2">
+  <div class="kicker">Capstone</div>
+  <h2>How the presentations run</h2>
+  <div class="agenda">
+    <div class="item now"><div><b>Expectations and final prep</b><small>the rubric, a last rehearsal, then the first presentations</small></div></div>
+    <div class="item"><div><b>Presentations</b><small>each one timed, with questions after it</small></div></div>
+    <div class="item"><div><b>Review and closing</b><small>peer feedback, the trainer's review, what next</small></div></div>
+  </div>
+</section>
+
+<section class="slide" id="rubric" data-label="The rubric" data-n="3">
+  <div class="kicker">How presentations are scored</div>
+  <h2>The rubric</h2>
+  <div class="bars">
+    <div class="row"><span>Fair comparison</span><div class="bar c-teal" style="--w:100%"></div><span class="val">25%</span></div>
+    <div class="row"><span>Validation under shift</span><div class="bar c-cyan" style="--w:100%"></div><span class="val">25%</span></div>
+    <div class="row"><span>Ensemble or decision analysis</span><div class="bar c-coral" style="--w:80%"></div><span class="val">20%</span></div>
+    <div class="row"><span>Adoption reasoning</span><div class="bar c-purple" style="--w:60%"></div><span class="val">15%</span></div>
+    <div class="row"><span>Reproducibility</span><div class="bar c-amber" style="--w:60%"></div><span class="val">15%</span></div>
+  </div>
+  <div class="callout tip mt"><b>Show results from at least two measured runs.</b> A claim without a number is a plan, not a result.</div>
+  <aside class="notes">Walk through each criterion with one example of what full marks look like.</aside>
+</section>
+
+<section class="slide" id="format" data-label="Format" data-n="4">
+  <div class="kicker">Format</div>
+  <h2>Ten minutes to defend the decision, ten minutes of questions from two assessors</h2>
+  <div class="cols cols-3">
+    <div class="card c-teal"><h4>1 · The task and the decision</h4><p class="small mb0">Which task, who decides, what is decided. One slide.</p></div>
+    <div class="card c-cyan"><h4>2 · The protocol</h4><p class="small mb0">The tuned baseline and its budget, two pretrained candidates, the ensemble, the validation scheme and the shift it matches.</p></div>
+    <div class="card c-coral"><h4>3 · Results and conditions</h4><p class="small mb0">Every number with its interval and its run; regret where a decision follows; the adoption decision with its conditions.</p></div>
+  </div>
+  <div class="callout note mt"><b>Peer feedback.</b> After each defence, everyone writes one strength, one question and one suggestion.</div>
+  <aside class="notes"><p>Keep time strictly: ten minutes, then questions. The case data is Bustan's, synthetic; a participant may use another public structured dataset if the shift and the decision are stated as clearly.</p></aside>
+</section>
+
+<section class="slide" id="shift-question" data-label="The shift question" data-lo="LO5" data-n="5">
+  <div class="kicker">Inside the ten minutes of questions</div>
+  <h2>An assessor names a new shift; you predict which result changes before you re-run</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Scenario</b>e.g. a third region, a supplier change, Ramadan inside the test window</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Prediction</b>which validation number moves, and which way</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Re-run</b>the protocol on the new split, live or right after</div>
+  </div>
+  <div class="callout tip mt"><b>What earns the marks.</b> A prediction with a reason, then an honest comparison with the re-run, whichever way it went.</div>
+  <aside class="notes"><p>Assessors: choose a scenario the repository can re-run in minutes, such as holding out Tabuk, moving the temporal cut before Ramadan 1447, or dropping one segment from training. Score the reasoning under "Validation under shift", not whether the prediction was right.</p></aside>
+</section>
+
+<section class="slide order" id="running-order" data-label="Running order" data-n="6">
+  <div class="kicker">Running order</div>
+  <h2>Who presents when</h2>
+  <table class="t small">
+    <tr><th>#</th><th>Presenter</th><th>Project</th></tr>
+    <tr><td>1</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>2</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>3</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>4</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>5</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>6</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>7</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><td>8</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+  </table>
+  <aside class="notes">Type the names in at the start; the fields can be edited live and are not saved, so keep the list in your notes too.</aside>
+</section>
+
+<section class="slide dark" id="final-prep" data-label="Before the first presentation" data-n="7">
+  <div class="kicker">Before the first presentation</div>
+  <h1>Final prep · 20 minutes</h1>
+  <div class="timer" data-minutes="20"></div>
+  <p class="lead">Rehearse once, record a backup, try the demo on this screen.</p>
+  <aside class="notes">Press T to start the timer. Breaks are not slides: press B when the room needs one.</aside>
+</section>
+
+<section class="slide dark presenting" id="now-presenting" data-label="Now presenting" data-n="8">
+  <div class="kicker center">Now presenting</div>
+  <div class="center"><input placeholder="Presenter · project"></div>
+  <aside class="notes">Type the presenter's name and press T to start the timer. Reuse this slide for every presenter.</aside>
+</section>
+
+<section class="slide" id="review" data-label="Trainer review" data-n="9">
+  <div class="kicker">Trainer review</div>
+  <h2>What the presentations showed</h2>
+  <div class="cols cols-3">
+    <div class="card c-teal"><h4>Strongest patterns</h4><p class="small mb0">What several projects got right.</p></div>
+    <div class="card c-coral"><h4>Common gaps</h4><p class="small mb0">What most projects would fix next.</p></div>
+    <div class="card c-purple"><h4>One surprise</h4><p class="small mb0">Something nobody expected.</p></div>
+  </div>
+  <aside class="notes">Fill these in from your scoring notes during the last break. Name projects for strengths; keep gaps anonymous.</aside>
+</section>
+
+<section class="slide" id="what-next" data-label="After the course" data-n="10">
+  <div class="kicker">After the course</div>
+  <h2>Keep going</h2>
+  <ul class="bullets">
+    <li><b>Your project stays yours:</b> keep it reproducible, and re-run the protocol when the data or the candidates change</li>
+    <li><b>The follow-up task, within three weeks:</b> apply the evaluation protocol to one workplace or public dataset and report the measured results to the trainer</li>
+    <li><b>Next in the Academy:</b> no catalog course follows DS-404; DS-304 and DS-305 are its foundations if a colleague needs them</li>
+  </ul>
+</section>
+
+<section class="slide dark" id="thanks" data-label="Thank you" data-n="11">
+  <div class="kicker">SDAIA Academy</div>
+  <h1>Thank you</h1>
+  <p class="lead">Advanced Modelling for Structured Data</p>
+</section>
+</div>
+<script type="application/json" id="academy-data">{"v":1,"engine":"1.0.0","build":{"at":"2026-11-15T19:47:50Z","version":"2027.1.0","commit":"49dbc1a"},"course":{"id":"ds-404","code":"DS-404","title":"Advanced Modelling for Structured Data","track":"data-science","lang":"en","dir":"ltr","url":"https://sdaiaacademy.github.io/ds-404/","repo":"SDAIAAcademy/ds-404","home":"../index.html"},"deck":{"id":"capstone","kind":"capstone","day":5,"label":"Capstone","title":"Capstone project presentations","prev":"day4.html","next":null,"md":"capstone.md","alt":{}},"sessions":[],"slides":[{"id":"title","n":1,"title":"Capstone project presentations","kind":"title","session":0,"hash":"187396b8","md":"#### [capstone#title] Capstone project presentations\n\n*SDAIA Academy · Advanced Modelling for Structured Data*\n\nCapstone: An evaluation protocol and an adoption decision, defended before two assessors\n\nData Science Track · 4 teaching days + capstone day · 10 min talk and demo · 10 min Q&A · DS-404","notes":"Today is theirs: keep your own talking to the opening and the closing. Confirm the running order and the demo setup (screen sharing, accounts, a recorded backup) first.","minutes":null,"lo":[]},{"id":"agenda","n":2,"title":"How the presentations run","kind":"content","session":0,"hash":"4b16b03e","md":"#### [capstone#agenda] How the presentations run\n\n*Capstone*\n\n- **Expectations and final prep**: the rubric, a last rehearsal, then the first presentations\n- **Presentations**: each one timed, with questions after it\n- **Review and closing**: peer feedback, the trainer's review, what next","notes":"","minutes":null,"lo":[]},{"id":"rubric","n":3,"title":"The rubric","kind":"content","session":0,"hash":"7201f154","md":"#### [capstone#rubric] The rubric\n\n*How presentations are scored*\n\n| Item | Value |\n| --- | --- |\n| Fair comparison | 25% |\n| Validation under shift | 25% |\n| Ensemble or decision analysis | 20% |\n| Adoption reasoning | 15% |\n| Reproducibility | 15% |\n\n> **Show results from at least two measured runs.** A claim without a number is a plan, not a result.","notes":"Walk through each criterion with one example of what full marks look like.","minutes":null,"lo":[]},{"id":"format","n":4,"title":"Ten minutes to defend the decision, ten minutes of questions from two assessors","kind":"content","session":0,"hash":"e74452a4","md":"#### [capstone#format] Ten minutes to defend the decision, ten minutes of questions from two assessors\n\n*Format*\n\n- **1 · The task and the decision.** Which task, who decides, what is decided. One slide.\n- **2 · The protocol.** The tuned baseline and its budget, two pretrained candidates, the ensemble, the validation scheme and the shift it matches.\n- **3 · Results and conditions.** Every number with its interval and its run; regret where a decision follows; the adoption decision with its conditions.\n\n> **Peer feedback.** After each defence, everyone writes one strength, one question and one suggestion.","notes":"Keep time strictly: ten minutes, then questions. The case data is Bustan's, synthetic; a participant may use another public structured dataset if the shift and the decision are stated as clearly.","minutes":null,"lo":[]},{"id":"shift-question","n":5,"title":"An assessor names a new shift; you predict which result changes before you re-run","kind":"content","session":0,"hash":"fa5c4370","md":"#### [capstone#shift-question] An assessor names a new shift; you predict which result changes before you re-run\n\n*Inside the ten minutes of questions*\n\n1. **Scenario** e.g. a third region, a supplier change, Ramadan inside the test window\n2. **Prediction** which validation number moves, and which way\n3. **Re-run** the protocol on the new split, live or right after\n\n> **What earns the marks.** A prediction with a reason, then an honest comparison with the re-run, whichever way it went.","notes":"Assessors: choose a scenario the repository can re-run in minutes, such as holding out Tabuk, moving the temporal cut before Ramadan 1447, or dropping one segment from training. Score the reasoning under \"Validation under shift\", not whether the prediction was right.","minutes":null,"lo":["LO5"]},{"id":"running-order","n":6,"title":"Who presents when","kind":"order","session":0,"hash":"20432938","md":"#### [capstone#running-order] Who presents when\n\n*Running order*\n\n| # | Presenter | Project |\n| --- | --- | --- |\n| 1 |  |  |\n| 2 |  |  |\n| 3 |  |  |\n| 4 |  |  |\n| 5 |  |  |\n| 6 |  |  |\n| 7 |  |  |\n| 8 |  |  |","notes":"Type the names in at the start; the fields can be edited live and are not saved, so keep the list in your notes too.","minutes":null,"lo":[]},{"id":"final-prep","n":7,"title":"Final prep · 20 minutes","kind":"content","session":0,"hash":"cbb54b3e","md":"#### [capstone#final-prep] Final prep · 20 minutes\n\n*Before the first presentation*\n\nRehearse once, record a backup, try the demo on this screen.","notes":"Press T to start the timer. Breaks are not slides: press B when the room needs one.","minutes":null,"lo":[]},{"id":"now-presenting","n":8,"title":"Now presenting","kind":"presenting","session":0,"hash":"c704901c","md":"#### [capstone#now-presenting] Now presenting\n\n*Now presenting*","notes":"Type the presenter's name and press T to start the timer. Reuse this slide for every presenter.","minutes":null,"lo":[]},{"id":"review","n":9,"title":"What the presentations showed","kind":"content","session":0,"hash":"c8c581b8","md":"#### [capstone#review] What the presentations showed\n\n*Trainer review*\n\n- **Strongest patterns.** What several projects got right.\n- **Common gaps.** What most projects would fix next.\n- **One surprise.** Something nobody expected.","notes":"Fill these in from your scoring notes during the last break. Name projects for strengths; keep gaps anonymous.","minutes":null,"lo":[]},{"id":"what-next","n":10,"title":"Keep going","kind":"content","session":0,"hash":"e6dcd9fd","md":"#### [capstone#what-next] Keep going\n\n*After the course*\n\n- **Your project stays yours:** keep it reproducible, and re-run the protocol when the data or the candidates change\n- **The follow-up task, within three weeks:** apply the evaluation protocol to one workplace or public dataset and report the measured results to the trainer\n- **Next in the Academy:** no catalog course follows DS-404; DS-304 and DS-305 are its foundations if a colleague needs them","notes":"","minutes":null,"lo":[]},{"id":"thanks","n":11,"title":"Thank you","kind":"content","session":0,"hash":"cab4bca3","md":"#### [capstone#thanks] Thank you\n\n*SDAIA Academy*\n\nAdvanced Modelling for Structured Data","notes":"","minutes":null,"lo":[]}],"activities":[],"ai":{"context":{"course":"../context/course.md","courseJs":"../context/course.js","day":"capstone.md","llms":"../llms.txt"},"tasks":[],"tools":[]},"bridge":{"allowedOrigins":[]},"features":{},"strings":{}}</script>
+<script src="../_engine/academy.js"></script>
+</body>
+</html>

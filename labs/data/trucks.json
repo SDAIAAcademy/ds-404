@@ -1,0 +1,21 @@
+{
+ "truck": {
+  "m3": 60.0,
+  "kg": 20000,
+  "sar_per_trip": 2400
+ },
+ "reefer": {
+  "m3": 40.0,
+  "kg": 14000,
+  "sar_per_trip": 3200,
+  "available_per_week": 2
+ },
+ "depot_inbound_m3_per_week": 200.0,
+ "suppliers": {
+  "S1": "dry goods",
+  "S2": "beverages",
+  "S3": "chilled dairy (reefer only)",
+  "S4": "dates and catering"
+ },
+ "note": "synthetic rates of Bustan Food Wholesale, not market prices"
+}

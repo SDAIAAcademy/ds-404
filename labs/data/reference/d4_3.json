@@ -1,0 +1,47 @@
+{
+ "q_split": 0.99569,
+ "cover_split": 0.877,
+ "cover_weighted": 0.90075,
+ "ess": 1082.42525,
+ "n_cal": 22325,
+ "table": [
+  {
+   "group": "grocery",
+   "split": 0.88974,
+   "weighted": 0.91415
+  },
+  {
+   "group": "horeca",
+   "split": 0.85511,
+   "weighted": 0.88191
+  },
+  {
+   "group": "hypermarket",
+   "split": 0.9523,
+   "weighted": 0.96546
+  },
+  {
+   "group": "institutional",
+   "split": 0.78661,
+   "weighted": 0.80962
+  },
+  {
+   "group": "HAS",
+   "split": 0.8784,
+   "weighted": 0.90267
+  },
+  {
+   "group": "TUU",
+   "split": 0.87576,
+   "weighted": 0.89906
+  },
+  {
+   "group": "all northern orders",
+   "split": 0.877,
+   "weighted": 0.90075
+  }
+ ],
+ "infinite_share": 0.0,
+ "width_split": 61.24811,
+ "width_weighted": 66.59669
+}

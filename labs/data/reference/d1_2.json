@@ -1,0 +1,28 @@
+{
+ "n": 2000,
+ "folds": 5,
+ "answered_by": "stand-in (spline logistic + nearest neighbours; not a pretrained model)",
+ "table": [
+  {
+   "answered_by": "tuned LightGBM",
+   "auc": 0.77852,
+   "auc_sd": 0.02679,
+   "fit_s": 0.3891,
+   "predict_s": 0.00815,
+   "tuning_s": 40.07695
+  },
+  {
+   "answered_by": "stand-in (spline logistic + nearest neighbours; not a pretrained model)",
+   "auc": 0.77092,
+   "auc_sd": 0.03511,
+   "fit_s": 0.22737,
+   "predict_s": 0.07307,
+   "tuning_s": 0.0
+  }
+ ],
+ "diff": [
+  -0.00759,
+  -0.02158,
+  0.00639
+ ]
+}

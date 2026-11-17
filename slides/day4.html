@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-ax="deck" data-track="data-science">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 4 · Shift and adoption · Advanced Modelling for Structured Data</title>
+<meta name="generator" content="SDAIA Academy engine 1.0.0">
+<link rel="icon" href="../_engine/icon.svg">
+<link rel="alternate" type="text/markdown" href="day4.md">
+<link rel="describedby" href="../llms.txt">
+<link rel="stylesheet" href="../_engine/academy.css">
+</head>
+<body>
+<div class="deck" data-course="Advanced Modelling for Structured Data" data-track="data-science" data-day="Day 4">
+<!-- ======================= OPENING ======================= -->
+<section class="slide title" id="title" data-auto="title" data-label="Welcome" data-n="1">
+  <div class="kicker">SDAIA Academy · Advanced Modelling for Structured Data</div>
+  <h1>Shift and adoption</h1>
+  <p class="lead mt">Day 4: Shift found, validated and corrected, then the adoption decision</p>
+  <div class="meta"><span class="track">Data Science Track</span><span>4 teaching days + capstone day</span><span>4 sessions · 4 labs</span><span>DS-404</span></div>
+  <aside class="notes"><p>Day 4 asks whether the evidence of Days 1 to 3 still holds when the data changes under the model, and what else must be true before Bustan adopts a pretrained model. The case moves to the northern region Bustan opened in August 2025. End the day with every participant's capstone task chosen.</p></aside>
+</section>
+
+<section class="slide" id="agenda" data-auto="agenda" data-label="Agenda" data-n="2">
+  <div class="kicker">Today</div>
+  <h2>Shift and adoption</h2>
+  <div class="agenda"><div class="item"><div><b>Session 1 · Detecting shift</b><small>Train a classifier to tell old depots from the new region: if it can, the data has shifted</small></div></div><div class="item"><div><b>Session 2 · Validating under shift</b><small>The validation scheme that matches the deployment shift is the one whose error you can promise</small></div></div><div class="item"><div><b>Session 3 · Correcting for shift</b><small>Weighting calibration rows by how deployment-like they are restores interval coverage under covariate shift</small></div></div><div class="item"><div><b>Session 4 · Adoption conditions</b><small>A model is adopted when accuracy, cost, licence and the data's classification and residency all allow it</small></div></div></div>
+</section>
+
+<section class="slide" id="review-day3" data-lo="LO4" data-n="3">
+  <div class="kicker">Review of Day 3</div>
+  <h2>What do you put in front of Ahlam?</h2>
+  <div class="quiz" data-type="single" data-lo="LO4" data-id="review-day3-q1">
+    <p class="lead">Over twelve weeks LightGBM's orders cost SAR 2,972 a week less than the zero-shot forecaster's, with a 95% interval from -7,820 to +506. Its scaled quantile loss is clearly lower. What do you report?</p>
+    <div class="opts">
+      <div class="opt" data-why="Lets error decide a question that was asked in riyals: the lower error does not settle the cost" data-k="A">LightGBM is better: its error is lower</div>
+      <div class="opt" data-ok data-k="B">LightGBM probably costs less, but twelve weeks cannot separate the two; keep both on test</div>
+      <div class="opt" data-why="Reads an interval that crosses zero as proof of no difference" data-k="C">The two forecasters cost the same</div>
+      <div class="opt" data-why="Uses one origin's flip as the verdict: over twelve weeks the ranking returns" data-k="D">Smoothing, because it won at one origin</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The mean favours LightGBM; the interval says the weeks do not prove it. Both facts go in the report.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. Two minutes. Today adds a third fact: whether any of these numbers hold in a region the models have not seen.</p></aside>
+</section>
+
+<!-- ======================= SESSION 1 ======================= -->
+<section class="slide section" id="s1" data-auto="section" data-session="1" data-n="4">
+  <div class="kicker">Session 1</div>
+  <h1>Detecting shift</h1>
+  <ul class="bullets outcomes"><li>Name covariate, label and concept shift and a test for each</li><li>Run adversarial validation between training and deployment data</li><li>Read which features carry the shift</li></ul>
+  <div class="sess-no">01</div>
+</section>
+
+<section class="slide" data-label="Three shifts" id="three-shifts" data-lo="LO5" data-n="5" data-session="1">
+  <div class="kicker">What can change between training and deployment</div>
+  <h2>Inputs, outcomes or the link between them can move, and each needs its own test</h2>
+  <table class="t small">
+    <tr><th>Shift</th><th>What changes</th><th>At Bustan's north</th><th>Test</th></tr>
+    <tr><td><b>Covariate</b></td><td>the features, p(x)</td><td>longer distances, new drivers</td><td>adversarial validation</td></tr>
+    <tr><td><b>Label</b></td><td>the outcome rate, p(y)</td><td>more late deliveries</td><td>compare rates</td></tr>
+    <tr><td><b>Concept</b></td><td>the link, p(y | x)</td><td>distance costs more on new routes</td><td>old model on new outcomes</td></tr>
+  </table>
+  <aside class="notes"><p>The holiday season that moves eleven days a year (Day 2) is a fourth, slower shift of the same kind: a pattern the training window holds in different places. Ask the room which of the three a model can be protected from without any northern outcomes. Only covariate shift; the other two need labels.</p></aside>
+</section>
+
+<section class="slide" data-label="Adversarial" id="adversarial-validation" data-lo="LO5" data-n="6" data-session="1">
+  <div class="kicker">A test that needs no labels</div>
+  <h2>Train a classifier to tell the old depots from the north: if it can, the inputs have shifted</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Stack</b>old orders and northern orders</div>
+    <div class="arrow frag" data-frag="b">→</div><div class="step c-teal frag" data-frag="b"><b>Label</b>north = 1, old = 0</div>
+    <div class="arrow frag" data-frag="c">→</div><div class="step c-cyan frag" data-frag="c"><b>Classify</b>grouped by customer, out of fold</div>
+    <div class="arrow frag" data-frag="d">→</div><div class="step c-coral frag" data-frag="d"><b>Read</b>AUC and the features it used</div>
+  </div>
+  <div class="callout warn small mt frag" data-frag="d"><b>Same period on both sides.</b> Old orders from before the north opened would let the classifier separate by date.</div>
+  <aside class="notes"><p>Press once per step. Grouping by customer matters here as on Day 1: a customer belongs to one region, so a random split would let the classifier recognise customers instead of conditions.</p></aside>
+</section>
+
+<section class="slide" data-label="What moved" id="what-moved" data-lo="LO5" data-minutes="3" data-n="7" data-session="1">
+  <div class="kicker">Lab 4.1, the course run, orders since 24 August 2025</div>
+  <h2>The classifier separates the north almost perfectly, on driver tenure and distance</h2>
+  <table class="t small">
+    <tr><th>Feature</th><th>Share of the classifier's gain</th><th>Old depots, median</th><th>North, median</th></tr>
+    <tr><td>Driver tenure</td><td>57%</td><td>28 months</td><td>8 months</td></tr>
+    <tr><td>Distance</td><td>32%</td><td>17.2 km</td><td>44.1 km</td></tr>
+    <tr><td>Truck utilisation</td><td>5%</td><td>0.68</td><td>0.56</td></tr>
+  </table>
+  <p class="small mt-s">Adversarial AUC 0.954, folds grouped by customer. Grocery is 66% of northern orders, 47% of old.</p>
+  <aside class="notes"><p>From data/reference/d4_1.json. The north is a year old, so its drivers are new; its customers are spread out. Neither fact surprises Shadi; the point is that the test found them without anyone asking, and would find the ones nobody thought of.</p></aside>
+</section>
+
+<section class="slide" data-label="Label and concept" id="label-concept" data-lo="LO5" data-n="8" data-session="1">
+  <div class="kicker">Lab 4.1, separating the shifts</div>
+  <h2>The new inputs explain less than half of the extra lateness</h2>
+  <div class="bars mt">
+    <div class="row"><span>Old depots, observed</span><div class="bar" style="--w:43%;--c:var(--cyan)"></div><span class="val">18.6%</span></div>
+    <div class="row"><span>North, predicted by the old model</span><div class="bar" style="--w:67%"></div><span class="val">29.2%</span></div>
+    <div class="row"><span>North, observed</span><div class="bar" style="--w:100%;--c:var(--coral)"></div><span class="val">43.6%</span></div>
+  </div>
+  <p class="small mt">Covariate shift accounts for +10.6 points; the other +14.4 points are a changed link between the features and lateness.</p>
+  <aside class="notes"><p>The old model's prediction is an extrapolation (it saw few eight-month drivers), so read the split as an estimate, not an accounting identity. The lab's distance-band table backs it up: with drivers of a year or more, the north is still later at every distance band.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-1" data-lo="LO5" data-n="9" data-session="1">
+  <div class="kicker">Checkpoint</div>
+  <h2>What does an adversarial AUC of 0.95 tell Shadi?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5" data-id="checkpoint-1-q1">
+    <p class="lead">The adversarial classifier separates northern orders from old ones with AUC 0.95, mostly on driver tenure and distance. What can you conclude before any northern outcome is known?</p>
+    <div class="opts">
+      <div class="opt" data-why="Jumps from different inputs to a failing model: shifted inputs make failure possible, not certain" data-k="A">The late model will fail in the north</div>
+      <div class="opt" data-why="Treats the strongest shifted features as the problem to delete: dropping them hides the shift and removes real signal" data-k="B">Drop tenure and distance from the late model</div>
+      <div class="opt" data-ok data-k="C">Many northern orders have few look-alikes in the training data, so its predictions there are untested</div>
+      <div class="opt" data-why="Confuses input shift with outcome shift: the classifier never saw a late flag" data-k="D">The north has a higher late rate</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Adversarial validation measures the inputs only. Whether the model fails is measured on outcomes (Session 2).</div>
+  </div>
+  <aside class="notes"><p>Answer: C. The lab's stretch tests option B. In the build's trial, dropping driver tenure lowered the adversarial AUC from 0.95 to 0.82, and distance took over 78% of the gain: the shift is still there, only less visible.</p></aside>
+</section>
+
+<section class="slide lab top" id="lab-4-1" data-auto="lab" data-lab="4.1" data-label="Lab 4.1" data-n="10" data-session="1">
+  <div class="cols cols-2 mid"><div><div class="lab-tag">Lab 4.1 · 25 min</div><h2>Adversarial validation</h2><p class="lead small">Run adversarial validation between old depots and the new region: a classifier that separates them, its grouped AUC, the features that carry the shift, and the late rate and its link to distance on each side.</p><a class="nb" href="../labs/D4_1_run_adversarial_validation.ipynb">D4_1_run_adversarial_validation.ipynb</a></div><ul class="checklist"><li>Two samples: old depots and the north <span class="min">3 min</span></li><li>The adversarial classifier <span class="min">8 min</span></li><li>Which features carry the shift <span class="min">6 min</span></li><li>Label and concept shift, checked apart <span class="min">8 min</span></li><li class="stretch">✱ Stretch: Drop the top shifted feature and run again</li></ul></div>
+  <aside class="notes"><p>The lab runs in about a minute on a laptop. LightGBM is set to one thread in the Day 4 labs: on some Windows laptops four threads were thirty times slower. Watch for folds that are not grouped by customer (AUC near 1.0) and for importance read from split counts instead of gain.</p></aside>
+</section>
+
+<!-- ======================= SESSION 2 ======================= -->
+<section class="slide section" id="s2" data-auto="section" data-session="2" data-n="11">
+  <div class="kicker">Session 2</div>
+  <h1>Validating under shift</h1>
+  <ul class="bullets outcomes"><li>Run random, grouped, temporal and region-held-out validation on one model</li><li>Compare each estimate with the error in the new region</li><li>Report error by region and customer segment before and after shift</li></ul>
+  <div class="sess-no">02</div>
+</section>
+
+<section class="slide" data-label="Four schemes" id="four-schemes" data-lo="LO5" data-n="12" data-session="2">
+  <div class="kicker">Validating on the old depots, before the north has outcomes</div>
+  <h2>Each validation scheme answers a different question about the future</h2>
+  <table class="t small">
+    <tr><th>Scheme</th><th>Test rows</th><th>Answers</th></tr>
+    <tr><td>Random</td><td>shuffled orders</td><td>new orders from the same customers</td></tr>
+    <tr><td>Grouped</td><td>unseen customers</td><td>new customers in the same regions</td></tr>
+    <tr><td>Temporal</td><td>the last 20% of days</td><td>the next months, same customers</td></tr>
+    <tr><td>Region-held-out</td><td>one unseen old region</td><td>a region the model has not seen</td></tr>
+  </table>
+  <aside class="notes"><p>Ask the room to pick the scheme that matches the deployment before the lab runs. Most pick region-held-out; some pick temporal, because the north is also later in time. The lab shows why temporal still flatters: the same customers sit on both sides of the date.</p></aside>
+</section>
+
+<section class="slide" data-label="Honest scheme" id="honest-scheme" data-lo="LO5" data-minutes="3" data-n="13" data-session="2">
+  <div class="kicker">Lab 4.2, the course run, one LightGBM, 72,000 old orders</div>
+  <h2>Region-held-out came within 0.01 AUC of the north; no scheme saw the calibration fail</h2>
+  <table class="t small">
+    <tr><th>Scheme</th><th>AUC</th><th>Log loss</th><th>Predicted late rate</th><th>Observed</th></tr>
+    <tr><td>Random</td><td>0.871</td><td>0.316</td><td>18.0%</td><td>18.1%</td></tr>
+    <tr><td>Temporal</td><td>0.881</td><td>0.316</td><td>19.5%</td><td>19.2%</td></tr>
+    <tr><td>Grouped</td><td>0.773</td><td>0.384</td><td>18.1%</td><td>18.0%</td></tr>
+    <tr><td>Region-held-out</td><td>0.770</td><td>0.389</td><td>17.9%</td><td>18.3%</td></tr>
+    <tr><td><b>Deployed in the north</b></td><td><b>0.763</b></td><td><b>0.618</b></td><td><b>31.0%</b></td><td><b>43.6%</b></td></tr>
+  </table>
+  <aside class="notes"><p>From data/reference/d4_2.json. Random and temporal promised an AUC 0.11 too high: customer leakage. Grouped and region-held-out were honest about ranking. Every scheme promised a log loss near 0.39 or lower; the north had 0.62, because the late rate and the distance effect changed. No split of old data can show a shift that exists only in the new region.</p></aside>
+</section>
+
+<section class="slide" data-label="Subgroups" id="subgroup-error" data-lo="LO5 LO6" data-n="14" data-session="2">
+  <div class="kicker">Lab 4.2, deployed in the north, by segment</div>
+  <h2>The average hides a segment the model barely ranks</h2>
+  <table class="t small">
+    <tr><th>Segment</th><th>Orders</th><th>AUC</th><th>Predicted</th><th>Observed</th></tr>
+    <tr><td>Grocery</td><td>5,242</td><td>0.764</td><td>29.7%</td><td>42.0%</td></tr>
+    <tr><td>HoReCa</td><td>1,194</td><td>0.817</td><td>39.2%</td><td>56.5%</td></tr>
+    <tr><td>Hypermarket</td><td>608</td><td>0.837</td><td>34.3%</td><td>29.3%</td></tr>
+    <tr><td>Institutional</td><td>956</td><td>0.651</td><td>25.3%</td><td>45.6%</td></tr>
+  </table>
+  <aside class="notes"><p>On the old depots the grouped scheme gave nearly equal AUCs by region (0.765 to 0.777). In the north, institutional customers (hospitals, schools) are ranked poorly and their lateness is underpredicted by 20 points. Subgroup error is part of the adoption memo on Day 4 Session 4, not an appendix.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-2" data-lo="LO5" data-n="15" data-session="2">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which promise can you make Shadi?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5" data-id="checkpoint-2-q1">
+    <p class="lead">Before the north opened, the analyst reported "AUC 0.87, well calibrated" from random 5-fold validation on the old depots. Knowing what you know now, what should the report have said?</p>
+    <div class="opts">
+      <div class="opt" data-ok data-k="A">A region-held-out AUC near 0.77, and no promise on calibrated probabilities until northern outcomes arrive</div>
+      <div class="opt" data-why="Keeps the leaky estimate: random folds put the same customers on both sides" data-k="B">AUC 0.87, since random folds use the most data</div>
+      <div class="opt" data-why="Picks a scheme that leaks across time through repeat customers" data-k="C">A temporal AUC of 0.88, since the north is later in time</div>
+      <div class="opt" data-why="Overcorrects: ranking held up under region-held-out validation, only calibration failed" data-k="D">No estimate at all: nothing measured on old data applies to the north</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The scheme that held out a whole region matched the deployed ranking. Calibration depends on the late rate, which only northern outcomes reveal.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. Then ask what date to put on recalibration: as soon as a few hundred northern outcomes per segment are in.</p></aside>
+</section>
+
+<section class="slide lab top" id="lab-4-2" data-auto="lab" data-lab="4.2" data-label="Lab 4.2" data-n="16" data-session="2">
+  <div class="cols cols-2 mid"><div><div class="lab-tag">Lab 4.2 · 25 min</div><h2>Four schemes against deployed error</h2><p class="lead small">Compare random, grouped and temporal validation with deployed error: the same model under four schemes, the error later measured in the north, and error by region and segment.</p><a class="nb" href="../labs/D4_2_compare_random_grouped.ipynb">D4_2_compare_random_grouped.ipynb</a></div><ul class="checklist"><li>One model, four schemes <span class="min">8 min</span></li><li>Deployed error in the north <span class="min">5 min</span></li><li>Which scheme was honest <span class="min">5 min</span></li><li>Error by region and segment <span class="min">7 min</span></li><li class="stretch">✱ Stretch: Validate on Hail only and predict Tabuk</li></ul></div>
+  <aside class="notes"><p>Fourteen LightGBM fits on 72,000 orders: about a minute and a half with one thread; quick mode uses a third of the old orders. Watch for a temporal split by order index instead of date, and for region-held-out folds that leave the north in training. The stretch (Hail to Tabuk) shows whether a few months of the new region fix the calibration.</p></aside>
+</section>
+
+<!-- ======================= SESSION 3 ======================= -->
+<section class="slide section" id="s3" data-auto="section" data-session="3" data-n="17">
+  <div class="kicker">Session 3</div>
+  <h1>Correcting for shift</h1>
+  <ul class="bullets outcomes"><li>Recall split conformal intervals and the exchangeability they assume</li><li>Estimate density-ratio weights from an adversarial classifier</li><li>Apply weighted conformal intervals and check coverage in the new region</li></ul>
+  <div class="sess-no">03</div>
+</section>
+
+<section class="slide" data-label="Recap conformal" id="recap-conformal" data-lo="LO5" data-n="18" data-session="3">
+  <div class="kicker">Recap from DS-305, then what breaks</div>
+  <h2>Split conformal holds 90% of the time only if new orders are exchangeable with the calibration orders</h2>
+  <pre class="code s" data-file="labs/_src/D4_3_apply_weighted_conformal.py"><code class="language-python">scores = np.<span class="hljs-built_in">abs</span>(y_cal - model.predict(X_cal))   <span class="hljs-comment"># log hours</span>
+k = <span class="hljs-built_in">int</span>(np.ceil((n + <span class="hljs-number">1</span>) * <span class="hljs-number">0.9</span>))
+q = np.sort(scores)[k - <span class="hljs-number">1</span>]                      <span class="hljs-comment"># interval: prediction ± q</span></code></pre>
+  <div class="callout warn small mt">Lab 4.1's adversarial AUC of 0.95 says the northern orders are not exchangeable with the old ones.</div>
+  <aside class="notes"><p>Split conformal belongs to DS-305, a prerequisite; if participants have not met it, take three minutes on this slide: sort the calibration errors, take the 90th percentile with the small-sample correction, add and subtract it. The intervals are on log hours, so in hours they are multiplicative: from 0.37 to 2.71 times the prediction in the course run.</p></aside>
+</section>
+
+<section class="slide" data-label="Weights" id="density-ratio-weights" data-lo="LO5" data-n="19" data-session="3">
+  <div class="kicker">Correcting for covariate shift</div>
+  <h2>Weight each calibration order by how northern it looks</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Classifier</b>p(north | x), out of fold</div>
+    <div class="arrow frag" data-frag="b">→</div><div class="step c-teal frag" data-frag="b"><b>Ratio</b>w(x) = p / (1 - p)</div>
+    <div class="arrow frag" data-frag="c">→</div><div class="step c-cyan frag" data-frag="c"><b>Weighted quantile</b>of calibration scores, plus the new order's own weight at infinity</div>
+  </div>
+  <div class="callout tip mt frag" data-frag="c"><b>Takeaway.</b> If too few calibration orders look like a new one, its interval is infinite: an honest "we do not know".</div>
+  <aside class="notes"><p>Weighted conformal prediction under covariate shift is from Tibshirani, Barber, Candès and Ramdas (2019). It keeps the coverage guarantee when only p(x) changes and the weights are right. Keep the classifier simple and score it out of fold: in-sample probabilities near 0 and 1 make a few weights enormous. Sources: arXiv 1904.06019.</p></aside>
+</section>
+
+<section class="slide" data-label="Coverage" id="coverage-result" data-lo="LO5" data-minutes="3" data-n="20" data-session="3">
+  <div class="kicker">Lab 4.3, the course run, 90% intervals for delivery hours in the north</div>
+  <h2>Weighting restores 90% overall, and leaves institutional customers short</h2>
+  <table class="t small">
+    <tr><th>Northern orders</th><th>Split conformal</th><th>Weighted</th></tr>
+    <tr><td>All</td><td>87.7%</td><td>90.1%</td></tr>
+    <tr><td>Grocery</td><td>89.0%</td><td>91.4%</td></tr>
+    <tr><td>HoReCa</td><td>85.5%</td><td>88.2%</td></tr>
+    <tr><td>Hypermarket</td><td>95.2%</td><td>96.5%</td></tr>
+    <tr><td>Institutional</td><td>78.7%</td><td>81.0%</td></tr>
+  </table>
+  <p class="small mt-s">Median width 61 hours split, 67 weighted. Effective sample size 1,082 of 22,325 calibration orders.</p>
+  <aside class="notes"><p>From data/reference/d4_3.json. On four different calibration splits during the build, weighting raised coverage every time, by 2 to 5 points, but landed between 85% and 91%: one split is not the whole story. The institutional gap is concept shift, which weights cannot correct. The width is in hours on a multiplicative interval; the point model is weak, which is a separate problem from coverage.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-3" data-lo="LO5" data-n="21" data-session="3">
+  <div class="kicker">Checkpoint</div>
+  <h2>What did the weights correct?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5" data-id="checkpoint-3-q1">
+    <p class="lead">After weighting, coverage in the north is 90.1% overall but 81.0% for institutional customers. Which statement is right?</p>
+    <div class="opts">
+      <div class="opt" data-why="Assumes weighting gives coverage in every subgroup: its guarantee is marginal, over the deployment distribution" data-k="A">The weights are wrong: weighted conformal guarantees 90% in every segment</div>
+      <div class="opt" data-why="Blames sample size: 956 orders are enough to see a 9-point gap" data-k="B">Institutional customers are too few to measure coverage</div>
+      <div class="opt" data-why="Thinks larger weights fix concept shift: no reweighting of old orders reproduces a link that changed" data-k="C">Raising the institutional weights would fix it</div>
+      <div class="opt" data-ok data-k="D">Weights correct a change in the inputs; the institutional gap is a change in the link, which needs northern outcomes</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Reweighting old orders can only reproduce relationships the old orders had.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. Mention Mondrian (group-conditional) conformal as the tool for per-segment coverage once the segment has its own calibration data.</p></aside>
+</section>
+
+<section class="slide lab top" id="lab-4-3" data-auto="lab" data-lab="4.3" data-label="Lab 4.3" data-n="22" data-session="3">
+  <div class="cols cols-2 mid"><div><div class="lab-tag">Lab 4.3 · 25 min</div><h2>Weighted conformal intervals</h2><p class="lead small">Apply weighted conformal intervals and check coverage in the new region: delivery-hours intervals calibrated on old depots, weights from the adversarial classifier, coverage by region and segment.</p><a class="nb" href="../labs/D4_3_apply_weighted_conformal.ipynb">D4_3_apply_weighted_conformal.ipynb</a></div><ul class="checklist"><li>Split conformal on old depots <span class="min">6 min</span></li><li>Coverage in the north <span class="min">4 min</span></li><li>Weights from the classifier <span class="min">7 min</span></li><li>Weighted intervals and their coverage <span class="min">8 min</span></li><li class="stretch">✱ Stretch: Clip the weights and watch width and coverage</li></ul></div>
+  <aside class="notes"><p>About a minute on a laptop; quick mode keeps all old orders because fewer make the weights noisy (with a third of them, weighting lowered coverage in a trial run). Watch for weights computed from in-sample probabilities and for a weighted quantile that leaves out the test order's own weight; both make coverage look better than it is.</p></aside>
+</section>
+
+<!-- ======================= SESSION 4 ======================= -->
+<section class="slide section" id="s4" data-auto="section" data-session="4" data-n="23">
+  <div class="kicker">Session 4</div>
+  <h1>Adoption conditions</h1>
+  <ul class="bullets outcomes"><li>Check the licence of a model's weights and outputs against the intended use</li><li>Apply the classification level and the transfer rules to a deployment option</li><li>Write an adoption decision with its conditions and choose the capstone task</li></ul>
+  <div class="sess-no">04</div>
+</section>
+
+<section class="slide" data-label="Four checks" id="four-checks" data-lo="LO6" data-n="24" data-session="4">
+  <div class="kicker">What adoption requires</div>
+  <h2>A model is adopted when accuracy, licence, data and cost all allow it</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-teal flat"><h4>Accuracy</h4><p class="small mb0">Against a tuned baseline, with intervals, under the deployment's shift, by subgroup.</p></div>
+    <div class="card c-cyan flat"><h4>Licence</h4><p class="small mb0">Weights and outputs allowed for commercial production use.</p></div>
+    <div class="card c-coral flat"><h4>Data</h4><p class="small mb0">Classification, personal data, where it may be processed.</p></div>
+    <div class="card c-purple flat"><h4>Cost</h4><p class="small mb0">Running and monitoring every cycle, against the gain in riyals.</p></div>
+  </div>
+  <aside class="notes"><p>Any one of the four can block adoption on its own. The lab finds that the licence blocks one candidate outright, the data blocks every option outside the Kingdom for personal data, and cost blocks nothing.</p></aside>
+</section>
+
+<section class="slide" data-label="Licences" id="licences" data-lo="LO6" data-n="25" data-session="4">
+  <div class="kicker">Checked on the official model pages, November 2026</div>
+  <h2>Three candidates allow commercial use; TabPFN-2.6 restricts even its outputs</h2>
+  <table class="t small">
+    <tr><th>Model</th><th>Task</th><th>Weights licence</th><th>Production at Bustan</th></tr>
+    <tr><td>TabICLv2</td><td>tables</td><td>BSD-3-Clause</td><td>allowed</td></tr>
+    <tr><td>TabPFN-2.6</td><td>tables</td><td>TabPFN-2.6 Non-Commercial License</td><td>blocked: outputs for non-commercial use only</td></tr>
+    <tr><td>Chronos-2</td><td>series</td><td>Apache-2.0</td><td>allowed</td></tr>
+    <tr><td>TimesFM 2.5</td><td>series</td><td>Apache-2.0</td><td>allowed</td></tr>
+  </table>
+  <aside class="notes"><p>Licences change between versions, and the catalog's own note that TimesFM's weights are non-commercial did not match the TimesFM 2.5 model page when checked for this course. Re-check on the day of the decision and record the date. Sources: github.com/soda-inria/tabicl; huggingface.co/Prior-Labs/tabpfn_2_6; huggingface.co/amazon/chronos-2; huggingface.co/google/timesfm-2.5-200m-pytorch.</p></aside>
+</section>
+
+<section class="slide" data-label="Residency" id="residency" data-lo="LO6" data-n="26" data-session="4">
+  <div class="kicker">The data decides where the model may run</div>
+  <h2>Orders hold personal data: leaving the Kingdom needs a purpose, a risk assessment and safeguards</h2>
+  <table class="t small">
+    <tr><th>Dataset (Bustan's register)</th><th>Level</th><th>Personal data</th><th>Outside the Kingdom</th></tr>
+    <tr><td>Orders with customer ids</td><td>Restricted</td><td>yes: sole traders</td><td>PDPL Article 29 conditions, transfer risk assessment, safeguards</td></tr>
+    <tr><td>Daily demand by product and depot</td><td>Restricted</td><td>no</td><td>Bustan's policy: an approved exception</td></tr>
+  </table>
+  <p class="small mt-s">Self-hosting in Riyadh is allowed for every candidate. Google Colab counts as outside the Kingdom: fine for synthetic course data only.</p>
+  <aside class="notes"><p>The Personal Data Protection Law, Article 29, allows a transfer only for listed purposes, with an adequate level of protection and the minimum data needed. The Regulation on Personal Data Transfer outside the Kingdom requires a risk assessment before a transfer (Article 7) and, in its exempted cases, safeguards such as standard contractual clauses, binding common rules or a certificate (Article 4). The National Data Governance Policies define the classification levels for public entities; Bustan, a private company, applies the same levels in its own register by choice. Sources: the national references in the README.</p></aside>
+</section>
+
+<section class="slide" data-label="Adoption table" id="adoption-table" data-lo="LO6" data-minutes="3" data-n="27" data-session="4">
+  <div class="kicker">Lab 4.4, the course's adoption table</div>
+  <h2>One go with conditions, two not now, one no-go</h2>
+  <table class="t small">
+    <tr><th>Model</th><th>Decision</th><th>Reason and condition</th></tr>
+    <tr><td>TabICLv2</td><td>not now</td><td>the course run cannot tell it from tuned LightGBM; retest with the real model</td></tr>
+    <tr><td>TabPFN-2.6</td><td>no-go</td><td>non-commercial licence</td></tr>
+    <tr><td>Chronos-2</td><td>go with conditions</td><td>self-hosted in Riyadh, for holiday windows, if its stacking weight pays its cost</td></tr>
+    <tr><td>TimesFM 2.5</td><td>not now</td><td>not evaluated in this course</td></tr>
+  </table>
+  <p class="small mt-s">Running costs from the synthetic sheet: SAR 2 to 84 a month per option, small next to SAR 3,000 a week of regret between two forecasters.</p>
+  <aside class="notes"><p>From data/reference/d4_4.json. The course's evidence for TabICLv2 and Chronos-2 came from stand-ins: say it again. A cohort that ran the real models in Colab may reach different decisions, and should, if their numbers differ. The memo lines are the capstone's starting point.</p></aside>
+</section>
+
+<section class="slide" id="checkpoint-4" data-lo="LO6" data-n="28" data-session="4">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which option can Bustan use for late-delivery risk?</h2>
+  <div class="quiz" data-type="single" data-lo="LO6" data-id="checkpoint-4-q1">
+    <p class="lead">A cloud reseller offers the open TabPFN-2.6 weights as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?</p>
+    <div class="opts">
+      <div class="opt" data-why="Puts cost first: a few riyals per thousand predictions is trivial next to the other two checks" data-k="A">The price per prediction</div>
+      <div class="opt" data-ok data-k="B">The licence: its outputs are for non-commercial use only</div>
+      <div class="opt" data-why="Treats the benchmark as evidence for Bustan: it is a hypothesis to test on Bustan's own data" data-k="C">The benchmark score is not high enough</div>
+      <div class="opt" data-why="Names a real obstacle but not the first: even self-hosted in Riyadh, the licence forbids commercial use" data-k="D">Only the transfer of personal data outside the Kingdom</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Self-hosting would solve the residency question; a reseller cannot grant commercial rights it does not hold, so only a separate commercial agreement with the model's maker solves the licence.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. D is the strongest distractor; point out that the residency problem has a remedy (self-hosting) and the licence does not. If someone asks about the maker's own hosted service: that is a different contract, with its own terms and its own residency question, and it would be assessed on those.</p></aside>
+</section>
+
+<section class="slide lab top" id="lab-4-4" data-auto="lab" data-lab="4.4" data-label="Lab 4.4" data-n="29" data-session="4">
+  <div class="cols cols-2 mid"><div><div class="lab-tag">Lab 4.4 · 25 min</div><h2>Licence, cost and residency</h2><p class="lead small">Complete a licence, cost and residency table and choose the capstone task: two candidates per task, Bustan's classification register, deployment options and a go or no-go with reasons.</p><a class="nb" href="../labs/D4_4_complete_licence_cost.ipynb">D4_4_complete_licence_cost.ipynb</a></div><ul class="checklist"><li>The candidates and their licences <span class="min">6 min</span></li><li>Classification and residency <span class="min">7 min</span></li><li>Cost per run <span class="min">5 min</span></li><li>Adoption table and memo lines <span class="min">4 min</span></li><li>Choose the capstone task <span class="min">3 min</span></li><li class="stretch">✱ Stretch: Write the evaluation protocol as a checklist another analyst could rerun</li></ul></div>
+  <aside class="notes"><p>No model runs in this lab; it reads the adoption files and the references of Days 1 and 2. Keep the last three minutes for the capstone choice: each participant sets CAPSTONE_TASK and says it aloud. Asil's role is the data protection officer: if a participant proposes a cloud option, ask them to write the exception request in one line.</p></aside>
+</section>
+
+<!-- ======================= CLOSE ======================= -->
+<section class="slide" data-label="Wrap-up" id="wrap-up" data-n="30" data-session="4">
+  <div class="kicker">Day 4 · Three things to keep</div>
+  <h2>Validate as you will deploy, and adopt only under conditions you can name</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal"><h4>Detect</h4><p class="small mb0">Adversarial validation on the inputs; rates and an old model on the outcomes.</p></div>
+    <div class="card c-cyan"><h4>Validate and correct</h4><p class="small mb0">Hold out what deployment holds out; weight for covariate shift, recalibrate for the rest.</p></div>
+    <div class="card c-coral"><h4>Adopt with conditions</h4><p class="small mb0">Licence, data, cost and subgroup error, in one table.</p></div>
+  </div>
+  <aside class="notes"><p>Collect every participant's capstone task. Remind them that the assessors will name a new shift scenario in the defence and ask which validation result changes before re-running it.</p></aside>
+</section>
+
+<section class="slide dark" id="next" data-label="Next" data-n="31" data-session="4">
+  <div class="kicker">Tomorrow · Day 5</div>
+  <h2>Capstone</h2>
+  <p class="lead">An evaluation protocol and an adoption decision for one structured-data task, defended in 10 minutes with 10 minutes of questions.</p>
+  <ul class="bullets">
+    <li>Start from labs/capstone/: the starter and the template.</li>
+    <li>Bring the numbers with their intervals, and the run that produced each.</li>
+  </ul>
+  <aside class="notes"><p>The capstone brief and rubric are on the course page. Participants work in a public repository; nothing in it may contain real customer data.</p></aside>
+</section>
+</div>
+<script type="application/json" id="academy-data">{"v":1,"engine":"1.0.0","build":{"at":"2026-11-15T19:47:50Z","version":"2027.1.0","commit":"49dbc1a"},"course":{"id":"ds-404","code":"DS-404","title":"Advanced Modelling for Structured Data","track":"data-science","lang":"en","dir":"ltr","url":"https://sdaiaacademy.github.io/ds-404/","repo":"SDAIAAcademy/ds-404","home":"../index.html"},"deck":{"id":"day4","kind":"day","day":4,"label":"Day 4","title":"Shift and adoption","prev":"day3.html","next":"capstone.html","md":"day4.md","alt":{}},"sessions":[{"n":1,"label":"Session 1","title":"Detecting shift","slide":"s1","outcomes":["Name covariate, label and concept shift and a test for each","Run adversarial validation between training and deployment data","Read which features carry the shift"],"minutes":50,"lab":{"id":"4.1","title":"Adversarial validation","minutes":25,"href":"../labs/D4_1_run_adversarial_validation.ipynb"}},{"n":2,"label":"Session 2","title":"Validating under shift","slide":"s2","outcomes":["Run random, grouped, temporal and region-held-out validation on one model","Compare each estimate with the error in the new region","Report error by region and customer segment before and after shift"],"minutes":50,"lab":{"id":"4.2","title":"Four schemes against deployed error","minutes":25,"href":"../labs/D4_2_compare_random_grouped.ipynb"}},{"n":3,"label":"Session 3","title":"Correcting for shift","slide":"s3","outcomes":["Recall split conformal intervals and the exchangeability they assume","Estimate density-ratio weights from an adversarial classifier","Apply weighted conformal intervals and check coverage in the new region"],"minutes":50,"lab":{"id":"4.3","title":"Weighted conformal intervals","minutes":25,"href":"../labs/D4_3_apply_weighted_conformal.ipynb"}},{"n":4,"label":"Session 4","title":"Adoption conditions","slide":"s4","outcomes":["Check the licence of a model's weights and outputs against the intended use","Apply the classification level and the transfer rules to a deployment option","Write an adoption decision with its conditions and choose the capstone task"],"minutes":50,"lab":{"id":"4.4","title":"Licence, cost and residency","minutes":25,"href":"../labs/D4_4_complete_licence_cost.ipynb"}}],"slides":[{"id":"title","n":1,"title":"Shift and adoption","kind":"title","session":0,"hash":"b13bc20b","md":"#### [day4#title] Shift and adoption\n\n*SDAIA Academy · Advanced Modelling for Structured Data*\n\nDay 4: Shift found, validated and corrected, then the adoption decision\n\nData Science Track · 4 teaching days + capstone day · 4 sessions · 4 labs · DS-404","notes":"Day 4 asks whether the evidence of Days 1 to 3 still holds when the data changes under the model, and what else must be true before Bustan adopts a pretrained model. The case moves to the northern region Bustan opened in August 2025. End the day with every participant's capstone task chosen.","minutes":null,"lo":[]},{"id":"agenda","n":2,"title":"Shift and adoption","kind":"content","session":0,"hash":"e47c4498","md":"#### [day4#agenda] Shift and adoption\n\n*Today*\n\n- **Session 1 · Detecting shift**: Train a classifier to tell old depots from the new region: if it can, the data has shifted\n- **Session 2 · Validating under shift**: The validation scheme that matches the deployment shift is the one whose error you can promise\n- **Session 3 · Correcting for shift**: Weighting calibration rows by how deployment-like they are restores interval coverage under covariate shift\n- **Session 4 · Adoption conditions**: A model is adopted when accuracy, cost, licence and the data's classification and residency all allow it","notes":"","minutes":null,"lo":[]},{"id":"review-day3","n":3,"title":"What do you put in front of Ahlam?","kind":"quiz","session":0,"hash":"01d3be47","md":"#### [day4#review-day3] What do you put in front of Ahlam?\n\n*Review of Day 3*\n\n**Question:** Over twelve weeks LightGBM's orders cost SAR 2,972 a week less than the zero-shot forecaster's, with a 95% interval from -7,820 to +506. Its scaled quantile loss is clearly lower. What do you report?\n\n- A. LightGBM is better: its error is lower\n- B. LightGBM probably costs less, but twelve weeks cannot separate the two; keep both on test\n- C. The two forecasters cost the same\n- D. Smoothing, because it won at one origin","notes":"Answer: B. Two minutes. Today adds a third fact: whether any of these numbers hold in a region the models have not seen.","minutes":null,"lo":["LO4"]},{"id":"s1","n":4,"title":"Detecting shift","kind":"section","session":1,"hash":"1516f756","md":"#### [day4#s1] Detecting shift\n\n*Session 1*\n\n- Name covariate, label and concept shift and a test for each\n- Run adversarial validation between training and deployment data\n- Read which features carry the shift","notes":"","minutes":null,"lo":["LO5"]},{"id":"three-shifts","n":5,"title":"Inputs, outcomes or the link between them can move, and each needs its own test","kind":"content","session":1,"hash":"640d8f65","md":"#### [day4#three-shifts] Inputs, outcomes or the link between them can move, and each needs its own test\n\n*What can change between training and deployment*\n\n| Shift | What changes | At Bustan's north | Test |\n| --- | --- | --- | --- |\n| **Covariate** | the features, p(x) | longer distances, new drivers | adversarial validation |\n| **Label** | the outcome rate, p(y) | more late deliveries | compare rates |\n| **Concept** | the link, p(y \\| x) | distance costs more on new routes | old model on new outcomes |","notes":"The holiday season that moves eleven days a year (Day 2) is a fourth, slower shift of the same kind: a pattern the training window holds in different places. Ask the room which of the three a model can be protected from without any northern outcomes. Only covariate shift; the other two need labels.","minutes":null,"lo":["LO5"]},{"id":"adversarial-validation","n":6,"title":"Train a classifier to tell the old depots from the north: if it can, the inputs have shifted","kind":"content","session":1,"hash":"7244c5f7","md":"#### [day4#adversarial-validation] Train a classifier to tell the old depots from the north: if it can, the inputs have shifted\n\n*A test that needs no labels*\n\n1. **Stack** old orders and northern orders\n2. **Label** north = 1, old = 0\n3. **Classify** grouped by customer, out of fold\n4. **Read** AUC and the features it used\n\n> **Same period on both sides.** Old orders from before the north opened would let the classifier separate by date.","notes":"Press once per step. Grouping by customer matters here as on Day 1: a customer belongs to one region, so a random split would let the classifier recognise customers instead of conditions.","minutes":null,"lo":["LO5"]},{"id":"what-moved","n":7,"title":"The classifier separates the north almost perfectly, on driver tenure and distance","kind":"content","session":1,"hash":"7bdbbd9a","md":"#### [day4#what-moved] The classifier separates the north almost perfectly, on driver tenure and distance\n\n*Lab 4.1, the course run, orders since 24 August 2025*\n\n| Feature | Share of the classifier's gain | Old depots, median | North, median |\n| --- | --- | --- | --- |\n| Driver tenure | 57% | 28 months | 8 months |\n| Distance | 32% | 17.2 km | 44.1 km |\n| Truck utilisation | 5% | 0.68 | 0.56 |\n\nAdversarial AUC 0.954, folds grouped by customer. Grocery is 66% of northern orders, 47% of old.","notes":"From data/reference/d4_1.json. The north is a year old, so its drivers are new; its customers are spread out. Neither fact surprises Shadi; the point is that the test found them without anyone asking, and would find the ones nobody thought of.","minutes":3,"lo":["LO5"]},{"id":"label-concept","n":8,"title":"The new inputs explain less than half of the extra lateness","kind":"content","session":1,"hash":"c364d87e","md":"#### [day4#label-concept] The new inputs explain less than half of the extra lateness\n\n*Lab 4.1, separating the shifts*\n\n| Item | Value |\n| --- | --- |\n| Old depots, observed | 18.6% |\n| North, predicted by the old model | 29.2% |\n| North, observed | 43.6% |\n\nCovariate shift accounts for +10.6 points; the other +14.4 points are a changed link between the features and lateness.","notes":"The old model's prediction is an extrapolation (it saw few eight-month drivers), so read the split as an estimate, not an accounting identity. The lab's distance-band table backs it up: with drivers of a year or more, the north is still later at every distance band.","minutes":null,"lo":["LO5"]},{"id":"checkpoint-1","n":9,"title":"What does an adversarial AUC of 0.95 tell Shadi?","kind":"quiz","session":1,"hash":"4578fa20","md":"#### [day4#checkpoint-1] What does an adversarial AUC of 0.95 tell Shadi?\n\n*Checkpoint*\n\n**Question:** The adversarial classifier separates northern orders from old ones with AUC 0.95, mostly on driver tenure and distance. What can you conclude before any northern outcome is known?\n\n- A. The late model will fail in the north\n- B. Drop tenure and distance from the late model\n- C. Many northern orders have few look-alikes in the training data, so its predictions there are untested\n- D. The north has a higher late rate","notes":"Answer: C. The lab's stretch tests option B. In the build's trial, dropping driver tenure lowered the adversarial AUC from 0.95 to 0.82, and distance took over 78% of the gain: the shift is still there, only less visible.","minutes":null,"lo":["LO5"]},{"id":"lab-4-1","n":10,"title":"Adversarial validation","kind":"lab","session":1,"hash":"4194409f","md":"#### [day4#lab-4-1] Adversarial validation\n\nLab 4.1 · 25 min\n\nRun adversarial validation between old depots and the new region: a classifier that separates them, its grouped AUC, the features that carry the shift, and the late rate and its link to distance on each side.\n\n[D4_1_run_adversarial_validation.ipynb](https://sdaiaacademy.github.io/ds-404/labs/D4_1_run_adversarial_validation.ipynb)\n\n- [ ] Two samples: old depots and the north (3 min)\n- [ ] The adversarial classifier (8 min)\n- [ ] Which features carry the shift (6 min)\n- [ ] Label and concept shift, checked apart (8 min)\n- [ ] ✱ Stretch: Drop the top shifted feature and run again","notes":"The lab runs in about a minute on a laptop. LightGBM is set to one thread in the Day 4 labs: on some Windows laptops four threads were thirty times slower. Watch for folds that are not grouped by customer (AUC near 1.0) and for importance read from split counts instead of gain.","minutes":null,"lo":[]},{"id":"s2","n":11,"title":"Validating under shift","kind":"section","session":2,"hash":"18c1d8e7","md":"#### [day4#s2] Validating under shift\n\n*Session 2*\n\n- Run random, grouped, temporal and region-held-out validation on one model\n- Compare each estimate with the error in the new region\n- Report error by region and customer segment before and after shift","notes":"","minutes":null,"lo":["LO5"]},{"id":"four-schemes","n":12,"title":"Each validation scheme answers a different question about the future","kind":"content","session":2,"hash":"bebd8640","md":"#### [day4#four-schemes] Each validation scheme answers a different question about the future\n\n*Validating on the old depots, before the north has outcomes*\n\n| Scheme | Test rows | Answers |\n| --- | --- | --- |\n| Random | shuffled orders | new orders from the same customers |\n| Grouped | unseen customers | new customers in the same regions |\n| Temporal | the last 20% of days | the next months, same customers |\n| Region-held-out | one unseen old region | a region the model has not seen |","notes":"Ask the room to pick the scheme that matches the deployment before the lab runs. Most pick region-held-out; some pick temporal, because the north is also later in time. The lab shows why temporal still flatters: the same customers sit on both sides of the date.","minutes":null,"lo":["LO5"]},{"id":"honest-scheme","n":13,"title":"Region-held-out came within 0.01 AUC of the north; no scheme saw the calibration fail","kind":"content","session":2,"hash":"d7782387","md":"#### [day4#honest-scheme] Region-held-out came within 0.01 AUC of the north; no scheme saw the calibration fail\n\n*Lab 4.2, the course run, one LightGBM, 72,000 old orders*\n\n| Scheme | AUC | Log loss | Predicted late rate | Observed |\n| --- | --- | --- | --- | --- |\n| Random | 0.871 | 0.316 | 18.0% | 18.1% |\n| Temporal | 0.881 | 0.316 | 19.5% | 19.2% |\n| Grouped | 0.773 | 0.384 | 18.1% | 18.0% |\n| Region-held-out | 0.770 | 0.389 | 17.9% | 18.3% |\n| **Deployed in the north** | **0.763** | **0.618** | **31.0%** | **43.6%** |","notes":"From data/reference/d4_2.json. Random and temporal promised an AUC 0.11 too high: customer leakage. Grouped and region-held-out were honest about ranking. Every scheme promised a log loss near 0.39 or lower; the north had 0.62, because the late rate and the distance effect changed. No split of old data can show a shift that exists only in the new region.","minutes":3,"lo":["LO5"]},{"id":"subgroup-error","n":14,"title":"The average hides a segment the model barely ranks","kind":"content","session":2,"hash":"6daeb311","md":"#### [day4#subgroup-error] The average hides a segment the model barely ranks\n\n*Lab 4.2, deployed in the north, by segment*\n\n| Segment | Orders | AUC | Predicted | Observed |\n| --- | --- | --- | --- | --- |\n| Grocery | 5,242 | 0.764 | 29.7% | 42.0% |\n| HoReCa | 1,194 | 0.817 | 39.2% | 56.5% |\n| Hypermarket | 608 | 0.837 | 34.3% | 29.3% |\n| Institutional | 956 | 0.651 | 25.3% | 45.6% |","notes":"On the old depots the grouped scheme gave nearly equal AUCs by region (0.765 to 0.777). In the north, institutional customers (hospitals, schools) are ranked poorly and their lateness is underpredicted by 20 points. Subgroup error is part of the adoption memo on Day 4 Session 4, not an appendix.","minutes":null,"lo":["LO5","LO6"]},{"id":"checkpoint-2","n":15,"title":"Which promise can you make Shadi?","kind":"quiz","session":2,"hash":"1fa71325","md":"#### [day4#checkpoint-2] Which promise can you make Shadi?\n\n*Checkpoint*\n\n**Question:** Before the north opened, the analyst reported \"AUC 0.87, well calibrated\" from random 5-fold validation on the old depots. Knowing what you know now, what should the report have said?\n\n- A. A region-held-out AUC near 0.77, and no promise on calibrated probabilities until northern outcomes arrive\n- B. AUC 0.87, since random folds use the most data\n- C. A temporal AUC of 0.88, since the north is later in time\n- D. No estimate at all: nothing measured on old data applies to the north","notes":"Answer: A. Then ask what date to put on recalibration: as soon as a few hundred northern outcomes per segment are in.","minutes":null,"lo":["LO5"]},{"id":"lab-4-2","n":16,"title":"Four schemes against deployed error","kind":"lab","session":2,"hash":"136fbbb5","md":"#### [day4#lab-4-2] Four schemes against deployed error\n\nLab 4.2 · 25 min\n\nCompare random, grouped and temporal validation with deployed error: the same model under four schemes, the error later measured in the north, and error by region and segment.\n\n[D4_2_compare_random_grouped.ipynb](https://sdaiaacademy.github.io/ds-404/labs/D4_2_compare_random_grouped.ipynb)\n\n- [ ] One model, four schemes (8 min)\n- [ ] Deployed error in the north (5 min)\n- [ ] Which scheme was honest (5 min)\n- [ ] Error by region and segment (7 min)\n- [ ] ✱ Stretch: Validate on Hail only and predict Tabuk","notes":"Fourteen LightGBM fits on 72,000 orders: about a minute and a half with one thread; quick mode uses a third of the old orders. Watch for a temporal split by order index instead of date, and for region-held-out folds that leave the north in training. The stretch (Hail to Tabuk) shows whether a few months of the new region fix the calibration.","minutes":null,"lo":[]},{"id":"s3","n":17,"title":"Correcting for shift","kind":"section","session":3,"hash":"0ee43629","md":"#### [day4#s3] Correcting for shift\n\n*Session 3*\n\n- Recall split conformal intervals and the exchangeability they assume\n- Estimate density-ratio weights from an adversarial classifier\n- Apply weighted conformal intervals and check coverage in the new region","notes":"","minutes":null,"lo":["LO5"]},{"id":"recap-conformal","n":18,"title":"Split conformal holds 90% of the time only if new orders are exchangeable with the calibration orders","kind":"content","session":3,"hash":"9c0d83ef","md":"#### [day4#recap-conformal] Split conformal holds 90% of the time only if new orders are exchangeable with the calibration orders\n\n*Recap from DS-305, then what breaks*\n\n```python\n# file: labs/_src/D4_3_apply_weighted_conformal.py\nscores = np.abs(y_cal - model.predict(X_cal))   # log hours\nk = int(np.ceil((n + 1) * 0.9))\nq = np.sort(scores)[k - 1]                      # interval: prediction ± q\n```\n\n> Lab 4.1's adversarial AUC of 0.95 says the northern orders are not exchangeable with the old ones.","notes":"Split conformal belongs to DS-305, a prerequisite; if participants have not met it, take three minutes on this slide: sort the calibration errors, take the 90th percentile with the small-sample correction, add and subtract it. The intervals are on log hours, so in hours they are multiplicative: from 0.37 to 2.71 times the prediction in the course run.","minutes":null,"lo":["LO5"]},{"id":"density-ratio-weights","n":19,"title":"Weight each calibration order by how northern it looks","kind":"content","session":3,"hash":"bdcadc3a","md":"#### [day4#density-ratio-weights] Weight each calibration order by how northern it looks\n\n*Correcting for covariate shift*\n\n1. **Classifier** p(north | x), out of fold\n2. **Ratio** w(x) = p / (1 - p)\n3. **Weighted quantile** of calibration scores, plus the new order's own weight at infinity\n\n> **Takeaway.** If too few calibration orders look like a new one, its interval is infinite: an honest \"we do not know\".","notes":"Weighted conformal prediction under covariate shift is from Tibshirani, Barber, Candès and Ramdas (2019). It keeps the coverage guarantee when only p(x) changes and the weights are right. Keep the classifier simple and score it out of fold: in-sample probabilities near 0 and 1 make a few weights enormous. Sources: arXiv 1904.06019.","minutes":null,"lo":["LO5"]},{"id":"coverage-result","n":20,"title":"Weighting restores 90% overall, and leaves institutional customers short","kind":"content","session":3,"hash":"631f09c1","md":"#### [day4#coverage-result] Weighting restores 90% overall, and leaves institutional customers short\n\n*Lab 4.3, the course run, 90% intervals for delivery hours in the north*\n\n| Northern orders | Split conformal | Weighted |\n| --- | --- | --- |\n| All | 87.7% | 90.1% |\n| Grocery | 89.0% | 91.4% |\n| HoReCa | 85.5% | 88.2% |\n| Hypermarket | 95.2% | 96.5% |\n| Institutional | 78.7% | 81.0% |\n\nMedian width 61 hours split, 67 weighted. Effective sample size 1,082 of 22,325 calibration orders.","notes":"From data/reference/d4_3.json. On four different calibration splits during the build, weighting raised coverage every time, by 2 to 5 points, but landed between 85% and 91%: one split is not the whole story. The institutional gap is concept shift, which weights cannot correct. The width is in hours on a multiplicative interval; the point model is weak, which is a separate problem from coverage.","minutes":3,"lo":["LO5"]},{"id":"checkpoint-3","n":21,"title":"What did the weights correct?","kind":"quiz","session":3,"hash":"30539ed7","md":"#### [day4#checkpoint-3] What did the weights correct?\n\n*Checkpoint*\n\n**Question:** After weighting, coverage in the north is 90.1% overall but 81.0% for institutional customers. Which statement is right?\n\n- A. The weights are wrong: weighted conformal guarantees 90% in every segment\n- B. Institutional customers are too few to measure coverage\n- C. Raising the institutional weights would fix it\n- D. Weights correct a change in the inputs; the institutional gap is a change in the link, which needs northern outcomes","notes":"Answer: D. Mention Mondrian (group-conditional) conformal as the tool for per-segment coverage once the segment has its own calibration data.","minutes":null,"lo":["LO5"]},{"id":"lab-4-3","n":22,"title":"Weighted conformal intervals","kind":"lab","session":3,"hash":"d793df7d","md":"#### [day4#lab-4-3] Weighted conformal intervals\n\nLab 4.3 · 25 min\n\nApply weighted conformal intervals and check coverage in the new region: delivery-hours intervals calibrated on old depots, weights from the adversarial classifier, coverage by region and segment.\n\n[D4_3_apply_weighted_conformal.ipynb](https://sdaiaacademy.github.io/ds-404/labs/D4_3_apply_weighted_conformal.ipynb)\n\n- [ ] Split conformal on old depots (6 min)\n- [ ] Coverage in the north (4 min)\n- [ ] Weights from the classifier (7 min)\n- [ ] Weighted intervals and their coverage (8 min)\n- [ ] ✱ Stretch: Clip the weights and watch width and coverage","notes":"About a minute on a laptop; quick mode keeps all old orders because fewer make the weights noisy (with a third of them, weighting lowered coverage in a trial run). Watch for weights computed from in-sample probabilities and for a weighted quantile that leaves out the test order's own weight; both make coverage look better than it is.","minutes":null,"lo":[]},{"id":"s4","n":23,"title":"Adoption conditions","kind":"section","session":4,"hash":"ea17cec8","md":"#### [day4#s4] Adoption conditions\n\n*Session 4*\n\n- Check the licence of a model's weights and outputs against the intended use\n- Apply the classification level and the transfer rules to a deployment option\n- Write an adoption decision with its conditions and choose the capstone task","notes":"","minutes":null,"lo":["LO6"]},{"id":"four-checks","n":24,"title":"A model is adopted when accuracy, licence, data and cost all allow it","kind":"content","session":4,"hash":"07b39617","md":"#### [day4#four-checks] A model is adopted when accuracy, licence, data and cost all allow it\n\n*What adoption requires*\n\n- **Accuracy.** Against a tuned baseline, with intervals, under the deployment's shift, by subgroup.\n- **Licence.** Weights and outputs allowed for commercial production use.\n- **Data.** Classification, personal data, where it may be processed.\n- **Cost.** Running and monitoring every cycle, against the gain in riyals.","notes":"Any one of the four can block adoption on its own. The lab finds that the licence blocks one candidate outright, the data blocks every option outside the Kingdom for personal data, and cost blocks nothing.","minutes":null,"lo":["LO6"]},{"id":"licences","n":25,"title":"Three candidates allow commercial use; TabPFN-2.6 restricts even its outputs","kind":"content","session":4,"hash":"5a26c2a1","md":"#### [day4#licences] Three candidates allow commercial use; TabPFN-2.6 restricts even its outputs\n\n*Checked on the official model pages, November 2026*\n\n| Model | Task | Weights licence | Production at Bustan |\n| --- | --- | --- | --- |\n| TabICLv2 | tables | BSD-3-Clause | allowed |\n| TabPFN-2.6 | tables | TabPFN-2.6 Non-Commercial License | blocked: outputs for non-commercial use only |\n| Chronos-2 | series | Apache-2.0 | allowed |\n| TimesFM 2.5 | series | Apache-2.0 | allowed |","notes":"Licences change between versions, and the catalog's own note that TimesFM's weights are non-commercial did not match the TimesFM 2.5 model page when checked for this course. Re-check on the day of the decision and record the date. Sources: github.com/soda-inria/tabicl; huggingface.co/Prior-Labs/tabpfn_2_6; huggingface.co/amazon/chronos-2; huggingface.co/google/timesfm-2.5-200m-pytorch.","minutes":null,"lo":["LO6"]},{"id":"residency","n":26,"title":"Orders hold personal data: leaving the Kingdom needs a purpose, a risk assessment and safeguards","kind":"content","session":4,"hash":"f23120d4","md":"#### [day4#residency] Orders hold personal data: leaving the Kingdom needs a purpose, a risk assessment and safeguards\n\n*The data decides where the model may run*\n\n| Dataset (Bustan's register) | Level | Personal data | Outside the Kingdom |\n| --- | --- | --- | --- |\n| Orders with customer ids | Restricted | yes: sole traders | PDPL Article 29 conditions, transfer risk assessment, safeguards |\n| Daily demand by product and depot | Restricted | no | Bustan's policy: an approved exception |\n\nSelf-hosting in Riyadh is allowed for every candidate. Google Colab counts as outside the Kingdom: fine for synthetic course data only.","notes":"The Personal Data Protection Law, Article 29, allows a transfer only for listed purposes, with an adequate level of protection and the minimum data needed. The Regulation on Personal Data Transfer outside the Kingdom requires a risk assessment before a transfer (Article 7) and, in its exempted cases, safeguards such as standard contractual clauses, binding common rules or a certificate (Article 4). The National Data Governance Policies define the classification levels for public entities; Bustan, a private company, applies the same levels in its own register by choice. Sources: the national references in the README.","minutes":null,"lo":["LO6"]},{"id":"adoption-table","n":27,"title":"One go with conditions, two not now, one no-go","kind":"content","session":4,"hash":"74c1654c","md":"#### [day4#adoption-table] One go with conditions, two not now, one no-go\n\n*Lab 4.4, the course's adoption table*\n\n| Model | Decision | Reason and condition |\n| --- | --- | --- |\n| TabICLv2 | not now | the course run cannot tell it from tuned LightGBM; retest with the real model |\n| TabPFN-2.6 | no-go | non-commercial licence |\n| Chronos-2 | go with conditions | self-hosted in Riyadh, for holiday windows, if its stacking weight pays its cost |\n| TimesFM 2.5 | not now | not evaluated in this course |\n\nRunning costs from the synthetic sheet: SAR 2 to 84 a month per option, small next to SAR 3,000 a week of regret between two forecasters.","notes":"From data/reference/d4_4.json. The course's evidence for TabICLv2 and Chronos-2 came from stand-ins: say it again. A cohort that ran the real models in Colab may reach different decisions, and should, if their numbers differ. The memo lines are the capstone's starting point.","minutes":3,"lo":["LO6"]},{"id":"checkpoint-4","n":28,"title":"Which option can Bustan use for late-delivery risk?","kind":"quiz","session":4,"hash":"3bfef256","md":"#### [day4#checkpoint-4] Which option can Bustan use for late-delivery risk?\n\n*Checkpoint*\n\n**Question:** A cloud reseller offers the open TabPFN-2.6 weights as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?\n\n- A. The price per prediction\n- B. The licence: its outputs are for non-commercial use only\n- C. The benchmark score is not high enough\n- D. Only the transfer of personal data outside the Kingdom","notes":"Answer: B. D is the strongest distractor; point out that the residency problem has a remedy (self-hosting) and the licence does not. If someone asks about the maker's own hosted service: that is a different contract, with its own terms and its own residency question, and it would be assessed on those.","minutes":null,"lo":["LO6"]},{"id":"lab-4-4","n":29,"title":"Licence, cost and residency","kind":"lab","session":4,"hash":"06222527","md":"#### [day4#lab-4-4] Licence, cost and residency\n\nLab 4.4 · 25 min\n\nComplete a licence, cost and residency table and choose the capstone task: two candidates per task, Bustan's classification register, deployment options and a go or no-go with reasons.\n\n[D4_4_complete_licence_cost.ipynb](https://sdaiaacademy.github.io/ds-404/labs/D4_4_complete_licence_cost.ipynb)\n\n- [ ] The candidates and their licences (6 min)\n- [ ] Classification and residency (7 min)\n- [ ] Cost per run (5 min)\n- [ ] Adoption table and memo lines (4 min)\n- [ ] Choose the capstone task (3 min)\n- [ ] ✱ Stretch: Write the evaluation protocol as a checklist another analyst could rerun","notes":"No model runs in this lab; it reads the adoption files and the references of Days 1 and 2. Keep the last three minutes for the capstone choice: each participant sets CAPSTONE_TASK and says it aloud. Asil's role is the data protection officer: if a participant proposes a cloud option, ask them to write the exception request in one line.","minutes":null,"lo":[]},{"id":"wrap-up","n":30,"title":"Validate as you will deploy, and adopt only under conditions you can name","kind":"content","session":4,"hash":"133cf1b0","md":"#### [day4#wrap-up] Validate as you will deploy, and adopt only under conditions you can name\n\n*Day 4 · Three things to keep*\n\n- **Detect.** Adversarial validation on the inputs; rates and an old model on the outcomes.\n- **Validate and correct.** Hold out what deployment holds out; weight for covariate shift, recalibrate for the rest.\n- **Adopt with conditions.** Licence, data, cost and subgroup error, in one table.","notes":"Collect every participant's capstone task. Remind them that the assessors will name a new shift scenario in the defence and ask which validation result changes before re-running it.","minutes":null,"lo":[]},{"id":"next","n":31,"title":"Capstone","kind":"content","session":4,"hash":"05280513","md":"#### [day4#next] Capstone\n\n*Tomorrow · Day 5*\n\nAn evaluation protocol and an adoption decision for one structured-data task, defended in 10 minutes with 10 minutes of questions.\n\n- Start from labs/capstone/: the starter and the template.\n- Bring the numbers with their intervals, and the run that produced each.","notes":"The capstone brief and rubric are on the course page. Participants work in a public repository; nothing in it may contain real customer data.","minutes":null,"lo":[]}],"activities":[{"id":"review-day3-q1","slide":"review-day3","type":"single","prompt":"Over twelve weeks LightGBM's orders cost SAR 2,972 a week less than the zero-shot forecaster's, with a 95% interval from -7,820 to +506. Its scaled quantile loss is clearly lower. What do you report?","options":[{"key":"A","text":"LightGBM is better: its error is lower"},{"key":"B","text":"LightGBM probably costs less, but twelve weeks cannot separate the two; keep both on test"},{"key":"C","text":"The two forecasters cost the same"},{"key":"D","text":"Smoothing, because it won at one origin"}],"correct":[1],"explanation":"The mean favours LightGBM; the interval says the weeks do not prove it. Both facts go in the report.","misconceptions":["Lets error decide a question that was asked in riyals: the lower error does not settle the cost","","Reads an interval that crosses zero as proof of no difference","Uses one origin's flip as the verdict: over twelve weeks the ranking returns"],"lo":["LO4"]},{"id":"checkpoint-1-q1","slide":"checkpoint-1","type":"single","prompt":"The adversarial classifier separates northern orders from old ones with AUC 0.95, mostly on driver tenure and distance. What can you conclude before any northern outcome is known?","options":[{"key":"A","text":"The late model will fail in the north"},{"key":"B","text":"Drop tenure and distance from the late model"},{"key":"C","text":"Many northern orders have few look-alikes in the training data, so its predictions there are untested"},{"key":"D","text":"The north has a higher late rate"}],"correct":[2],"explanation":"Adversarial validation measures the inputs only. Whether the model fails is measured on outcomes (Session 2).","misconceptions":["Jumps from different inputs to a failing model: shifted inputs make failure possible, not certain","Treats the strongest shifted features as the problem to delete: dropping them hides the shift and removes real signal","","Confuses input shift with outcome shift: the classifier never saw a late flag"],"lo":["LO5"]},{"id":"checkpoint-2-q1","slide":"checkpoint-2","type":"single","prompt":"Before the north opened, the analyst reported \"AUC 0.87, well calibrated\" from random 5-fold validation on the old depots. Knowing what you know now, what should the report have said?","options":[{"key":"A","text":"A region-held-out AUC near 0.77, and no promise on calibrated probabilities until northern outcomes arrive"},{"key":"B","text":"AUC 0.87, since random folds use the most data"},{"key":"C","text":"A temporal AUC of 0.88, since the north is later in time"},{"key":"D","text":"No estimate at all: nothing measured on old data applies to the north"}],"correct":[0],"explanation":"The scheme that held out a whole region matched the deployed ranking. Calibration depends on the late rate, which only northern outcomes reveal.","misconceptions":["","Keeps the leaky estimate: random folds put the same customers on both sides","Picks a scheme that leaks across time through repeat customers","Overcorrects: ranking held up under region-held-out validation, only calibration failed"],"lo":["LO5"]},{"id":"checkpoint-3-q1","slide":"checkpoint-3","type":"single","prompt":"After weighting, coverage in the north is 90.1% overall but 81.0% for institutional customers. Which statement is right?","options":[{"key":"A","text":"The weights are wrong: weighted conformal guarantees 90% in every segment"},{"key":"B","text":"Institutional customers are too few to measure coverage"},{"key":"C","text":"Raising the institutional weights would fix it"},{"key":"D","text":"Weights correct a change in the inputs; the institutional gap is a change in the link, which needs northern outcomes"}],"correct":[3],"explanation":"Reweighting old orders can only reproduce relationships the old orders had.","misconceptions":["Assumes weighting gives coverage in every subgroup: its guarantee is marginal, over the deployment distribution","Blames sample size: 956 orders are enough to see a 9-point gap","Thinks larger weights fix concept shift: no reweighting of old orders reproduces a link that changed",""],"lo":["LO5"]},{"id":"checkpoint-4-q1","slide":"checkpoint-4","type":"single","prompt":"A cloud reseller offers the open TabPFN-2.6 weights as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?","options":[{"key":"A","text":"The price per prediction"},{"key":"B","text":"The licence: its outputs are for non-commercial use only"},{"key":"C","text":"The benchmark score is not high enough"},{"key":"D","text":"Only the transfer of personal data outside the Kingdom"}],"correct":[1],"explanation":"Self-hosting would solve the residency question; a reseller cannot grant commercial rights it does not hold, so only a separate commercial agreement with the model's maker solves the licence.","misconceptions":["Puts cost first: a few riyals per thousand predictions is trivial next to the other two checks","","Treats the benchmark as evidence for Bustan: it is a hypothesis to test on Bustan's own data","Names a real obstacle but not the first: even self-hosted in Riyadh, the licence forbids commercial use"],"lo":["LO6"]}],"ai":{"context":{"course":"../context/course.md","courseJs":"../context/course.js","day":"day4.md","llms":"../llms.txt"},"tasks":[],"tools":[]},"bridge":{"allowedOrigins":[]},"features":{},"strings":{}}</script>
+<script src="../_engine/academy.js"></script>
+</body>
+</html>

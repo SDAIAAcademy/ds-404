@@ -1,0 +1,1731 @@
+{
+  "format": "classpulse-bank",
+  "version": 1,
+  "course": {
+    "name": "Advanced Modelling for Structured Data",
+    "los": [
+      {
+        "code": "LO1",
+        "description": "Evaluate a pretrained tabular model against a tuned, ensembled boosted-tree baseline across training-set sizes, given late-delivery records from 500 to 50,000 orders and a fixed compute budget"
+      },
+      {
+        "code": "LO2",
+        "description": "Evaluate zero-shot pretrained forecasters, with and without covariates, against statistical and tuned learned benchmarks by rolling-origin backtests, given 400 demand series with Hijri holiday covariates"
+      },
+      {
+        "code": "LO3",
+        "description": "Implement a stacked ensemble from out-of-fold or rolling-origin predictions and measure its improvement over the best single model, given four fitted candidate models"
+      },
+      {
+        "code": "LO4",
+        "description": "Build a predict-then-optimise pipeline and judge forecasters by the decision cost they cause, given capacity limits, holding costs and shortage costs"
+      },
+      {
+        "code": "LO5",
+        "description": "Diagnose distribution shift between training and deployment data and validate a model under it, given a new depot region and a holiday season that moves between years"
+      },
+      {
+        "code": "LO6",
+        "description": "Decide whether to adopt a pretrained model for one task, weighing accuracy, cost, licence and data residency, given two candidate models, their licences and the wholesaler's data classification"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "checkpoint-1-q1",
+      "type": "single",
+      "prompt": "Sarab's baseline scores 0.80 AUC under random 5-fold and 0.78 under 5-fold grouped by customer. Bustan will use the model on next quarter's orders, many from new customers. Which number goes in the memo?",
+      "options": [
+        "0.80, because it is the model's best result",
+        "0.78, because the folds keep each customer on one side",
+        "0.79, the average of the two schemes",
+        "Either, as long as the memo names the scheme"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The model will meet customers it has not seen. Only grouped folds measure that; random folds let it recognise customers by their fixed fields.",
+      "misconceptions": [
+        "Takes the higher score as the better one: a higher estimate from a leaky split is only more optimistic",
+        "",
+        "Averages two estimates as if both were honest: the average keeps half of the leak",
+        "Treats the choice of split as a matter of taste: the deployment, not preference, decides which split is honest"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 14
+    },
+    {
+      "id": "checkpoint-2-q1",
+      "type": "single",
+      "prompt": "The pretrained model took 0.3 seconds per fold and the baseline 0.4. Rafif concludes the pretrained model is cheaper. What is missing from his comparison?",
+      "options": [
+        "The type of processor each model ran on",
+        "Nothing: fit time is the cost that matters",
+        "The 103 fits the baseline's tuning cost before that fit",
+        "The AUC of each model on the same folds"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The baseline's single fit was bought with a search; the pretrained model ran with defaults. The table carries tuning time, fit time and predict time.",
+      "misconceptions": [
+        "Thinks hardware explains everything: both ran on the same CPU here",
+        "Treats prediction as free: for an in-context model it is where most of the cost lives, so it must be counted, not dropped",
+        "",
+        "Confuses accuracy with cost: AUC is a separate column of the same table"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 23
+    },
+    {
+      "id": "checkpoint-3-q1",
+      "type": "single",
+      "prompt": "At 500 orders, three repeats give the pretrained model a mean AUC 0.011 above the tuned baseline. The 95% interval of the paired difference runs from -0.031 to +0.052. What goes in the memo?",
+      "options": [
+        "No difference detectable at 500 orders with three repeats",
+        "The pretrained model wins on small data",
+        "The two models are equally accurate at 500 orders",
+        "The comparison is invalid and should be dropped"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The interval contains zero, so the sign is not established. More repeats or more test customers would narrow it; until then, no claim either way.",
+      "misconceptions": [
+        "",
+        "Reads the mean and ignores the interval: a positive mean inside a wide interval is not a win",
+        "Reads an interval that contains zero as proof of equality: absence of evidence is not evidence of absence",
+        "Blames the method for the sample: more repeats, not a different metric, narrow the interval"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 31
+    },
+    {
+      "id": "checkpoint-4-q1",
+      "type": "single",
+      "prompt": "A benchmark table shows a pretrained model winning 30 of 32 datasets. Which single fact, if true, most undermines the claim?",
+      "options": [
+        "The pretrained model was slower on every dataset",
+        "Most of the datasets are publicly available",
+        "Half of the datasets have fewer than 3,000 rows",
+        "The boosted trees were run at default settings"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "An untuned baseline turns tuning effort into \"model quality\": every win may be the budget, not the model.",
+      "misconceptions": [
+        "Mistakes speed for accuracy: run time is a separate column of the decision",
+        "Treats a public dataset as suspect by itself: public data is fine unless the model was built or selected on it",
+        "Assumes small tables cannot be evidence: they are exactly where such models claim to help",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 39
+    },
+    {
+      "id": "review-day1-q1",
+      "type": "single",
+      "prompt": "Yesterday the learning curves of the tuned baseline and the pretrained model overlapped at every size, with paired intervals around zero. Which new evidence would justify writing \"the pretrained model wins below 1,000 orders\"?",
+      "options": [
+        "A vendor table with 35 wins out of 36",
+        "A higher mean AUC at 500 orders in one more run",
+        "More repeats at 500 and 1,000 orders whose paired interval stays above zero",
+        "Rerunning the curves with random K-fold instead of held-out customers"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "A win at a size needs the interval of the paired difference to leave zero on Bustan's own data, with the same held-out customers.",
+      "misconceptions": [
+        "Counts someone else's datasets as Bustan's evidence: a benchmark sets a hypothesis, it does not settle it",
+        "Treats a higher mean as a win: without the interval the sign is not established",
+        "",
+        "Changes the question: random folds flatter both models and say nothing about new customers"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 3
+    },
+    {
+      "id": "checkpoint-1-q1",
+      "type": "single",
+      "prompt": "The zero-shot forecaster scores 0.75 of the floor's quantile loss; the tuned LightGBM scores 0.61. Ahlam asks whether the pretrained model is worth keeping. What is the best answer today?",
+      "options": [
+        "Not as a replacement; test where it wins and what it adds to an ensemble first",
+        "No: it loses to LightGBM, so it has no use",
+        "Yes: it needs no training, so it should replace LightGBM",
+        "Yes: it beats the floor, which is all a forecaster must do"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO2"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The average hides groups (Session 2) and a weaker model can still lower an ensemble's loss (Session 4). Both are measured today.",
+      "misconceptions": [
+        "",
+        "Equates second place with no value: a model can still win in a group or help an ensemble",
+        "Ignores the measured gap because the model needs no training: cheap to run is not the same as good enough",
+        "Moves the goalposts: the floor is the minimum, not the target"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 11
+    },
+    {
+      "id": "checkpoint-2-q1",
+      "type": "single",
+      "prompt": "For 60 short series the zero-shot forecaster and smoothing differ by -0.009 in scaled quantile loss, with a 95% interval from -0.064 to +0.050. Both trail LightGBM by about 0.19. What do you recommend for new products?",
+      "options": [
+        "Switch new products to the zero-shot model, which scored lower",
+        "Keep smoothing because the two are proven equal",
+        "Treat short series as unforecastable and order by hand",
+        "Use the tuned LightGBM, which wins the group, and retest the pretrained model later"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO2"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The only difference that leaves zero in this group is LightGBM's lead. The zero-shot against smoothing comparison is undecided.",
+      "misconceptions": [
+        "Reads a negative mean as a win: the interval crosses zero",
+        "Reads a tie as proof of equality and chooses on habit: the evidence says nothing about which is better",
+        "Drops the evidence for a guess: the group is measured, and LightGBM wins it clearly",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 19
+    },
+    {
+      "id": "checkpoint-3-q1",
+      "type": "single",
+      "prompt": "A planner forecasts dates (the fruit) for next Ramadan by copying last year. Bustan's demand is low on Fridays. Which single lag gives the smallest error over Ramadan and Eid?",
+      "options": [
+        "364 days, one Gregorian year in whole weeks",
+        "357 days, 51 whole weeks",
+        "354 days, one Hijri year",
+        "365 days, one calendar year"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO2",
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "357 days keeps the weekday and lands within three days of the same Hijri date: both cycles are close to aligned.",
+      "misconceptions": [
+        "Keeps the weekday but forgets that Ramadan moves about eleven days earlier each Gregorian year",
+        "",
+        "Aligns the Hijri date but lands on another weekday, so every Friday dip is misplaced",
+        "Ignores both cycles: a Gregorian year of 365 days fits neither the week nor Ramadan"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 27
+    },
+    {
+      "id": "checkpoint-4-q1",
+      "type": "single",
+      "prompt": "An analyst fits stacking weights on all six origins and reports that the stack beats the best single model on origins three to six. What is wrong?",
+      "options": [
+        "Four members are too many for six origins",
+        "The weights were fitted on quantile loss",
+        "The weights saw the windows they are scored on",
+        "The best single model was the tuned LightGBM"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO3"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Weights for an origin must come from windows that ended before it; otherwise the stack is scored on its own training data.",
+      "misconceptions": [
+        "Blames the number of models, not the procedure: four members are fine when the weights are fitted honestly",
+        "Thinks the loss choice is the flaw: the judged loss is the right one to fit on",
+        "",
+        "Confuses the comparison: the best single model must be chosen on earlier windows too, but that is not the main fault here"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 35
+    },
+    {
+      "id": "review-day2-q1",
+      "type": "single",
+      "prompt": "Yesterday's stack beat the tuned LightGBM by 0.4% in scaled quantile loss, with a 95% interval from +0.0012 to +0.0028. What is still missing before Ahlam can decide?",
+      "options": [
+        "Nothing: the interval excludes zero, so adopt the stack",
+        "Six more origins to narrow the interval",
+        "What 0.4% less loss is worth in riyals, against the cost of running four models",
+        "A comparison with the seasonal naive floor"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO3"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Error and running cost are in different units. Today puts forecast error into riyals: regret.",
+      "misconceptions": [
+        "Treats a significant gain as a decision: a real gain can still be too small to pay for itself",
+        "Asks for more of the same evidence: more origins would narrow the interval, not price the gain",
+        "",
+        "Changes the comparison: the floor is not the alternative Ahlam is choosing between"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 3
+    },
+    {
+      "id": "checkpoint-1-q1",
+      "type": "single",
+      "prompt": "A chilled yoghurt line: a case short costs SAR 12 in margin and goodwill; a case left over costs SAR 36, mostly spoilage. Which quantile of next week's demand should Imad order?",
+      "options": [
+        "The 0.75 quantile",
+        "The 0.33 quantile",
+        "The median",
+        "The 0.25 quantile"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "12 / (12 + 36) = 0.25. A leftover costs three times a shortage, so order low.",
+      "misconceptions": [
+        "Divides the costs the wrong way round: the ratio is underage over the sum, not overage over the sum",
+        "Uses the ratio of the two costs, 12 / 36, as if it were the critical ratio",
+        "Orders the mean out of habit: that is right only when both costs are equal",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 10
+    },
+    {
+      "id": "checkpoint-2-q1",
+      "type": "single",
+      "prompt": "The plan uses both reefers, so the reefer constraint has zero slack. The two reefers carry 53.5 of their 80 cubic metres. A haulier offers a third reefer for SAR 900 this week. What do you tell Imad?",
+      "options": [
+        "Accept: the reefer constraint binds, so more reefers help",
+        "Decline: re-solving with three reefers would not change the plan, because dairy already fits",
+        "Accept: a third reefer frees depot space for dry goods",
+        "Accept: it is cheaper than the SAR 1,703 that capacity is worth"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Zero slack is not value. The depot space limits the plan; the reefers do not.",
+      "misconceptions": [
+        "Equates zero slack with value: a tight constraint is worth relaxing only if the re-solved plan costs less",
+        "",
+        "Moves the extra capacity to a constraint it does not relax: a reefer adds no depot space",
+        "Uses the depot's value for a different constraint: SAR 1,703 is what 10 m3 of depot space is worth"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 18
+    },
+    {
+      "id": "checkpoint-3-q1",
+      "type": "single",
+      "prompt": "At the origin 2026-05-10 the zero-shot forecaster has the lower scaled quantile loss of the two, yet its orders cost SAR 5,000 more than smoothing's over the four weeks. Which explanation fits?",
+      "options": [
+        "The scaled quantile loss was computed wrongly",
+        "Regret depends on demand, not on the forecaster",
+        "Its errors fell where they cost most: dairy overage and the Eid al-Adha week",
+        "Smoothing is the better forecaster for Bustan"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Regret weighs each error by its cost per case and by the quantile the order uses; error weighs them all alike.",
+      "misconceptions": [
+        "Blames the measure, not the weighting: scaled quantile loss is a fair error measure, it just weighs products and quantiles differently from the cost",
+        "Assumes regret ignores the forecast: the orders come directly from each forecaster's quantiles",
+        "",
+        "Reads a flip at one origin as a verdict: over twelve weeks the ranking returns"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 25
+    },
+    {
+      "id": "checkpoint-4-q1",
+      "type": "single",
+      "prompt": "Rice and sugar each run short in 10% of weeks. A planner reports a 1% chance that both run short in the same week. When is that report most wrong?",
+      "options": [
+        "When a shared shock, such as a pre-Eid rush, lifts both demands in the same week",
+        "When both come from the same supplier",
+        "When each product's days are independent of each other",
+        "When the forecaster's bands are too wide"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "10% times 10% assumes independence. A shared shock makes shortages arrive together.",
+      "misconceptions": [
+        "",
+        "Confuses a common supplier truck with common demand: the plan fixes the orders, and shortages come from demand",
+        "Treats low daily correlation as no risk: the weekly totals still share any common shock",
+        "Blames the width of each band: too-wide bands would make each 10% too high, while the 1% is wrong because it multiplies the two as if independent"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 33
+    },
+    {
+      "id": "review-day3-q1",
+      "type": "single",
+      "prompt": "Over twelve weeks LightGBM's orders cost SAR 2,972 a week less than the zero-shot forecaster's, with a 95% interval from -7,820 to +506. Its scaled quantile loss is clearly lower. What do you report?",
+      "options": [
+        "LightGBM is better: its error is lower",
+        "LightGBM probably costs less, but twelve weeks cannot separate the two; keep both on test",
+        "The two forecasters cost the same",
+        "Smoothing, because it won at one origin"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The mean favours LightGBM; the interval says the weeks do not prove it. Both facts go in the report.",
+      "misconceptions": [
+        "Lets error decide a question that was asked in riyals: the lower error does not settle the cost",
+        "",
+        "Reads an interval that crosses zero as proof of no difference",
+        "Uses one origin's flip as the verdict: over twelve weeks the ranking returns"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 3
+    },
+    {
+      "id": "checkpoint-1-q1",
+      "type": "single",
+      "prompt": "The adversarial classifier separates northern orders from old ones with AUC 0.95, mostly on driver tenure and distance. What can you conclude before any northern outcome is known?",
+      "options": [
+        "The late model will fail in the north",
+        "Drop tenure and distance from the late model",
+        "Many northern orders have few look-alikes in the training data, so its predictions there are untested",
+        "The north has a higher late rate"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Adversarial validation measures the inputs only. Whether the model fails is measured on outcomes (Session 2).",
+      "misconceptions": [
+        "Jumps from different inputs to a failing model: shifted inputs make failure possible, not certain",
+        "Treats the strongest shifted features as the problem to delete: dropping them hides the shift and removes real signal",
+        "",
+        "Confuses input shift with outcome shift: the classifier never saw a late flag"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 9
+    },
+    {
+      "id": "checkpoint-2-q1",
+      "type": "single",
+      "prompt": "Before the north opened, the analyst reported \"AUC 0.87, well calibrated\" from random 5-fold validation on the old depots. Knowing what you know now, what should the report have said?",
+      "options": [
+        "A region-held-out AUC near 0.77, and no promise on calibrated probabilities until northern outcomes arrive",
+        "AUC 0.87, since random folds use the most data",
+        "A temporal AUC of 0.88, since the north is later in time",
+        "No estimate at all: nothing measured on old data applies to the north"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The scheme that held out a whole region matched the deployed ranking. Calibration depends on the late rate, which only northern outcomes reveal.",
+      "misconceptions": [
+        "",
+        "Keeps the leaky estimate: random folds put the same customers on both sides",
+        "Picks a scheme that leaks across time through repeat customers",
+        "Overcorrects: ranking held up under region-held-out validation, only calibration failed"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 15
+    },
+    {
+      "id": "checkpoint-3-q1",
+      "type": "single",
+      "prompt": "After weighting, coverage in the north is 90.1% overall but 81.0% for institutional customers. Which statement is right?",
+      "options": [
+        "The weights are wrong: weighted conformal guarantees 90% in every segment",
+        "Institutional customers are too few to measure coverage",
+        "Raising the institutional weights would fix it",
+        "Weights correct a change in the inputs; the institutional gap is a change in the link, which needs northern outcomes"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Reweighting old orders can only reproduce relationships the old orders had.",
+      "misconceptions": [
+        "Assumes weighting gives coverage in every subgroup: its guarantee is marginal, over the deployment distribution",
+        "Blames sample size: 956 orders are enough to see a 9-point gap",
+        "Thinks larger weights fix concept shift: no reweighting of old orders reproduces a link that changed",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 21
+    },
+    {
+      "id": "checkpoint-4-q1",
+      "type": "single",
+      "prompt": "A cloud reseller offers the open TabPFN-2.6 weights as a hosted service outside the Kingdom, at SAR 6 per 1,000 predictions, with a strong benchmark score. The task reads Bustan's orders with customer ids. What blocks it first?",
+      "options": [
+        "The price per prediction",
+        "The licence: its outputs are for non-commercial use only",
+        "The benchmark score is not high enough",
+        "Only the transfer of personal data outside the Kingdom"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO6"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Self-hosting would solve the residency question; a reseller cannot grant commercial rights it does not hold, so only a separate commercial agreement with the model's maker solves the licence.",
+      "misconceptions": [
+        "Puts cost first: a few riyals per thousand predictions is trivial next to the other two checks",
+        "",
+        "Treats the benchmark as evidence for Bustan: it is a hypothesis to test on Bustan's own data",
+        "Names a real obstacle but not the first: even self-hosted in Riyadh, the licence forbids commercial use"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 28
+    },
+    {
+      "id": "q-prework-pinball-01",
+      "type": "single",
+      "prompt": "Pre-work. A forecaster's 0.9 quantile for tomorrow is 120 cases; 100 cases are sold. What is the pinball loss at tau 0.9?",
+      "options": [
+        "2",
+        "18",
+        "20",
+        "10"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The forecast is 20 above the actual; above the quantile the loss is (1 - 0.9) x 20 = 2.",
+      "misconceptions": [
+        "",
+        "Charges the over-forecast at tau instead of 1 - tau: 0.9 x 20 is the price of being 20 below",
+        "Uses the plain absolute error, which ignores the quantile",
+        "Uses half the absolute error, the loss of the median"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 8
+    },
+    {
+      "id": "q-prework-newsvendor-01",
+      "type": "single",
+      "prompt": "Pre-work. A case short costs SAR 30 and a case left over SAR 10. Next week's demand is roughly normal with mean 400 and standard deviation 50. About how many cases should be ordered?",
+      "options": [
+        "400",
+        "375",
+        "434",
+        "466"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The critical ratio is 30 / (30 + 10) = 0.75; its normal quantile is 0.674, so 400 + 0.674 x 50 = 434.",
+      "misconceptions": [
+        "Orders the mean, right only when a shortage and a leftover cost the same",
+        "Turns the ratio the wrong way round and orders below the mean",
+        "",
+        "Uses the 0.9 quantile: the ratio here is 0.75, not 0.9"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 6
+    },
+    {
+      "id": "q-prework-lp-01",
+      "type": "single",
+      "prompt": "Pre-work. Imad writes the week's order as a linear programme. Which of these is a constraint?",
+      "options": [
+        "Minimise the cost of trips plus the cost of shortages",
+        "The number of cases of rice to order",
+        "The SAR 2,400 a truck trip costs",
+        "The volume ordered from one supplier fits the trucks booked for it"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "A constraint limits the choices: here volume against the capacity of the trucks booked.",
+      "misconceptions": [
+        "Names the objective, what is minimised, not a limit on the choices",
+        "Names a decision variable, which the solver chooses",
+        "Names a parameter, a fixed number in the objective",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 14
+    },
+    {
+      "id": "q-prework-coverage-01",
+      "type": "single",
+      "prompt": "Pre-work. A forecaster's 80% bands held the actual demand on 62 of 100 days. What does that tell you?",
+      "options": [
+        "The bands are too wide",
+        "The bands are too narrow: the forecaster is more confident than it should be",
+        "The median forecast is biased",
+        "Nothing: 62% is close enough to 80%"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO2",
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Too few days inside the band means the band is too narrow; quantiles near the tails are too close to the median.",
+      "misconceptions": [
+        "Reverses the direction: wide bands hold the actual more often, not less",
+        "",
+        "Confuses coverage with bias: a centred forecast with narrow bands misses on both sides",
+        "Ignores the size of the gap: 18 points on 100 days is far outside sampling noise"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 7
+    },
+    {
+      "id": "q-budget-fair-01",
+      "type": "single",
+      "prompt": "A pretrained tabular model scores 0.781 AUC in one 40-second run. Your LightGBM scores 0.779 after a search of 103 fits that took 25 seconds. Which comparison is fair?",
+      "options": [
+        "The pretrained model wins: it scored higher",
+        "LightGBM wins: it needed less time",
+        "Accuracy with intervals for both, and the full time each took, tuning included, on the same folds",
+        "Neither: models of different families cannot be compared"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "A fair table carries both the score with its interval and the total compute, search included, on identical folds.",
+      "misconceptions": [
+        "Reads a difference of 0.002 without an interval as a win",
+        "Judges on time alone and forgets the score",
+        "",
+        "Gives up a comparison that a shared metric on shared folds makes possible"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 9
+    },
+    {
+      "id": "q-grouped-cv-01",
+      "type": "single",
+      "prompt": "Bustan's 1,500 customers each place dozens of orders. The late-delivery model will score orders from customers it has never seen. Which cross-validation estimates that?",
+      "options": [
+        "Folds grouped by customer, so that no customer is on both sides",
+        "Random 5-fold, because it uses every order",
+        "Stratified folds on the late flag",
+        "Leave-one-order-out"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO1",
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Only folds that hold whole customers out test the model on customers it has not seen.",
+      "misconceptions": [
+        "",
+        "Mixes a customer's orders across folds, so the model recognises customers",
+        "Balances the outcome but still puts each customer on both sides",
+        "Leaks the most: every other order of the same customer stays in training"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 11
+    },
+    {
+      "id": "q-crossover-01",
+      "type": "single",
+      "prompt": "At 1,000 orders the pretrained model scores 0.760 and the tuned baseline 0.752; the paired difference is +0.008 with a 95% interval from -0.019 to +0.035. What do you report?",
+      "options": [
+        "The pretrained model wins at 1,000 orders",
+        "The baseline wins: its interval is wider",
+        "The models are proven equal at 1,000 orders",
+        "No difference can be told apart at 1,000 orders with these repeats"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "An interval that contains zero leaves the sign undecided; more repeats could narrow it.",
+      "misconceptions": [
+        "Reads the mean as a win when the interval includes zero",
+        "Confuses a wider interval with a better model",
+        "Reads absence of evidence as proof of equality",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 29
+    },
+    {
+      "id": "q-overlap-01",
+      "type": "single",
+      "prompt": "A vendor reports wins on 20 of 24 datasets. You learn that 8 of the 24 were in the suite used to select the model during pretraining. What do you do first?",
+      "options": [
+        "Accept the claim: 20 of 24 is a large majority",
+        "Drop the 8 overlapping datasets and recount with paired intervals",
+        "Ask for more datasets of the same kind",
+        "Rerun only the 4 losses"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO1"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Datasets the model was selected on cannot test it; recount on the rest, with paired differences and intervals.",
+      "misconceptions": [
+        "Counts wins without asking whether the test sets were independent of the model",
+        "",
+        "Adds data without removing the leak",
+        "Looks only where the claim failed, keeping the leaked wins"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 36
+    },
+    {
+      "id": "q-scaled-error-01",
+      "type": "single",
+      "prompt": "Why are forecast errors divided by each series' own naive error before averaging over 400 series?",
+      "options": [
+        "So that high-volume staples do not decide the average alone",
+        "To turn the errors into percentages",
+        "Because pretrained models need scaled inputs",
+        "To remove the effect of holidays"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO2"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Unscaled, a staple selling hundreds of cases a day outweighs a specialty item selling two.",
+      "misconceptions": [
+        "",
+        "Confuses scaling by a naive error with a percentage error, which fails on zero days",
+        "Mixes up scaling the inputs of a model with scaling the scores",
+        "Scaling changes the units, not which days are hard"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 7
+    },
+    {
+      "id": "q-same-windows-01",
+      "type": "single",
+      "prompt": "A zero-shot forecaster was scored on the last four weeks of data; the supplied benchmarks on six rolling origins over eight months. The zero-shot score is better. What do you conclude?",
+      "options": [
+        "The zero-shot forecaster is better",
+        "The benchmarks are better: they were tested more",
+        "Nothing yet: score the zero-shot forecaster at the same six origins and horizon",
+        "Average the two scores"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO2"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Different windows have different difficulty; only the same origins, horizon and series make the comparison.",
+      "misconceptions": [
+        "Compares scores from different windows as if the windows were equally hard",
+        "Rewards the number of tests, not their content",
+        "",
+        "Averages scores that measure different things"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 10
+    },
+    {
+      "id": "q-intermittent-01",
+      "type": "single",
+      "prompt": "Over the last year a catering product sold on one day in three on average (ADI 3.0), with sizes that vary little. How does the lab classify it at that origin?",
+      "options": [
+        "Regular",
+        "Short",
+        "Ramadan item",
+        "Intermittent"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO2"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "An average gap of 1.32 days or more between sales marks a series as intermittent in the lab.",
+      "misconceptions": [
+        "Looks at the size variability only, not at how often it sells",
+        "Confuses many zero days with a short history",
+        "Uses a product-master group that this product does not belong to",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 15
+    },
+    {
+      "id": "q-future-covariate-01",
+      "type": "single",
+      "prompt": "Which input may be passed as a known future covariate when forecasting the next 28 days of dates (the fruit) at Riyadh?",
+      "options": [
+        "The Ramadan and Eid days in the next 28 days from the Umm al-Qura calendar",
+        "Next week's actual sales of dates at Jeddah",
+        "The actual temperature of the next 28 days",
+        "The total of next month's orders"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO2"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The calendar is published in advance, so it is known at the origin.",
+      "misconceptions": [
+        "",
+        "Uses another series' future, which is not known at the origin",
+        "Uses actual weather that only a weather forecast could stand in for",
+        "Leaks the target itself"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 24
+    },
+    {
+      "id": "q-stack-leak-01",
+      "type": "single",
+      "prompt": "Stacking weights for the origin 2026-03-15 are fitted on the forecasts of all six origins. What is wrong?",
+      "options": [
+        "Nothing: more origins give better weights",
+        "The weights saw the window they are scored on",
+        "Six origins are too few for four weights",
+        "Weights must be fitted per series"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO3"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Weights for an origin may use only windows that ended before it.",
+      "misconceptions": [
+        "Treats more data as always better, even when it includes the test window",
+        "",
+        "Blames the count of origins instead of the leak",
+        "Adds a requirement the method does not have"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 31
+    },
+    {
+      "id": "q-simple-average-01",
+      "type": "single",
+      "prompt": "When is the simple average of four forecasters most likely to lose to the best single one?",
+      "options": [
+        "When the four forecasters are about equally good",
+        "When the series are long",
+        "When one forecaster is far better than the others",
+        "When the forecasts are quantiles"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO3"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Equal weights give a weak member as much say as the best one; that costs most when quality differs a lot.",
+      "misconceptions": [
+        "Describes the case where the simple average does well",
+        "Series length does not decide whether equal weights fit",
+        "",
+        "Quantile forecasts can be averaged like point forecasts"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 30
+    },
+    {
+      "id": "q-gain-interval-01",
+      "type": "single",
+      "prompt": "A stack beats the best single model by 0.3% in scaled quantile loss, with a 95% bootstrap interval over series from -0.1% to +0.7%. What do you tell Ahlam?",
+      "options": [
+        "Adopt the stack: it is better on average",
+        "Drop the stack: it is worse",
+        "The stack is proven equal to the best model",
+        "The gain is not established; keep the single model unless more windows separate them"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO3"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "An interval that includes zero does not establish a gain, and the stack costs more to run.",
+      "misconceptions": [
+        "Adopts on a mean whose interval includes zero",
+        "Reads an undecided interval as a loss",
+        "Reads an undecided interval as proof of equality",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 33
+    },
+    {
+      "id": "q-judged-loss-01",
+      "type": "single",
+      "prompt": "Forecasts will be judged by scaled quantile loss. On which loss should the stacking weights be fitted?",
+      "options": [
+        "Scaled quantile loss, on earlier windows",
+        "Squared error of the medians, because it is smooth",
+        "Accuracy of the 0.5 quantile only",
+        "Whichever loss gives the largest weight to the newest model"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO3"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Weights fitted on the judged loss optimise what will be scored; least squares chases large spikes instead.",
+      "misconceptions": [
+        "",
+        "Prefers a convenient loss to the one that is judged",
+        "Ignores the 0.1 and 0.9 quantiles that are judged too",
+        "Chooses the loss by the answer it gives"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 32
+    },
+    {
+      "id": "q-regret-error-01",
+      "type": "single",
+      "prompt": "Forecaster A has lower scaled quantile loss than B over a quarter, but A's orders cost more. Which explanation fits best?",
+      "options": [
+        "Regret does not depend on the forecaster",
+        "A's errors fall on products and quantiles where errors cost most",
+        "The loss was computed on the wrong days",
+        "B was tuned on the test quarter"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Error weighs every product and quantile alike; regret weighs each error by what it costs in the order it causes.",
+      "misconceptions": [
+        "Forgets that the orders come from each forecaster's quantiles",
+        "",
+        "Blames the measure without evidence of a mistake",
+        "Invents a leak the question gives no sign of"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 22
+    },
+    {
+      "id": "q-binding-01",
+      "type": "single",
+      "prompt": "In the solved plan the limit of two reefers has zero slack. Re-solving with three reefers gives the same objective. What is the third reefer worth this week?",
+      "options": [
+        "SAR 3,200, the price of a trip",
+        "As much as the depot space is worth",
+        "Nothing: the constraint is tight but does not limit the plan",
+        "It cannot be known without the dual prices"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The value of relaxing a constraint is the drop in the objective when it is relaxed; here there is none.",
+      "misconceptions": [
+        "Confuses the cost of a resource with its value to this plan",
+        "Transfers the value of another constraint",
+        "",
+        "Re-solving is the direct way to price a constraint in an integer programme"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 17
+    },
+    {
+      "id": "q-integer-trucks-01",
+      "type": "single",
+      "prompt": "The dry goods need 75 cubic metres; a truck carries 60. A linear relaxation books 1.25 trucks. Why are trucks integer variables?",
+      "options": [
+        "To make the solver faster",
+        "Because cases are integers",
+        "Because 1.25 trucks is easier to round later",
+        "Because a trip is paid whole: 1.25 trucks underprices the plan"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Half a truck costs a whole trip; a continuous count makes small loads look cheap.",
+      "misconceptions": [
+        "Integer variables make solving slower, not faster",
+        "Cases are integers too, but rounding hundreds of cases barely matters",
+        "Rounding after solving can break the other constraints",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 15
+    },
+    {
+      "id": "q-joint-shortage-01",
+      "type": "single",
+      "prompt": "A plan's simulation assumes products are independent and reports a 2% chance that five products run short in the same week. Past errors show a shared weekly shock. What happens to that 2%?",
+      "options": [
+        "It rises: shared shocks make shortages arrive together",
+        "It falls: shared shocks cancel out",
+        "It stays: each product's own risk is unchanged",
+        "It cannot change without new orders"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO4"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Correlation leaves each product's marginal risk similar but makes joint shortages more likely.",
+      "misconceptions": [
+        "",
+        "Thinks correlated errors offset each other, which only negatively correlated ones do",
+        "Looks at each product's own risk and misses the joint event",
+        "Forgets that demand, not the plan, carries the shock"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 29
+    },
+    {
+      "id": "q-adversarial-01",
+      "type": "single",
+      "prompt": "An adversarial classifier separates last year's orders from this month's with AUC 0.52. What can you conclude?",
+      "options": [
+        "The model will work this month",
+        "The features show no shift the classifier can see; outcomes may still have shifted",
+        "There is no shift of any kind",
+        "The classifier is broken"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Adversarial validation tests the inputs only; label and concept shift need outcomes.",
+      "misconceptions": [
+        "Jumps from similar inputs to a working model",
+        "",
+        "Ignores label and concept shift, which the test cannot see",
+        "Reads an AUC near 0.5 as a failure, when it is the expected result without input shift"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 6
+    },
+    {
+      "id": "q-temporal-leak-01",
+      "type": "single",
+      "prompt": "A temporal split trains on the first 80% of days and tests on the last 20%. The same customers order in both periods, and the model will serve a new region's customers. What does the temporal score overstate?",
+      "options": [
+        "Nothing: a temporal split never leaks",
+        "The effect of holidays",
+        "The size of the region",
+        "How well the model ranks customers it has not seen"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Repeat customers sit on both sides of the date, so the score rewards recognising them.",
+      "misconceptions": [
+        "Assumes time order alone removes every leak",
+        "Names a seasonal issue unrelated to the leak",
+        "Region size does not enter the split",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 12
+    },
+    {
+      "id": "q-weights-correct-01",
+      "type": "single",
+      "prompt": "Weighted conformal intervals use weights from an adversarial classifier. Which shift can they correct?",
+      "options": [
+        "A change in how the features are distributed, with the same link to the outcome",
+        "A change in the link between distance and lateness",
+        "Any shift, if the weights are clipped",
+        "A change in the late rate with the same features"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Density-ratio weights reweight old rows toward the new inputs; they cannot create a link the old rows never had.",
+      "misconceptions": [
+        "",
+        "Expects reweighting to reproduce a relationship that changed",
+        "Thinks clipping adds a guarantee; it trades coverage for stability",
+        "A change in the outcome rate alone leaves p(x) unchanged, so the weights do not see it"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 19
+    },
+    {
+      "id": "q-hijri-validation-01",
+      "type": "single",
+      "prompt": "A demand model was validated on January and February 2026 and will forecast the weeks before Eid al-Fitr 1448. Which validation estimates that error?",
+      "options": [
+        "The January and February scores, since they are recent",
+        "Random days from the last year",
+        "Rolling origins whose test windows covered the weeks before the past Eids al-Fitr",
+        "A split by product"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO2",
+        "LO5"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Ramadan moves about eleven days a year; only test windows that held past pre-Eid weeks measure that season.",
+      "misconceptions": [
+        "Takes recent for representative, though the season differs",
+        "Mixes days from all seasons and leaks neighbouring days",
+        "",
+        "Holds products out, which answers a different question"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 22
+    },
+    {
+      "id": "q-licence-outputs-01",
+      "type": "single",
+      "prompt": "A model's weights are free to download, but its licence says its outputs may be used for non-commercial purposes only. Bustan wants it to set weekly orders. What follows?",
+      "options": [
+        "Allowed: downloading was free",
+        "Allowed if it runs on Bustan's own servers",
+        "Allowed once its accuracy beats the baseline",
+        "Not allowed without a separate commercial licence"
+      ],
+      "key": {
+        "indices": [
+          3
+        ]
+      },
+      "lo": [
+        "LO6"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Setting orders is commercial use of the outputs, which the licence excludes wherever the model runs.",
+      "misconceptions": [
+        "Confuses free access with permitted use",
+        "Thinks hosting changes the licence: residency and licence are separate checks",
+        "Lets accuracy override a licence condition",
+        ""
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 25
+    },
+    {
+      "id": "q-residency-01",
+      "type": "single",
+      "prompt": "Bustan's order records hold customer ids of sole traders. A candidate runs only as a cloud endpoint outside the Kingdom. What must happen before those records are sent?",
+      "options": [
+        "Nothing, if the data is encrypted in transit",
+        "A purpose allowed by the Personal Data Protection Law, a transfer risk assessment and appropriate safeguards, or self-hosting instead",
+        "Only the customers' consent by email",
+        "A faster network link"
+      ],
+      "key": {
+        "indices": [
+          1
+        ]
+      },
+      "lo": [
+        "LO6"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "The PDPL's Article 29 and the transfer regulation set the conditions; self-hosting in the Kingdom avoids the transfer.",
+      "misconceptions": [
+        "Treats encryption as a substitute for the legal conditions",
+        "",
+        "Reduces the conditions to consent alone",
+        "Answers a technical question that was not asked"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 26
+    },
+    {
+      "id": "q-cost-decides-01",
+      "type": "single",
+      "prompt": "Running a pretrained forecaster costs about SAR 50 a month self-hosted. The course's evidence shows it does not beat the tuned LightGBM overall. What is the adoption decision?",
+      "options": [
+        "Adopt it: it is cheap",
+        "Adopt it for every series: it needs no training",
+        "Not as a replacement; at most as a member where it adds measured value, such as holiday windows",
+        "Reject pretrained forecasters for good"
+      ],
+      "key": {
+        "indices": [
+          2
+        ]
+      },
+      "lo": [
+        "LO6"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Low cost does not make a model useful; adopt where the evidence shows value, with that condition written down.",
+      "misconceptions": [
+        "Lets a low price stand in for evidence",
+        "Takes no training for no cost of being wrong",
+        "",
+        "Generalises one result to every future model"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 27
+    },
+    {
+      "id": "q-four-checks-01",
+      "type": "single",
+      "prompt": "A candidate has an Apache-2.0 licence, can be self-hosted in Riyadh and costs little to run, but it was never evaluated on Bustan's data. What is the right decision today?",
+      "options": [
+        "Not now: evaluate it on Bustan's data first",
+        "Go: the licence, residency and cost all allow it",
+        "No-go: unevaluated models are never adopted",
+        "Go with conditions: monitor it after adoption"
+      ],
+      "key": {
+        "indices": [
+          0
+        ]
+      },
+      "lo": [
+        "LO6"
+      ],
+      "weight": 1,
+      "scored": true,
+      "timer": 30,
+      "displayMode": "full",
+      "explanation": "Accuracy is one of the four checks; without evidence on Bustan's data it is not met yet.",
+      "misconceptions": [
+        "",
+        "Skips the accuracy check",
+        "Turns 'not yet evaluated' into a permanent refusal",
+        "Moves the evaluation after the decision it should inform"
+      ],
+      "liveContext": false,
+      "basis": "best",
+      "confidence": true,
+      "createdAt": 1794772070000,
+      "updatedAt": 1794772070000,
+      "slide": 24
+    }
+  ]
+}

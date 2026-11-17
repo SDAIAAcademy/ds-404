@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-ax="page" data-track="data-science">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced Modelling for Structured Data · SDAIA Academy</title>
+<meta name="generator" content="SDAIA Academy engine 1.0.0">
+<meta name="description" content="Decide when pretrained models, stacked ensembles and decision-aware pipelines earn their place, measured against tuned baselines and under shift">
+<link rel="icon" href="_engine/icon.svg">
+<link rel="alternate" type="text/markdown" href="index.md">
+<link rel="describedby" href="llms.txt">
+<link rel="stylesheet" href="_engine/academy.css">
+</head>
+<body>
+<header>
+<div class="wrap">
+<div class="top"><div class="logo" id="logo"></div><nav><a href="slides/day1.html">Slides</a><a href="practice.html">Practice</a><a href="index.md" type="text/markdown">Markdown</a></nav></div>
+<div class="kicker">Data Science Track · SDAIA Academy · DS-404</div>
+<h1>Advanced Modelling for Structured Data<span class="sub ar" lang="ar" dir="rtl">النمذجة المتقدمة للبيانات المهيكلة</span></h1>
+<p>Decide when pretrained models, stacked ensembles and decision-aware pipelines earn their place, measured against tuned baselines and under shift</p>
+<div class="meta"><span class="track">Data Science Track</span><span>4 teaching days + capstone day</span><span>26 hours</span><span>Level 400</span><span>Data Science · Expert badge</span></div>
+</div>
+</header>
+<main class="wrap">
+<h2>About the course</h2>
+<p>Participants decide when pretrained models, ensembles and decision-aware pipelines earn their place in structured-data work. On a fictional food wholesaler's synthetic orders and demand, they test pretrained tabular models and zero-shot forecasters against tuned baselines, stack ensembles, turn forecasts into orders by optimisation, score models by decision cost and validate under the shift of a new depot region. They end with an adoption decision weighing accuracy, licence, cost and data residency.</p>
+<p><b>Who it is for:</b> Specialists. Data scientists who have completed the level 300 core or can show equivalent work: a defended analysis with a validated model or a causal estimate that they can explain.</p>
+<p><b>Format:</b> Intensive: 4 teaching days of four sessions and a capstone day, with guided pre-work and a tracked follow-up task</p>
+<h2>The case study</h2>
+<div class="note info"><b>Bustan Food Wholesale.</b> Bustan Food Wholesale is a fictional food wholesaler with depots in Riyadh, Buraidah, Jeddah and Dammam and a new northern region around Hail and Tabuk. Participants test a pretrained tabular model against a tuned boosted-tree baseline on 80,000 orders, score zero-shot forecasters with and without Ramadan and Eid covariates on 400 daily demand series over three Hijri years, stack forecasters, turn forecasts into orders and truck plans by optimisation, rank forecasters by the regret they cause, validate a model under the shift of the new region and end with an adoption decision on licence, cost and data residency. All data is synthetic and generated with a fixed seed.</div>
+<h2>The course</h2>
+<div class="day">
+<div class="day-head c-teal"><div><div class="t">Day 1 · 4 sessions · 4 labs</div><h3>Pretrained models for tables</h3></div><a class="btn" href="slides/day1.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Tuned boosted trees first</b><br>A pretrained model is judged against a baseline tuned under a stated budget and validated by customer groups<ul><li>State a tuning budget in fits and seconds before comparing models</li><li>Tune a boosted-tree model by random search under grouped cross-validation</li><li>Explain why random K-fold flatters a model when customers repeat</li></ul></td><td><a href="labs/D1_1_tune_boosted_tree.ipynb">Lab 1.1 · A tuned baseline under a budget</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D1_1_tune_boosted_tree.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>In-context learning on tables</b><br>A tabular foundation model reads the training rows as context and predicts without training on them<ul><li>Describe what a tabular foundation model learns in pretraining and what it does at prediction</li><li>Run a pretrained tabular model on the same folds as the baseline</li><li>Compare accuracy and run time with the tuning time included</li></ul></td><td><a href="labs/D1_2_run_pretrained_tabular.ipynb">Lab 1.2 · A pretrained model on the same folds</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D1_2_run_pretrained_tabular.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Learning curves decide</b><br>One score is one point on a curve: compare models across training sizes with intervals<ul><li>Build learning curves from repeated subsamples at six training sizes</li><li>Put an interval on each point and read where the curves cross</li><li>State where each approach wins and where the evidence is too thin to say</li></ul></td><td><a href="labs/D1_3_plot_both_across.ipynb">Lab 1.3 · Learning curves with intervals</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D1_3_plot_both_across.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Reading a leaderboard claim</b><br>A benchmark win counts only at equal tuning budgets, without pretraining overlap and with an interval<ul><li>Find unequal tuning budgets in a benchmark table</li><li>Remove datasets the pretrained model may have seen or been selected on</li><li>Recount wins as a paired difference with an interval</li></ul></td><td><a href="labs/D1_4_check_claim_unequal.ipynb">Lab 1.4 · Check a leaderboard claim</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D1_4_check_claim_unequal.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-cyan"><div><div class="t">Day 2 · 4 sessions · 4 labs</div><h3>Forecasting with pretrained models</h3></div><a class="btn" href="slides/day2.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Zero-shot against a benchmark floor</b><br>A zero-shot forecaster is one more method in the same rolling-origin backtest, scored on the same windows<ul><li>Run a zero-shot forecaster on 400 series at four origins</li><li>Score scaled point error and quantile loss on the same windows as supplied benchmarks</li><li>Report each method against the seasonal naive floor</li></ul></td><td><a href="labs/D2_1_score_zero_shot.ipynb">Lab 2.1 · Zero-shot against the supplied backtests</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D2_1_score_zero_shot.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>Where zero-shot loses</b><br>An average over 400 series hides the groups where a benchmark wins<ul><li>Classify series as smooth, intermittent or short from their own history</li><li>Compare methods by series group, point and quantile</li><li>Turn a group table into a routing rule</li></ul></td><td><a href="labs/D2_2_find_series_groups.ipynb">Lab 2.2 · Where the benchmark wins</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D2_2_find_series_groups.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Holidays that move</b><br>Ramadan comes about eleven days earlier each Gregorian year, so a yearly lag misses it and a covariate finds it<ul><li>Show why a yearly lag must respect both the week and the Hijri year</li><li>Supply Ramadan and Eid as known future covariates</li><li>Measure error in holiday weeks separately from ordinary weeks</li></ul></td><td><a href="labs/D2_3_add_ramadan_eid.ipynb">Lab 2.3 · Ramadan and Eid as covariates</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D2_3_add_ramadan_eid.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Ensembles worth their cost</b><br>A stack learned on earlier windows must beat the best single model on later windows by more than its interval<ul><li>Build a stacking set from rolling-origin forecasts without leakage</li><li>Fit non-negative stacking weights and test them on later windows</li><li>Report the improvement over the best single model with a bootstrap interval</li></ul></td><td><a href="labs/D2_4_stack_forecasters_rolling.ipynb">Lab 2.4 · Stacking on rolling-origin windows</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D2_4_stack_forecasters_rolling.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-coral"><div><div class="t">Day 3 · 4 sessions · 4 labs</div><h3>From forecast to order</h3></div><a class="btn" href="slides/day3.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Asymmetric costs</b><br>When a shortage costs more than a leftover, order a high quantile of demand, not its mean<ul><li>Compute underage and overage costs from a cost table</li><li>Turn a critical ratio into an order quantity from quantile forecasts</li><li>Measure the cost of ordering the median instead</li></ul></td><td><a href="labs/D3_1_compute_newsvendor_quantities.ipynb">Lab 3.1 · Newsvendor quantities</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D3_1_compute_newsvendor_quantities.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>Optimising under capacity</b><br>A rule per product ignores shared trucks and space: an integer programme decides them together<ul><li>Write an order and truck plan as variables, constraints and an objective</li><li>Solve it with an open solver and read the solution</li><li>Find which constraint binds and what relaxing it is worth</li></ul></td><td><a href="labs/D3_2_solve_order_truck.ipynb">Lab 3.2 · Orders and trucks for one depot week</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D3_2_solve_order_truck.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Scoring by regret</b><br>Judge a forecaster by the cost of the decisions it causes, not only by its error<ul><li>Compute the realised cost of a plan made from each forecaster</li><li>Compute regret against the plan made with hindsight</li><li>Compare the ranking by regret with the ranking by error</li></ul></td><td><a href="labs/D3_3_rank_three_forecasters.ipynb">Lab 3.3 · Regret against error</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D3_3_rank_three_forecasters.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Uncertainty in the plan</b><br>A plan that works on the forecast can still run short: simulate demand and report the risk<ul><li>Simulate weekly demand scenarios with correlated days and products</li><li>Report shortage probability and fill rate of a fixed plan</li><li>Show how independence assumptions understate shortage risk</li></ul></td><td><a href="labs/D3_4_stress_test_plan.ipynb">Lab 3.4 · Stress-test the plan</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D3_4_stress_test_plan.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-purple"><div><div class="t">Day 4 · 4 sessions · 4 labs</div><h3>Shift and adoption</h3></div><a class="btn" href="slides/day4.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Detecting shift</b><br>Train a classifier to tell old depots from the new region: if it can, the data has shifted<ul><li>Name covariate, label and concept shift and a test for each</li><li>Run adversarial validation between training and deployment data</li><li>Read which features carry the shift</li></ul></td><td><a href="labs/D4_1_run_adversarial_validation.ipynb">Lab 4.1 · Adversarial validation</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D4_1_run_adversarial_validation.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>Validating under shift</b><br>The validation scheme that matches the deployment shift is the one whose error you can promise<ul><li>Run random, grouped, temporal and region-held-out validation on one model</li><li>Compare each estimate with the error in the new region</li><li>Report error by region and customer segment before and after shift</li></ul></td><td><a href="labs/D4_2_compare_random_grouped.ipynb">Lab 4.2 · Four schemes against deployed error</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D4_2_compare_random_grouped.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Correcting for shift</b><br>Weighting calibration rows by how deployment-like they are restores interval coverage under covariate shift<ul><li>Recall split conformal intervals and the exchangeability they assume</li><li>Estimate density-ratio weights from an adversarial classifier</li><li>Apply weighted conformal intervals and check coverage in the new region</li></ul></td><td><a href="labs/D4_3_apply_weighted_conformal.ipynb">Lab 4.3 · Weighted conformal intervals</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D4_3_apply_weighted_conformal.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Adoption conditions</b><br>A model is adopted when accuracy, cost, licence and the data's classification and residency all allow it<ul><li>Check the licence of a model's weights and outputs against the intended use</li><li>Apply the classification level and the transfer rules to a deployment option</li><li>Write an adoption decision with its conditions and choose the capstone task</li></ul></td><td><a href="labs/D4_4_complete_licence_cost.ipynb">Lab 4.4 · Licence, cost and residency</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-404/blob/main/labs/D4_4_complete_licence_cost.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-amber"><div><div class="t">Capstone</div><h3>Capstone project presentations</h3></div><a class="btn" href="slides/capstone.html">Open the slides</a></div>
+<div class="scroll"><table><tr><td>An evaluation protocol and an adoption decision, defended before two assessors</td></tr></table></div>
+</div>
+<h2>Capstone</h2>
+<div class="two">
+<div><p>An evaluation protocol and adoption decision for one structured-data task (two pretrained candidates, a tuned baseline, an ensemble, validation under a stated shift, regret where relevant) in a public repository whose README reports measured results; defence before two assessors</p><p><b>What you submit:</b> A public GitHub repository link: the evaluation protocol run end to end (two pretrained candidates, a tuned baseline, an ensemble, validation under a stated shift, regret where a decision follows), a README that reports the measured results with intervals and the adoption decision with its conditions, the run logs and a verification note on AI-assisted steps. Then a defence before two assessors: one assessor names a new shift scenario and the participant predicts which validation result changes before re-running it.</p><p><b>Format:</b> 10 min talk and demo · 10 min Q&amp;A</p></div>
+<div><h3>Rubric</h3><div class="bar c-teal"><span>Fair comparison<i style="--w:100%"></i></span><b>25%</b></div><div class="bar c-cyan"><span>Validation under shift<i style="--w:100%"></i></span><b>25%</b></div><div class="bar c-coral"><span>Ensemble or decision analysis<i style="--w:80%"></i></span><b>20%</b></div><div class="bar c-purple"><span>Adoption reasoning<i style="--w:60%"></i></span><b>15%</b></div><div class="bar c-amber"><span>Reproducibility<i style="--w:60%"></i></span><b>15%</b></div></div>
+</div>
+<h2>Outcomes</h2>
+<p>By the end of the course, participants can:</p>
+<div class="day"><div class="scroll"><table>
+<tr><th></th><th>Outcomes</th><th>Level</th><th>Evidence</th></tr>
+<tr><td><b>LO1</b></td><td>Evaluate a pretrained tabular model against a tuned, ensembled boosted-tree baseline across training-set sizes, given late-delivery records from 500 to 50,000 orders and a fixed compute budget</td><td>Performance</td><td>learning curves with intervals showing where each approach wins</td></tr>
+<tr><td><b>LO2</b></td><td>Evaluate zero-shot pretrained forecasters, with and without covariates, against statistical and tuned learned benchmarks by rolling-origin backtests, given 400 demand series with Hijri holiday covariates</td><td>Performance</td><td>point and quantile accuracy by series group</td></tr>
+<tr><td><b>LO3</b></td><td>Implement a stacked ensemble from out-of-fold or rolling-origin predictions and measure its improvement over the best single model, given four fitted candidate models</td><td>Applied</td><td>a stacking run with the improvement and its interval</td></tr>
+<tr><td><b>LO4</b></td><td>Build a predict-then-optimise pipeline and judge forecasters by the decision cost they cause, given capacity limits, holding costs and shortage costs</td><td>Performance</td><td>regret per forecaster compared with the error ranking</td></tr>
+<tr><td><b>LO5</b></td><td>Diagnose distribution shift between training and deployment data and validate a model under it, given a new depot region and a holiday season that moves between years</td><td>Performance</td><td>a shift report with adversarial, grouped and temporal validation and a corrected error estimate</td></tr>
+<tr><td><b>LO6</b></td><td>Decide whether to adopt a pretrained model for one task, weighing accuracy, cost, licence and data residency, given two candidate models, their licences and the wholesaler's data classification</td><td>Performance</td><td>a defended adoption memo with a reusable evaluation protocol</td></tr>
+</table></div></div>
+<h2>Tools</h2>
+<div class="grid">
+<div class="card c-teal"><h3>Pretrained tabular models</h3><p>TabICL · TabPFN family (non-commercial weights)</p></div>
+<div class="card c-cyan"><h3>Pretrained forecasters</h3><p>Chronos family · TimesFM</p></div>
+<div class="card c-coral"><h3>Baselines and ensembling</h3><p>LightGBM · StatsForecast · AutoGluon</p></div>
+<div class="card c-purple"><h3>Optimisation modelling and solvers</h3><p>Pyomo or PuLP with HiGHS · OR-Tools</p></div>
+<div class="card c-green"><h3>Conformal prediction</h3><p>MAPIE · course-provided implementations</p></div>
+</div>
+<h2>Before you start</h2>
+<h3>Prerequisites</h3>
+<ul><li>DS-304 Forecasting and Time Series</li><li>DS-305 Uncertainty, Interpretability and Model Validation</li><li>Tunes boosted-tree models with cross-validation</li><li>Backtests forecasters with rolling-origin cross-validation</li><li>Formulates a simple linear programme, or completes the pre-work</li><li>Setup: a laptop CPU with uv, or Google Colab. No key and no model download is needed on a laptop: the pretrained models run in a Colab runtime, and a labelled stand-in answers elsewhere. Run 00_setup_check before Day 1; see labs/README.md.</li></ul>
+<div class="note tip">The labs are notebooks. Open each one in Google Colab from the table above, or clone the repository and run them locally.</div>
+<h2>Sources</h2>
+<h3>Pretrained tabular models and their licences</h3>
+<ul><li><a href="https://arxiv.org/abs/2502.05564">Qu and others: TabICL: A Tabular Foundation Model for In-Context Learning on Large Data</a></li><li><a href="https://arxiv.org/abs/2602.11139">Qu and others: TabICLv2: A better, faster, scalable, and open tabular foundation model</a></li><li><a href="https://github.com/soda-inria/tabicl">TabICL repository and README (BSD-3-Clause)</a></li><li><a href="https://huggingface.co/Prior-Labs/tabpfn_2_6">TabPFN-2.6: model card</a></li><li><a href="https://huggingface.co/Prior-Labs/tabpfn_2_6/raw/main/LICENSE">TabPFN-2.6: licence file (non-commercial)</a></li><li><a href="https://huggingface.co/Prior-Labs/tabpfn_2_5/raw/main/LICENSE">TabPFN-2.5: licence file (non-commercial)</a></li></ul>
+<h3>Pretrained forecasters and their licences</h3>
+<ul><li><a href="https://arxiv.org/abs/2510.15821">Ansari and others: Chronos-2: From Univariate to Universal Forecasting</a></li><li><a href="https://huggingface.co/amazon/chronos-2">Chronos-2: model card (Apache-2.0)</a></li><li><a href="https://github.com/amazon-science/chronos-forecasting">chronos-forecasting repository and README</a></li><li><a href="https://arxiv.org/abs/2310.10688">Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)</a></li><li><a href="https://huggingface.co/google/timesfm-2.5-200m-pytorch">TimesFM 2.5: model card (Apache-2.0)</a></li><li><a href="https://github.com/google-research/timesfm">TimesFM repository</a></li></ul>
+<h3>Baselines, evaluation and ensembles</h3>
+<ul><li><a href="https://jmlr.org/papers/v13/bergstra12a.html">Bergstra and Bengio (2012): Random Search for Hyper-Parameter Optimization</a></li><li><a href="https://lightgbm.readthedocs.io/en/stable/">LightGBM documentation</a></li><li><a href="https://otexts.com/fpp3/accuracy.html">Hyndman and Athanasopoulos: FPP3, evaluating point forecast accuracy (scaled errors)</a></li><li><a href="https://otexts.com/fpp3/combinations.html">Hyndman and Athanasopoulos: FPP3, forecast combinations</a></li></ul>
+<h3>Decisions and optimisation</h3>
+<ul><li><a href="https://arxiv.org/abs/1710.08005">Elmachtoub and Grigas: Smart "Predict, then Optimize"</a></li><li><a href="https://pypi.org/project/PuLP/">PuLP on PyPI</a></li><li><a href="https://highs.dev/">HiGHS: high performance software for linear optimisation</a></li></ul>
+<h3>Shift and conformal prediction</h3>
+<ul><li><a href="https://arxiv.org/abs/1904.06019">Tibshirani, Barber, Candès and Ramdas (2019): Conformal Prediction Under Covariate Shift</a></li><li><a href="https://mapie.readthedocs.io/en/stable/">MAPIE documentation</a></li></ul>
+<h3>National references</h3>
+<ul><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/DataClassificationPolicy.pdf">National Data Governance Policies, including the Data Classification Policy (NDMO)</a></li><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/PersonalDataProtectionLaw.pdf">Personal Data Protection Law</a></li><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf">Implementing Regulation of the Personal Data Protection Law</a></li><li><a href="https://sdaia.gov.sa/Documents/RegulationonPersonalDataEN.pdf">Regulation on Personal Data Transfer outside the Kingdom</a></li><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf">AI Ethics Principles</a></li></ul>
+<h2>Files and links</h2>
+<div class="files">
+<a href="practice.html"><b>practice.html</b><span>Practice questions with feedback</span></a>
+<a href="index.md"><b>index.md</b><span>This page as Markdown, for an AI assistant</span></a>
+<a href="llms.txt"><b>llms.txt</b><span>The course for AI assistants (llms.txt)</span></a>
+<a href="https://github.com/SDAIAAcademy/ds-404"><b>SDAIAAcademy/ds-404</b><span>The course repository</span></a>
+</div>
+</main>
+<footer><div class="wrap">SDAIA Academy · Data Science Track · Advanced Modelling for Structured Data<br><span class="muted">Course version 2027.1.0 · engine 1.0.0 · built 2026-11-15 · commit 49dbc1a</span></div></footer>
+<script type="application/json" id="academy-data">{"v":1,"engine":"1.0.0","build":{"at":"2026-11-15T19:47:50Z","version":"2027.1.0","commit":"49dbc1a"},"course":{"id":"ds-404","code":"DS-404","title":"Advanced Modelling for Structured Data","track":"data-science","lang":"en","dir":"ltr","url":"https://sdaiaacademy.github.io/ds-404/","repo":"SDAIAAcademy/ds-404","home":"index.html"},"ai":{"context":{"course":"context/course.md","courseJs":"context/course.js","day":null,"llms":"llms.txt"},"tasks":[],"tools":[]},"features":{},"strings":{}}</script>
+<script src="_engine/academy.js"></script>
+</body>
+</html>

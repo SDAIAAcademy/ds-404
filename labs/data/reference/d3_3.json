@@ -1,0 +1,183 @@
+{
+ "overall": [
+  {
+   "model": "lightgbm",
+   "regret": 100672.39,
+   "sql": 0.42143,
+   "rank_regret": 1,
+   "rank_error": 1
+  },
+  {
+   "model": "smoothing",
+   "regret": 148736.58,
+   "sql": 0.59784,
+   "rank_regret": 3,
+   "rank_error": 3
+  },
+  {
+   "model": "zero_shot_cov",
+   "regret": 136338.7,
+   "sql": 0.50602,
+   "rank_regret": 2,
+   "rank_error": 2
+  }
+ ],
+ "by_origin": [
+  {
+   "origin": "2026-01-04",
+   "model": "lightgbm",
+   "regret": 34253.95,
+   "sql": 0.419
+  },
+  {
+   "origin": "2026-01-04",
+   "model": "smoothing",
+   "regret": 40562.28,
+   "sql": 0.467
+  },
+  {
+   "origin": "2026-01-04",
+   "model": "zero_shot_cov",
+   "regret": 36829.54,
+   "sql": 0.456
+  },
+  {
+   "origin": "2026-03-15",
+   "model": "lightgbm",
+   "regret": 35657.67,
+   "sql": 0.461
+  },
+  {
+   "origin": "2026-03-15",
+   "model": "smoothing",
+   "regret": 56342.61,
+   "sql": 0.761
+  },
+  {
+   "origin": "2026-03-15",
+   "model": "zero_shot_cov",
+   "regret": 42663.71,
+   "sql": 0.532
+  },
+  {
+   "origin": "2026-05-10",
+   "model": "lightgbm",
+   "regret": 30760.77,
+   "sql": 0.384
+  },
+  {
+   "origin": "2026-05-10",
+   "model": "smoothing",
+   "regret": 51831.69,
+   "sql": 0.565
+  },
+  {
+   "origin": "2026-05-10",
+   "model": "zero_shot_cov",
+   "regret": 56845.45,
+   "sql": 0.53
+  }
+ ],
+ "weekly_winners": [
+  {
+   "origin": "2026-01-04",
+   "week": 0,
+   "model_by_regret": "zero_shot_cov",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-01-04",
+   "week": 1,
+   "model_by_regret": "lightgbm",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-01-04",
+   "week": 2,
+   "model_by_regret": "lightgbm",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-01-04",
+   "week": 3,
+   "model_by_regret": "zero_shot_cov",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-03-15",
+   "week": 0,
+   "model_by_regret": "lightgbm",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-03-15",
+   "week": 1,
+   "model_by_regret": "zero_shot_cov",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-03-15",
+   "week": 2,
+   "model_by_regret": "zero_shot_cov",
+   "model_by_error": "zero_shot_cov"
+  },
+  {
+   "origin": "2026-03-15",
+   "week": 3,
+   "model_by_regret": "zero_shot_cov",
+   "model_by_error": "zero_shot_cov"
+  },
+  {
+   "origin": "2026-05-10",
+   "week": 0,
+   "model_by_regret": "lightgbm",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-05-10",
+   "week": 1,
+   "model_by_regret": "zero_shot_cov",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-05-10",
+   "week": 2,
+   "model_by_regret": "lightgbm",
+   "model_by_error": "lightgbm"
+  },
+  {
+   "origin": "2026-05-10",
+   "week": 3,
+   "model_by_regret": "smoothing",
+   "model_by_error": "lightgbm"
+  }
+ ],
+ "differ": 5,
+ "paired": {
+  "first": "lightgbm",
+  "second": "zero_shot_cov",
+  "mean": -2972.1925,
+  "lo": -7819.98437,
+  "hi": 506.47198
+ },
+ "by_category": {
+  "lightgbm": {
+   "beverages": 12067.0,
+   "dairy_chilled": 71660.0,
+   "dates_ramadan": 8847.0,
+   "rice_flour_sugar": 8098.0
+  },
+  "smoothing": {
+   "beverages": 15962.0,
+   "dairy_chilled": 99982.0,
+   "dates_ramadan": 17062.0,
+   "rice_flour_sugar": 15730.0
+  },
+  "zero_shot_cov": {
+   "beverages": 16073.0,
+   "dairy_chilled": 100773.0,
+   "dates_ramadan": 8764.0,
+   "rice_flour_sugar": 10729.0
+  }
+ }
+}

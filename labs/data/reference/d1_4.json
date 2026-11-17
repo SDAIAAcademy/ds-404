@@ -1,0 +1,29 @@
+{
+ "claimed": 35,
+ "equal": 23,
+ "clean_wins": 11,
+ "clean_n": 23,
+ "paired": [
+  {
+   "slice": "all",
+   "datasets": 23,
+   "mean_diff": -0.00048,
+   "lo": -0.00489,
+   "hi": 0.00393
+  },
+  {
+   "slice": "under 3,000 rows",
+   "datasets": 10,
+   "mean_diff": 0.00898,
+   "lo": 0.00516,
+   "hi": 0.01247
+  },
+  {
+   "slice": "3,000 rows or more",
+   "datasets": 13,
+   "mean_diff": -0.00776,
+   "lo": -0.01085,
+   "hi": -0.00449
+  }
+ ]
+}

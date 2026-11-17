@@ -1,0 +1,34 @@
+{
+ "adv_auc": 0.95439,
+ "importance": {
+  "driver_tenure_m": 0.5679,
+  "distance_km": 0.3244,
+  "truck_util": 0.0488,
+  "promised_hours": 0.0193,
+  "segment": 0.0166,
+  "lines": 0.006,
+  "weight_kg": 0.0054,
+  "chilled_share": 0.0047,
+  "cases": 0.0047,
+  "dow": 0.0019,
+  "ramadan": 0.0001,
+  "pre_eid": 0.0001
+ },
+ "medians": {
+  "driver_tenure_m": {
+   "0": 28.0,
+   "1": 8.0
+  },
+  "distance_km": {
+   "0": 17.2,
+   "1": 44.1
+  },
+  "truck_util": {
+   "0": 0.679,
+   "1": 0.56
+  }
+ },
+ "late_old": 0.18588,
+ "late_north": 0.43625,
+ "predicted_north": 0.29203
+}

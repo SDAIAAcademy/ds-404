@@ -1,0 +1,245 @@
+{
+ "plan": [
+  {
+   "product": "P001",
+   "category": "rice_flour_sugar",
+   "supplier": "S1",
+   "cr": 0.88401,
+   "target": 527.0,
+   "order": 515,
+   "cut": 12.0
+  },
+  {
+   "product": "P002",
+   "category": "rice_flour_sugar",
+   "supplier": "S1",
+   "cr": 0.81841,
+   "target": 297.0,
+   "order": 296,
+   "cut": 1.0
+  },
+  {
+   "product": "P003",
+   "category": "rice_flour_sugar",
+   "supplier": "S1",
+   "cr": 0.91696,
+   "target": 379.0,
+   "order": 39,
+   "cut": 340.0
+  },
+  {
+   "product": "P004",
+   "category": "rice_flour_sugar",
+   "supplier": "S1",
+   "cr": 0.87965,
+   "target": 370.0,
+   "order": 370,
+   "cut": 0.0
+  },
+  {
+   "product": "P005",
+   "category": "rice_flour_sugar",
+   "supplier": "S1",
+   "cr": 0.91011,
+   "target": 457.0,
+   "order": 457,
+   "cut": 0.0
+  },
+  {
+   "product": "P023",
+   "category": "beverages",
+   "supplier": "S2",
+   "cr": 0.82585,
+   "target": 278.0,
+   "order": 278,
+   "cut": 0.0
+  },
+  {
+   "product": "P024",
+   "category": "beverages",
+   "supplier": "S2",
+   "cr": 0.88315,
+   "target": 290.0,
+   "order": 290,
+   "cut": 0.0
+  },
+  {
+   "product": "P025",
+   "category": "beverages",
+   "supplier": "S2",
+   "cr": 0.91724,
+   "target": 555.0,
+   "order": 555,
+   "cut": 0.0
+  },
+  {
+   "product": "P026",
+   "category": "beverages",
+   "supplier": "S2",
+   "cr": 0.85694,
+   "target": 327.0,
+   "order": 327,
+   "cut": 0.0
+  },
+  {
+   "product": "P027",
+   "category": "beverages",
+   "supplier": "S2",
+   "cr": 0.83607,
+   "target": 316.0,
+   "order": 316,
+   "cut": 0.0
+  },
+  {
+   "product": "P033",
+   "category": "dairy_chilled",
+   "supplier": "S3",
+   "cr": 0.27288,
+   "target": 250.0,
+   "order": 250,
+   "cut": 0.0
+  },
+  {
+   "product": "P034",
+   "category": "dairy_chilled",
+   "supplier": "S3",
+   "cr": 0.23658,
+   "target": 148.0,
+   "order": 148,
+   "cut": 0.0
+  },
+  {
+   "product": "P035",
+   "category": "dairy_chilled",
+   "supplier": "S3",
+   "cr": 0.32949,
+   "target": 314.0,
+   "order": 314,
+   "cut": 0.0
+  },
+  {
+   "product": "P036",
+   "category": "dairy_chilled",
+   "supplier": "S3",
+   "cr": 0.33213,
+   "target": 225.0,
+   "order": 225,
+   "cut": 0.0
+  },
+  {
+   "product": "P037",
+   "category": "dairy_chilled",
+   "supplier": "S3",
+   "cr": 0.16765,
+   "target": 457.0,
+   "order": 457,
+   "cut": 0.0
+  },
+  {
+   "product": "P041",
+   "category": "dates_ramadan",
+   "supplier": "S4",
+   "cr": 0.91275,
+   "target": 133.0,
+   "order": 133,
+   "cut": 0.0
+  },
+  {
+   "product": "P042",
+   "category": "dates_ramadan",
+   "supplier": "S4",
+   "cr": 0.833,
+   "target": 119.0,
+   "order": 119,
+   "cut": 0.0
+  },
+  {
+   "product": "P043",
+   "category": "dates_ramadan",
+   "supplier": "S4",
+   "cr": 0.90577,
+   "target": 61.0,
+   "order": 61,
+   "cut": 0.0
+  },
+  {
+   "product": "P044",
+   "category": "dates_ramadan",
+   "supplier": "S4",
+   "cr": 0.87154,
+   "target": 140.0,
+   "order": 140,
+   "cut": 0.0
+  },
+  {
+   "product": "P045",
+   "category": "dates_ramadan",
+   "supplier": "S4",
+   "cr": 0.87799,
+   "target": 74.0,
+   "order": 74,
+   "cut": 0.0
+  }
+ ],
+ "trucks": {
+  "S1": 1,
+  "S2": 2,
+  "S3": 2,
+  "S4": 1
+ },
+ "objective": 21584.8,
+ "used_m3": 199.982,
+ "slack": [
+  {
+   "constraint": "m3_S1",
+   "slack": 3.43,
+   "binds": false
+  },
+  {
+   "constraint": "kg_S1",
+   "slack": 1.0,
+   "binds": false
+  },
+  {
+   "constraint": "m3_S2",
+   "slack": 53.35,
+   "binds": false
+  },
+  {
+   "constraint": "kg_S2",
+   "slack": 8874.4,
+   "binds": false
+  },
+  {
+   "constraint": "m3_S3",
+   "slack": 26.52,
+   "binds": false
+  },
+  {
+   "constraint": "kg_S3",
+   "slack": 3348.2,
+   "binds": false
+  },
+  {
+   "constraint": "m3_S4",
+   "slack": 36.72,
+   "binds": false
+  },
+  {
+   "constraint": "kg_S4",
+   "slack": 14431.6,
+   "binds": false
+  },
+  {
+   "constraint": "reefers",
+   "slack": -0.0,
+   "binds": true
+  },
+  {
+   "constraint": "depot_space",
+   "slack": 0.02,
+   "binds": true
+  }
+ ],
+ "value_10m3": 1703.1
+}

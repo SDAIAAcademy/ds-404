@@ -1,0 +1,43 @@
+{
+ "answered_by": "stand-in (weekday profile with in-context holiday multipliers; not a pretrained model)",
+ "e364": 0.57442,
+ "e357": 0.48658,
+ "e354": 0.61454,
+ "split": [
+  {
+   "model": "LightGBM (tuned)",
+   "holiday_mase": 0.69295,
+   "ordinary_mase": 0.69769,
+   "holiday_sql": 0.47069,
+   "ordinary_sql": 0.47264
+  },
+  {
+   "model": "smoothing",
+   "holiday_mase": 1.15445,
+   "ordinary_mase": 0.88278,
+   "holiday_sql": 0.80835,
+   "ordinary_sql": 0.60823
+  },
+  {
+   "model": "zero-shot",
+   "holiday_mase": 1.07169,
+   "ordinary_mase": 0.74988,
+   "holiday_sql": 0.74373,
+   "ordinary_sql": 0.51722
+  },
+  {
+   "model": "zero-shot + covariates",
+   "holiday_mase": 0.94627,
+   "ordinary_mase": 0.68699,
+   "holiday_sql": 0.66633,
+   "ordinary_sql": 0.48221
+  }
+ ],
+ "ramadan_items_holiday_sql": {
+  "LightGBM (tuned)": 0.5648,
+  "smoothing": 1.05253,
+  "zero-shot": 0.99664,
+  "zero-shot + covariates": 0.72743
+ },
+ "gain": 0.10407
+}
